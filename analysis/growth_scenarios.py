@@ -15,11 +15,12 @@ XLSX = Path(__file__).resolve().parent.parent / "TemanJourney_Model_2027_v13.xls
 
 UMP = 5.73        # ESTIMATE: Jakarta minimum wage 2026, Rp m / month (confirm)
 ON = 1.18         # ESTIMATE: employer BPJS + THR on top of salary
-CUR = dict(admin=3.0, socmed=1.5, leadmkt=2.5, psych=2.3, interns=2.0)        # Inputs sheet, 2027 budget
-FAIR = dict(admin=UMP * ON, socmed=UMP * ON, leadmkt=7.0 * ON, psych=9.0 * ON, interns=2.0)  # ESTIMATE gross pay
-ADS = 3.0         # extra IG ads and content, Rp m / month (founder budget choice)
+CUR = dict(admin=2.0, socmed=1.5, leadmkt=2.5, psych=2.3, interns=2.0, lp=0.0)   # admin: Rp1.8m + Rp17k x ~12 clients (Kia, 5 Oct 2026)
+FAIR = dict(admin=UMP * ON, socmed=UMP * ON, leadmkt=4.0 * ON, psych=2.3 * ON, interns=2.0, lp=6.0 * ON)
+# lead marketing capped at Rp4m (she has shares); psychologist stays part-time; ESTIMATE Lead Partnership (non-psychologist) Rp6m
+ADS = 3.5         # extra IG ads: Rp3.5m moved from the lead-marketing budget; Rp1m already in the software budget (Kia, 2026-10-05)
 EAP_R, EAP_C = 15.0, 5.0                      # Inputs: p_eap, c_eap
-BANK_R, BANK_C, PMFEE = 51.0, 15.0, 2.5       # Rate_Card state bank Signature; cost 12 + Coreitera 3; ESTIMATE bench PM fee
+BANK_R, BANK_C, PMFEE = 51.0, 15.0, 2.0       # Rate_Card state bank Signature; cost 12 + Coreitera 3; PM fee per project (founders: usually Rp2M)
 COF, CTO, ADM2 = 8.0, 10.0, UMP * ON          # ESTIMATE cash pay: BD co-founder, CTO, second admin
 TAX = 0.005
 
