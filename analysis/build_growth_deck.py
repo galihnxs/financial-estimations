@@ -1255,7 +1255,7 @@ notes(s, "These are the open founder decisions. Each one is a blue input in the 
 mark("decisions")
 
 # ================================================================== Divider: Where do the numbers come from?
-divider('+', 'APPENDIX', 'Where do the numbers come from?', 'The tables, rules and checks behind each slide, so anyone can test the plan.', [], ['What are the numbers behind each chart?', 'How are running cost, contracts and capacity set?', 'What are the risks?', 'What do the business words mean?', 'What is still an estimate?'], None)
+divider('+', 'APPENDIX', 'Where do the numbers come from?', 'The tables, rules and checks behind each slide, so anyone can test the plan.', [], ['What are the numbers behind each chart?', 'How are running cost, contracts and capacity set?', 'How do we win clients and trainers for less?', 'What are the risks?', 'What do the business words mean?', 'What is still an estimate?'], None)
 mark("d_app")
 
 # ================================================================== A1. Numbers
@@ -1310,6 +1310,115 @@ for i, (d, t) in enumerate(steps10):
 notes(s, "Running cost is what we pay every month even with no events. Delivery costs (trainer and session fees) come on top, only when there is work.")
 
 mark("runcost")
+
+# ================================================================== A3a. Acquisition programs (program first)
+ADS_FY = sum(B2C["ads"][3:]) + 12 * WB["B2C"]["K17"].value          # base Instagram ads + extra ads, 2027
+CERT_FY = WB["Capacity_OPEX"]["D31"].value                          # trainer certification, 2027
+CERT_EACH = 2.5
+REF_CAC = WB["B2C"]["C17"].value                                    # referral reward, both sides
+s = new_slide("Two programs: win clients and trainers for less", accent="for less", tag="app",
+              sub="Cheaper growth, not lower pay: each lever also brings sales or trainers we need.",
+              source=CUR + " (B2C sheet, Capacity_OPEX). Program effects are targets, not yet in the model.")
+PROGS = [("A", "Win clients for less", "Cost to win one new client", INK_D,
+          [("Referral", f"Rp{REF_CAC * 1000 / 2:.0f}k session credit to each side; 20% of new clients by Q4 2027 (slide §referral§)"),
+           ("Channels we already own", "EAP staff come through Theta vouchers; one head office opens many branches"),
+           ("Proof of impact", "Before/after report on every training: easier re-orders, real stories for Instagram"),
+           ("Ads discipline", f"Each month, pause any ad that costs more per client than the Rp{B2C['ltv'][14]:.2f}M profit a client brings")],
+          [(f"Rp{B2C['cac'][3]:.1f}M", "per client from Instagram, Jan 2027"), (f"Rp{REF_CAC:.1f}M", "per client from referral")]),
+         ("B", "Grow and keep good trainers", "Cost to find, train and keep one trainer", TERRA,
+          [("Grow our own", "Best training participants and our pool of 20 psychologists: observe → co-lead → lead"),
+           ("Keep the loyal few", "Minimum days a year, paid within days of handover, a 'Certified TJ Trainer' title"),
+           ("Certification as a product", "Clients pay for a trainer licence (Bank Elite); the best join our pool"),
+           ("Trust that sells", "Lead trainers that regulators trust help win the next deal (slide §kraljic§)")],
+          [(f"Rp{CERT_EACH:g}M", "to certify one trainer we grow ourselves"), (f"{WB['Inputs']['C96'].value:g}x", "what big-name trainers charge banks, vs our old rate")])]
+for i, (l, h, sub_, f, levers, st) in enumerate(PROGS):
+    x = 0.5 + i * 6.25
+    card(s, x, 1.5, 6.05, 4.55, "")
+    circle(s, x + 0.2, 1.65, 0.6, l, fill=f, size=20)
+    text(s, x + 0.95, 1.6, 4.9, 0.7, [[(h, {"font": HEAD, "size": 18, "bold": True, "color": INK_D})], [(sub_, {"size": 11, "color": MUTED})]],
+         margin=0.02, space=0, anchor=MSO_ANCHOR.MIDDLE)
+    text(s, x + 0.25, 2.45, 5.6, 2.35, [[("•  ", {"color": TERRA, "bold": True}), B(a + ": "), N(t)] for a, t in levers], size=12, space=6, margin=0.02)
+    for j, (v, lab) in enumerate(st):
+        stat(s, x + 0.25 + j * 2.85, 4.85, 2.7, 1.05, v, lab, vcolor=TERRA, fill=WHITE, vsize=22, lsize=10)
+callout(s, 0.5, 6.2, 12.3, 0.68, [[B("Guardrail: "), N("we never cut what we pay trainers and psychologists. That is the People pillar and our fair-pay floor (slide §goal§). "
+                                                      "We cut the cost of finding them, and of finding clients.")]], size=12)
+notes(s, "Program first, numbers second. Program A lowers what it costs to win a client: referral and the channels we already own "
+         "(EAP vouchers, head office to branches) cost far less than ads, and a before/after report makes the next sale easier. "
+         "Program B treats trainers as our most important supply: we grow them from our own participants and psychologist pool, "
+         "keep the loyal ones, and let clients pay for trainer certification. The next slide shows what both programs do to our profit.")
+mark("acq_prog")
+
+# ================================================================== A3b. Profit tree (the DuPont logic, applied to us)
+R27, N27v = F27["R"], F27["N"]
+DEL27 = sum(REC["delivery"][3:])
+FIX27 = sum(REC["fixed"][3:])
+TAX27 = R27 - DEL27 - FIX27 - N27v
+SAVE_A, SAVE_B = ADS_FY / 2, CERT_FY / 2
+SAVE = SAVE_A + SAVE_B
+N_NEW = N27v + SAVE
+CONTRIB = (R27 - DEL27 - TAX27) / R27                              # what one extra rupiah of sales leaves as profit
+SALES_EQ = SAVE / CONTRIB
+DAY_KEEP = K_NEW - K_COST
+s = new_slide(f"Lower acquisition cost lifts our margin to {pc(N_NEW / R27, 1)}", accent=pc(N_NEW / R27, 1), tag="app",
+              sub="Our profit tree, read like a DuPont tree: black is the 2027 plan, red is after programs A and B.",
+              source=CUR + ". Program effects are estimates: same ad money wins twice the clients; clients pay half of trainer certification.")
+from pptx.enum.shapes import MSO_CONNECTOR
+
+
+def node(x, y, w, h, title, old, new=None, note=None, fill=SKY):
+    paras = [[(title, {"bold": True, "color": INK_D, "size": 12})],
+             [(old, {"font": HEAD, "bold": True, "size": 18, "color": INK_D})] + ([("  →  " + new, {"font": HEAD, "bold": True, "size": 18, "color": TERRA})] if new else [])]
+    if note:
+        paras.append([(note, {"size": 10, "color": MUTED})])
+    text(s, x, y, w, h, paras, fill=fill, shape=MSO_SHAPE.ROUNDED_RECTANGLE, radius=0.12, align=PP_ALIGN.CENTER,
+         anchor=MSO_ANCHOR.MIDDLE, space=0, margin=0.05)
+
+
+def wire(x1, y1, x2, y2):
+    ln = s.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(x1), Inches(y1), Inches(x2), Inches(y2))
+    ln.line.color.rgb, ln.line.width = MUTED, Pt(1.25)
+
+
+TOPX, BW = 2.4, 4.2
+node(TOPX, 1.5, BW, 1.05, "Net profit (net margin)", f"{N27v:.0f} ({pc(N27v / R27, 1)})", f"{N_NEW:.0f} ({pc(N_NEW / R27, 1)})")
+L2 = [("Sales", f"{R27:,.0f}", None, "same"), ("Delivery cost", f"{DEL27:.0f}", None, "trainer and psychologist fees: never cut"),
+      ("Running cost", f"{FIX27:.0f}", f"{FIX27 - SAVE:.0f}", None), ("Tax", f"{TAX27:.0f}", None, "0.5% of sales")]
+xs2 = [0.5 + i * 2.05 for i in range(4)]
+wire(TOPX + BW / 2, 2.55, TOPX + BW / 2, 2.8)
+wire(xs2[0] + 0.9, 2.8, xs2[3] + 0.9, 2.8)
+for x, (t, o, n, nt) in zip(xs2, L2):
+    wire(x + 0.9, 2.8, x + 0.9, 3.05)
+    node(x, 3.05, 1.8, 1.15, t, o, n, nt)
+L3 = [("Winning clients: ads", f"{ADS_FY:.0f}", f"{ADS_FY - SAVE_A:.0f}", "program A"), ("Certifying trainers", f"{CERT_FY:.0f}", f"{CERT_FY - SAVE_B:.1f}", "program B"),
+      ("Everything else", f"{FIX27 - ADS_FY - CERT_FY:.0f}", None, "team, founders, office")]
+xs3 = [2.55 + i * 2.05 for i in range(3)]
+rc = xs2[2] + 0.9
+wire(rc, 4.2, rc, 4.6)
+wire(xs3[0] + 0.9, 4.6, xs3[2] + 0.9, 4.6)
+for x, (t, o, n, nt) in zip(xs3, L3):
+    wire(x + 0.9, 4.6, x + 0.9, 4.75)
+    node(x, 4.75, 1.8, 1.15, t, o, n, nt, fill=CREAM if n else SKY)
+text(s, 0.5, 6.05, 8.0, 0.8, [[B("Net profit = sales − delivery cost − running cost − tax. "), N(f"Follow the red numbers up: Rp{SAVE:g}M less running cost is Rp{SAVE:g}M more profit, so net margin "
+                                                  f"rises from {pc(N27v / R27, 1)} to {pc(N_NEW / R27, 1)}. All money in Rp M, 2027.")]],
+     size=11, margin=0.02)
+stat(s, 8.9, 1.5, 3.9, 1.3, f"Rp{SALES_EQ:.0f}M", f"more sales would give the same Rp{SAVE:g}M profit: about {SALES_EQ / DAY_KEEP:.1f} more regional training days",
+     vcolor=TERRA, vsize=26, lsize=11)
+stat(s, 8.9, 2.95, 3.9, 1.3, f"Rp1 = Rp{1 / CONTRIB:.1f}", f"a rupiah saved is worth Rp{1 / CONTRIB:.1f} of sales for us. In the factory example it is $16.",
+     vcolor=TERRA, vsize=26, lsize=11)
+callout(s, 8.9, 4.4, 3.9, 2.45, [[B("What this means for us")],
+                                 [N(f"Most of our costs do not grow with sales, so each extra rupiah of sales keeps {pc(CONTRIB)}. "
+                                    "Saving is not much stronger than selling.")],
+                                 [N("So pick levers that do both: lower what it costs to win clients and trainers, and bring more sales.")]],
+        size=11, space=5)
+notes(s, "This is the DuPont logic from the procurement course, applied to us. In the factory example, bought materials are about half of "
+         "sales and the margin is 6%, so a $1 saving equals about $16 of extra sales. Our delivery cost is only "
+         f"{pc(DEL27 / R27)} of sales and most of our cost is fixed, so one extra rupiah of sales keeps {pc(CONTRIB)}: a rupiah saved is "
+         f"worth about Rp{1 / CONTRIB:.1f} of sales (by the textbook rule, dividing by net margin, it would be Rp{1 / (N27v / R27):.1f}). "
+         "The asset side of the DuPont tree matters little for us: we hold no stock or machines. Our assets are cash and money clients owe us; "
+         "a down payment moves money from one to the other, so it protects cash (slide §cashplan§) rather than changing the return. "
+         f"Estimates: same ad money wins twice the clients (Rp{SAVE_A:.0f}M), clients pay half of trainer certification (Rp{SAVE_B:.1f}M).")
+mark("acq_tree")
+
 
 # ================================================================== 14. Contracts
 s = new_slide("Better contracts in four areas", accent="four areas", tag="app",
@@ -1462,6 +1571,6 @@ callout(s, 0.5, 6.2, 12.3, 0.7, [[B("Next step: "), N("register on MagangHub thi
 mark("magang")
 
 fill_refs()
-assert len(prs.slides) == 40, len(prs.slides)
+assert len(prs.slides) == 42, len(prs.slides)
 prs.save(OUT)
 print("wrote", OUT, len(prs.slides), "slides")
