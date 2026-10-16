@@ -3,7 +3,26 @@
 The financial model and growth plan for Teman Journey (PT Indo Medika Resolusi), October 2026 to December 2027.
 All money is in Rupiah million (Rp M) unless stated.
 
-## The answer in one paragraph
+## v16 update (16 Oct 2026): EAP as the channel, schools, latest B2C prices
+
+**Current model: `TemanJourney_Model_2027_v16.xlsx`.** Full write-up: `v16 - Projection Update and Proposal Check.md`.
+Founders' feedback: EAP is the main channel to counseling and training; BI stays at today's volume as a premium client;
+LPS/OJK come second and banks third; schools are new; prices follow a pricing scheme (small intro, list price, Commit-2);
+B2C uses the latest price list (`../B2C Pricing/`).
+
+| 2027 | v15 plan | v16 plan | v16 recommended |
+|---|---|---|---|
+| Sales | Rp2,040M | Rp2,433M | Rp2,451M |
+| Net margin | 26.1% | 22.9% | 25.0% |
+| Lowest cash | Rp82M (Feb) | Rp70M (Feb) | Rp107M (Jan) |
+| Months below the safety floor | 1 | 5 | 1 |
+
+Recommended = the plan, plus standard BI KPw packages repriced to a 30% margin, and the cash guard (second founder's
+pay from May, extra ads from March, 30% Flagship down payment). The latest B2C prices earn Rp169k a session for TJ
+(v15: Rp600k), so Instagram ads return 0.1-0.5x their cost; B2C pays through EAP, schools and referral.
+With Inputs `v16_on` = 0, v16 gives exactly v15. The sections below describe v15, which v16 builds on.
+
+## The answer in one paragraph (v15)
 
 Two goals: **create real value for our clients**, and **build a business that pays for itself**. Four impact pillars show
 it is working: **Clients** (EAP renewals, before/after training scores), **People** (fair pay: minimum wage + BPJS + THR,
@@ -48,13 +67,16 @@ shows model version numbers.
 
 | File | What it is |
 |---|---|
-| `TemanJourney_Model_2027_v15.xlsx` | **The current model.** Monthly sales, costs, profit and cash, with real timing, the pay plan, the growth plan and the roadmap. Open **Outlook** and **Roadmap** first. |
+| `TemanJourney_Model_2027_v16.xlsx` | **The current model.** v15 plus the sheets Segments (revenue by target priority and the 2027 targets), B2C_Pricing, Channels (BI KPw EAP packages, schools) and Pricing_Scheme; Inputs section 14; Volume rows 38-50, PnL rows 46-57, CashFlow rows 31-35. |
+| `v16 - Projection Update and Proposal Check.md` | The v16 answer: targets, pricing scheme, proposal check (BI Sibolga, Lyfe at 30s), B2C at the latest prices. |
+| `TemanJourney_Model_2027_v15.xlsx` | The previous model. Monthly sales, costs, profit and cash, with real timing, the pay plan, the growth plan and the roadmap. Open **Outlook** and **Roadmap** first. |
 | `TemanJourney_Model_2027_v14.xlsx` | The previous model (fair pay in one step). Kept for comparison. |
 | `TemanJourney_Model_2027_v13.xlsx` | The previous model. It assumes sales from October 2026. Kept unchanged for comparison. |
 | `TemanJourney_Growth_Recommendation.pptx` / `.pdf` | The growth plan deck: 42 slides (appendix includes two slides on lowering the cost of winning clients and trainers, with a DuPont-style profit tree). Pyramid: summary first; each part (goal and problem, A. B2B, B. B2C, C. people, D. money, next steps, appendix) opens with a dark slide that asks the question it answers. |
 | `projection guide.docx` | Written review of model v13. **Out of date:** its numbers are v13, not v15. |
 | `analysis/` | Python scripts that build the model, run it, and build the deck (see below). |
 | `output/model_runs.json` | Results of v15 under several settings, calculated by Excel. The deck and the Summary sheet read this file. |
+| `output/v16_runs.json` | Results of v16 under 20 settings, calculated by LibreOffice (`analysis/lo_runner.py`). The v16 Summary sheet reads this file. |
 
 ## How the model works (v15)
 
@@ -91,7 +113,21 @@ The model is built bottom-up: number of events × price (or cost). Every result 
 Pay steps and founder pay live on the **Pay_Plan** sheet. With C101 = 0 and C105 = 0, v15 gives exactly the v13
 results (25.2% margin, lowest cash Rp204M). This check proves that v15 only adds to v13.
 
-## How to rebuild everything
+## How to rebuild v16 (LibreOffice, any machine)
+
+Run from this folder. LibreOffice gives the same numbers as Excel on v15 (checked to 12 digits).
+
+```bash
+python analysis/build_model_v16.py        # 1. build v16 from v15 (v15 is never changed)
+python analysis/lo_runner.py              # 2. recalculate every setting, write output/v16_runs.json
+python analysis/build_model_v16.py        # 3. rebuild so the Summary scenario table uses the new runs
+python analysis/lo_runner.py --save plan  # 4. save v16 with values (the plan settings)
+```
+
+To add a scenario, add a line to `CONFIGS` in `analysis/lo_runner.py`. Keys in square brackets are Inputs keys
+(column A), e.g. `"[commit_d]": 0.1`. The deck still shows v15.
+
+## How to rebuild v15 (Excel for Mac)
 
 The scripts use the conda environment `ind5003` (it has openpyxl and python-pptx) and **Microsoft Excel and
 PowerPoint for Mac**. openpyxl cannot calculate formulas, and this Mac has no LibreOffice, so Excel does the maths
