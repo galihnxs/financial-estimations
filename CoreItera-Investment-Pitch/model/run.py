@@ -16,8 +16,22 @@ def slow_case():
     """Half the bureaus, half the solo seats, copilot adoption 30% lower."""
     I = types.SimpleNamespace(**{k: copy.deepcopy(v) for k, v in vars(BASE).items() if k.isupper()})
     I.BUREAU_TARGETS = {k: v * 0.5 for k, v in BASE.BUREAU_TARGETS.items()}
+    I.GROSS_ADDS = {k: v * 0.5 for k, v in BASE.GROSS_ADDS.items()}
     I.SOLO_SEATS = {k: v * 0.5 for k, v in BASE.SOLO_SEATS.items()}
     I.COPILOT_ADOPTION = {k: v * 0.7 for k, v in BASE.COPILOT_ADOPTION.items()}
+    return I
+
+
+def stretch_case():
+    """Galih's 700-in-year-1 goal, funded by the growth round."""
+    I = types.SimpleNamespace(**{k: copy.deepcopy(v) for k, v in vars(BASE).items() if k.isupper()})
+    I.TARGETS_OVERRIDE = BASE.STRETCH_TARGETS
+    return I
+
+
+def churn_case(curve):
+    I = types.SimpleNamespace(**{k: copy.deepcopy(v) for k, v in vars(BASE).items() if k.isupper()})
+    I.CHURN_CURVE = curve
     return I
 
 

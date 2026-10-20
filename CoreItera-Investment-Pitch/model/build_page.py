@@ -136,17 +136,31 @@ lp_cost = I.PLAN_TIERS[0][3] + lp_payments * I.PAYMENT_FEE
 lp_return = x_extra_rev / lp_cost
 first_profit = plan["first_profitable_month"]
 good_profit = plan["profitable_for_good_from"]
-B27 = {k: v for k, v in I.BUREAU_TARGETS.items() if k[0] == 2027}
+def paying_at(label, res=None):
+    return next(r for r in (res or plan)["rows"] if r["label"] == label)["bureaus"]
+B27 = {(2027, q): round(paying_at(f"2027-{3 * q:02d}")) for q in (1, 2, 3, 4)}    # bureaus still paying at each quarter end
+B27.update({(2027, 3 * q): B27[(2027, q)] for q in (1, 2, 3, 4)})
+GA = I.GROSS_ADDS
+SIGNED27 = round(sum(v for k, v in GA.items() if k[0] == 2027))
+LOST27 = round(Y[2027]["churned"])
 ADMIN_FROM, ADMIN_TO = 9, 17                    # E  typical admin hours
-Y1 = B27[(2027, 12)]
+Y1 = round(Y[2027]['bureaus_end'])
 y1_share = Y1 / bureaus_market
 rnd = I.NEXT_ROUND
 rnd_when = month_name(f"{rnd['month'][0]}-{rnd['month'][1]:02d}")
 stake_after = plan["riskia_side"]["stake_after_round"]
 top_plan = I.PLAN_TIERS[-1][3]
-no_round = engine.run(I, False)["lowest_cash"]
+noangel = engine.run(I, False)
+NY = noangel["years"]
+Q_NEW = [round(sum(v for k, v in GA.items() if k[0] == 2027 and (k[1] - 1) // 3 == q)) for q in range(4)]
+B26 = round(GA[(2026, 12)])
+B28 = Y[2028]["bureaus_end"]
+def hc_at(label):
+    r_ = next(r for r in plan["rows"] if r["label"] == label)
+    return r_["headcount"]
 TEST_FEE_LOW, TEST_FEE_HIGH = 50_000, 150_000   # K  KantorKu online recruitment tests, per candidate (Augment A3)
 
+fp = I.FOUNDER_PAY_YEAR
 S = []
 add = S.append
 yes, no = '<span class="yes">Yes</span>', '<span class="no">No</span>'
@@ -170,7 +184,7 @@ add(f"""
 <section id="answer">
   <h2>The answer in one picture</h2>
   {viz.pyramid(
-      f"Invest <b>Rp30M</b> for <b>20%</b>. We use it to help <b>TemanJourney</b> win more clients with a <b>24-hour sales agent</b>. Then we sell the same tool to <b>{num(Y1)} bureaus</b> in year 1.",
+      f"Invest <b>Rp30M</b> for <b>20%</b>. We use it to help <b>TemanJourney</b> win more clients with a <b>24-hour sales agent</b>. Then we sign <b>{num(SIGNED27 + B26)} bureaus</b> by December 2027 ({num(Y1)} still paying after churn) and <b>{num(B28)}</b> in year 2, and enter <b>Malaysia or Singapore</b> in year 3.",
       [("A", "The need is big", [
             ("a1", f"Too few psychologists: {per100k:.0f} per 100,000 in ASEAN"),
             ("a2", "Bureaus lose clients who chat after admin hours"),
@@ -181,10 +195,10 @@ add(f"""
             ("b3", "Only we sell 24 hours in the bureau's own style")]),
        ("C", "A safe plan and deal", [
             ("c1", "Year 1: bureaus only. Year 2: Psynthesia"),
-            ("c2", "Cheap to run; growth money only after proof"),
+            ("c2", f"Cheap to run; a {rp(rnd['amount'], 0)} angel round keeps growth steady"),
             ("c3", "Rp50M in total for 20%; the 15% promise kept")])])}
   <div class="tiles">
-    <div class="tile"><b>{num(Y1)} bureaus</b><span>paying by December 2027</span></div>
+    <div class="tile"><b>{num(B28)} bureaus</b><span>paying in year 2 (December 2028); {num(Y1)} in December 2027</span></div>
     <div class="tile"><b>Rp1M to {rp(top_plan, 1)}</b><span>a month; never more than one admin</span></div>
     <div class="tile"><b>{month_name(first_profit)}</b><span>first month with a profit</span></div>
     <div class="tile"><b>20%</b><span>Riskia 16.1%, TemanJourney 3.9%</span></div>
@@ -233,7 +247,7 @@ add(f"""
   {viz.hbars([
       ("All psychologists in Indonesia", tam, "c-cost", f"{rp(tam)} a year"),
       (f"In private practice (about {num(round(bureaus_market, -2))} bureaus)", sam, "c-ochre", f"{rp(sam)} a year"),
-      (f"Year-1 goal: {num(Y1)} bureaus ({pct(y1_share)})", Y[2027]['revenue'], "c-rev", f"{rp(Y[2027]['revenue'])} in 2027"),
+      (f"Year-1 plan: {num(Y1)} bureaus ({pct(y1_share)})", Y[2027]['revenue'], "c-rev", f"{rp(Y[2027]['revenue'])} in 2027"),
   ], note=f"Value = psychologists × {rpk(per_psy_month)} a month each. The bureau count is our estimate: HIMPSI does not publish one.")}
   {table(["Why now", "What it means"], [
     ["Clients buy in chat", "The first bureau to reply wins."],
@@ -315,18 +329,17 @@ add(f"""
 
 # ---- PART C
 road = viz.roadmap([
-    {"name": "1. TemanJourney first", "when": "Nov 2026 to Feb 2027", "gate": "TemanJourney wins more clients",
-     "cells": {"Product": "Booking and chat live 30 Nov; WhatsApp agent in Feb", "Customers": "TemanJourney only",
+    {"name": "1. TemanJourney first", "when": "Nov 2026 to Mar 2027", "gate": f"TemanJourney wins more clients; {num(B27[(2027, 3)])} bureaus pay",
+     "cells": {"Product": "Booking and chat live 30 Nov; WhatsApp agent in Feb", "Customers": f"{num(B26)} bureaus + TemanJourney by December 2026; +{num(Q_NEW[0])} in Q1 2027 (7 a month). Galih and Riskia close the deals; no sales staff",
                "Money": f"Rp30M in; {rp(I.BASE_RUN_COST)} a month", "Team": "3 founders + TemanJourney psychologists"}},
-    {"name": f"2. Year 1: {num(Y1)} bureaus", "when": "Mar to Dec 2027", "gate": f"{num(Y1)} bureaus pay; under {pct(I.MONTHLY_CHURN, 1)} leave a month",
-     "cells": {"Product": "Set up in one day; tests; Instagram agent", "Customers": f"{num(B27[(2027, 6)])} by June, {num(B27[(2027, 9)])} by September, {num(Y1)} by December",
-               "Money": f"Growth round {rp(rnd['amount'], 0)} in {rnd_when}; first profit {month_name(first_profit)}", "Team": "Support and sales hires as bureaus join"}},
-    {"name": "3. Year 2: Psynthesia", "when": "2028", "gate": "40% of psychologists buy a seat",
+    {"name": f"2. Grow steadily", "when": "Apr to Dec 2027", "gate": f"{num(Y1)} bureaus still paying; churn down to 5% a month",
+     "cells": {"Product": "Set up in one day; tests; Instagram agent", "Customers": f"+{num(Q_NEW[1])} in Q2, +{num(Q_NEW[2])} in Q3, +{num(Q_NEW[3])} in Q4: {num(SIGNED27)} signed, {num(Y1)} still paying by December",
+               "Money": f"Angel round {rp(rnd['amount'], 0)} in {rnd_when}; first profit {month_name(first_profit)}", "Team": f"Each hire when profit pays it. By December: {hc_at("2027-12")["Sales"]} sales, {hc_at("2027-12")["Support"]} support, {hc_at("2027-12")["Engineers"]} engineers, {hc_at("2027-12")["Quality"]} quality"}},
+    {"name": f"3. Year 2: {num(B28)} bureaus + Psynthesia", "when": "2028", "gate": f"{num(B28)} bureaus pay; churn 2% a month; 40% buy a seat",
      "cells": {"Product": "Psynthesia, Rp300,000 a seat", "Customers": f"{num(Y[2028]['bureaus_end'])} bureaus",
-               "Money": "Profit every month", "Team": "Clinical lead"}},
-    {"name": "4. National, then ASEAN", "when": "2029 to 2031", "gate": "Ready for a second country",
-     "cells": {"Product": "Local test norms; company work for bureaus", "Customers": f"{num(Y[2031]['bureaus_end'])} bureaus by 2031",
-               "Money": f"{rp(Y[2031]['revenue'])} revenue in 2031", "Team": "Engineers grow with revenue"}},
+               "Money": f"Full founder pay from {month_name(plan['full_pay_from'])}", "Team": "Clinical lead; more engineers and quality"}},
+    {"name": "4. Year 3: Malaysia or Singapore", "when": "2029 to 2031", "gate": "First paying bureaus abroad",
+     "cells": {"Product": "English version; local tests and data law (PDPA)", "Customers": f"{num(Y[2031]['bureaus_end'])} bureaus in Indonesia by 2031, plus the first country abroad", "Money": f"{rp(Y[2031]['revenue'])} revenue in 2031 (Indonesia only)", "Team": f"Country lead abroad; {rp(I.ABROAD_COST, 0)} a month to set up"}},
 ], ["Product", "Customers", "Money", "Team"])
 eng = viz.gantt([
     ("Booking and chat (Theta)", "launch: Adit, Zaki", 0, 1, "c-cost"),
@@ -338,6 +351,36 @@ eng = viz.gantt([
     ("Dashboard of extra clients", "Zaki", 6, 2, "c-rev"),
     ("Psynthesia, ready for year 2", "Zaki, clinical lead", 10, 4, "c-ochre"),
 ], (2026, 11), 14)
+TP = I.TEAM_PLAN
+periods = ["Q1 27", "Q2 27", "Q3 27", "Q4 27", "2028", "2029", "2030", "2031"]
+keys = [(2027, 1), (2027, 2), (2027, 3), (2027, 4), 2028, 2029, 2030, 2031]
+core_n = 4   # Galih, Riskia, Adit, Zaki
+ends = ["2027-03", "2027-06", "2027-09", "2027-12", "2028-12", "2029-12", "2030-12", "2031-12"]
+HC = [hc_at(e) for e in ends]
+team_viz = viz.team_chart(periods, [
+    ("Founders and Zaki", "t-core", [core_n] * len(ends)),
+    ("Engineers", "t-eng", [h["Engineers"] for h in HC]),
+    ("Quality", "t-qa", [h["Quality"] for h in HC]),
+    ("Support", "t-cs", [h["Support"] for h in HC]),
+    ("Sales", "t-sales", [h["Sales"] for h in HC]),
+])
+why = {"Sales": f"Rp{I.TEAM_PAY['Sales'][2027]:.0f}M base + {pct(I.COMMISSION_FIRST_PAYMENT)} of each new bureau's first payment",
+       "Support": f"Today: one person shared with TemanJourney, who also sells for {pct(I.COMMISSION_FIRST_PAYMENT)} of the first payment",
+       "Engineers": "Beyond Adit and Zaki; one main build a month",
+       "Quality": "Tests every release and the agent's answers"}
+team_rows = [[r] + [str(HC[i][r]) for i in (0, 1, 2, 3, 4, 7)] + [why[r]] for r in I.HIRE_ORDER]
+def _c(curve, ym):
+    return engine.interp(curve, ym, before=curve[min(curve)])
+churn_rows = []
+for name_, curve_ in I.CHURN_SCENARIOS.items():
+    res_ = engine.run(runner.churn_case(curve_), I.USE_NEXT_ROUND)
+    yy_ = res_["years"]
+    path_ = " → ".join(pct(_c(curve_, k)) for k in ((2027, 1), (2027, 12), (2028, 12)))
+    churn_rows.append([f"<b>{name_}</b>", path_, num(yy_[2027]["bureaus_end"]), num(yy_[2028]["new"]), rp(yy_[2028]["profit"]), rp(yy_[2031]["profit"])])
+MN_ = {1: "Jan", 6: "Jun", 12: "Dec"}
+cpts = [((f"{MN_[r['ym'][1]]} {r['ym'][0]}" if (r["ym"] == (2027, 1) or r["ym"][1] in (6, 12)) else ""), 100 * r["churn_rate"])
+        for r in plan["rows"] if (2027, 1) <= r["ym"] <= (2029, 6)]
+churn_viz = viz.line_chart(cpts, ref=[("Industry middle 5%", 5.0), ("Good software 2%", 2.0)], label="Share of paying bureaus that leave each month", aria="Monthly churn")
 q_rows = [[q["quarter"], rp(q["revenue"]) if q["revenue"] > 0.05 else "None", rp(q["costs"]), rp(q["investment"]) if q["investment"] else "None", rp(q["net"]), f"<b>{rp(q['cash_end'])}</b>"] for q in plan["quarters"]]
 add(f"""
 <div class="part"><span class="pyr-letter">C</span><h2>A safe plan and deal</h2></div>
@@ -346,11 +389,16 @@ add(f"""
   <p class="msg">C1. Year 1: bureaus only, TemanJourney first. Year 2: Psynthesia.</p>
   {road}
   <div class="callout">
-    <p><b>Why {num(Y1)}?</b> Vibefam (Singapore) runs 700+ gyms and studios on one system. Bureaus need the same: bookings, payments and a front desk that sells. Vibefam took several years and 26 countries. We aim for {num(Y1)} in one year, in one country, so the TemanJourney test must work first.</p>
+    <p><b>Why {num(B28)} in year 2.</b> Vibefam (Singapore) runs 700+ gyms and studios on one system, and bureaus need the same things: bookings, payments and a front desk that sells. We build up step by step in year 1 ({num(B26)}, then +{num(Q_NEW[0])}, +{num(Q_NEW[1])}, +{num(Q_NEW[2])}, +{num(Q_NEW[3])} a quarter) and reach {num(B28)} in year 2. Year 3 takes the same tool to Malaysia or Singapore.</p>
   </div>
   <h3>One build at a time</h3>
   {eng}
   <p class="note">Proposed owners. One main build a month. Psynthesia work starts in September 2027; it is sold from January 2028.</p>
+  <h3>How the team grows</h3>
+  <p class="msg">We hire only when profit can pay the first salary: sales first, then support, then quality and engineering.</p>
+  {team_viz}
+  {table(["Role", "Mar 2027", "Jun", "Sep", "Dec 2027", "Dec 2028", "Dec 2031", "Pay and job"], team_rows, right=(1, 2, 3, 4, 5, 6))}
+  <p class="note">A hire happens only when last month's profit can pay that salary. Galih and Riskia are the deal makers until then.</p>
   {table(["Who", "Role"], [
     ["<b>Galih</b>, CEO", "Strategy, money, payments, data protection. Studying at NUS, so the smallest build share."],
     ["<b>Adit</b>, co-founder", "Sales agent, scheduling and chat; B2B sales."],
@@ -360,14 +408,15 @@ add(f"""
   {table(["Risk", "Early sign", "What we do"], [
     ["Agent says something clinical", "Chats about symptoms or crisis", "No counselling; crisis goes to the hotline and a person."],
     ["Meta limits messaging", "A warning on WhatsApp or Instagram", "Official Meta tools only; answers about the bureau's services only."],
-    ["Agent does not add clients", "No rise at TemanJourney in February", "Stop. No growth round until it works."],
-    [f"{num(Y1)} is too ambitious", f"Under {num(B27[(2027, 6)])} bureaus by June", "Cut sales spend; stay profitable."],
+    ["Bureaus leave after a few months", "Churn not below 5% a month by December 2027", "Set-up call in week 1; monthly extra-clients report; fix the top reason they leave."],
+    ["Agent does not add clients", "No rise at TemanJourney in February", "Stop. No growth spending until it works."],
+    [f"{num(B28)} in year 2 is too ambitious", f"Under {num(Y1)} bureaus by December 2027", "Slow hiring; keep the angel money as a buffer; stay profitable."],
     ["Family and company mix", "Decisions only in conversation", "Write everything down; both companies approve."],
   ])}
 </section>
 
 <section id="c2">
-  <p class="msg">C2. We are cheap to run. Rp30M pays for phase 1. The {num(Y1)}-bureau push needs {rp(rnd['amount'], 0)} more, raised only after proof.</p>
+  <p class="msg">C2. We are cheap to run. The Rp30M starts us; a {rp(rnd['amount'], 0)} angel round in {rnd_when} gives a safe buffer, and every hire still waits until profit can pay it.</p>
   <div class="tiles">
     <div class="tile"><b>{rp(I.BASE_RUN_COST)}</b><span>a month to run today; no salaries</span></div>
     <div class="tile"><b>{starter_needed} bureaus</b><span>on the Rp1M plan cover it</span></div>
@@ -376,7 +425,26 @@ add(f"""
   </div>
   {viz.quarter_chart(plan['quarters'])}
   {table(["Quarter", "Revenue", "Costs", "New money", "Net cash", "Cash at end"], q_rows, right=(1, 2, 3, 4, 5))}
-  <p class="note">Without the growth round, cash falls to {rp(no_round["cash"])} in {month_name(no_round["month"])}: we pay to win bureaus before they pay us.</p>
+  <p class="note"><b>New money:</b> Q4 2026 = the Rp30M from this deal (TemanJourney Rp20M, Riskia Rp10M) at the notary signing. Q1 2027 = the {rp(rnd['amount'], 0)} angel round (warm introductions or cold email to angel investors).</p>
+  <h3>What the angel round adds</h3>
+  {table(["", "With the angel round", "Without it"], [
+    ["Outside money", f"Rp30M + {rp(rnd['amount'], 0)}", "Rp30M only"],
+    ["Cash at the end of 2027", rp(Y[2027]['cash_end']), rp(NY[2027]['cash_end'])],
+    ["Lowest cash in 2027", rp(min(r['cash'] for r in plan['rows'] if r['ym'][0] == 2027)), rp(min(r['cash'] for r in noangel['rows'] if r['ym'][0] == 2027))],
+    ["Ownership of Riskia's side", f"{pct(stake_after, 0)} unless they join the round", "20%"],
+  ], right=(1, 2))}
+  <p class="note">With these targets, bureau income alone keeps cash above zero. The round is a safety buffer: it pays for a slow month, a hire a little earlier, or a faster push if the TemanJourney test goes well. It costs about {pct(rnd['dilution'])} of CoreItera {EST}.</p>
+  <h3>Churn: how many bureaus we keep</h3>
+  <p class="msg">As a new product we lose more bureaus at first: 8% a month, falling to the industry middle (5%) by December 2027 and to good-software level (2%) by December 2028.</p>
+  {churn_viz}
+  {viz.hbars([
+      ("Signed in 2027", SIGNED27, "c-cost", f"{num(SIGNED27)} bureaus"),
+      ("Left during 2027", LOST27, "c-ochre", f"{num(LOST27)} bureaus"),
+      ("Still paying in December 2027", Y1, "c-rev", f"{num(Y1)} bureaus"),
+      ("New bureaus needed in 2028 to reach 700", Y[2028]['new'], "c-cost", f"{num(Y[2028]['new'])} (because {num(Y[2028]['churned'])} leave)"),
+  ], note="Churn falls as the product, onboarding and support get better; most small-business churn happens in the first 90 days, so early onboarding matters most.")}
+  {table(["Churn path", "Jan 2027 → Dec 2027 → Dec 2028", "Paying Dec 2027", "New needed in 2028", "Profit 2028", "Profit 2031"], churn_rows, right=(2, 3, 4, 5))}
+  <p class="note">Sources: Vena (2025), using Recurly and Paddle data: 3% to 7% a month for small-business software; Focus Digital (2025 to 2026): 6.4% a month for small-business SaaS. How we keep churn low: a set-up call in week 1, a monthly "extra clients" report to each bureau, and the first month free so only serious bureaus pay.</p>
   {viz.revenue_chart(Y)}
   <p>2027 income comes only from the bureau tool. Psynthesia adds income from 2028. <b>With half the bureaus</b>, we still make a profit every year from {slow_profit_year}. Full tables are in the appendix.</p>
 </section>
@@ -397,7 +465,7 @@ add(f"""
   <ul>
     <li><b>Price:</b> Rp480M before the new money, Rp510M after. That is 2.5× the price of Riskia's first 10%. Her 16.1% is worth about Rp82M on paper.</li>
     <li><b>Why founders own more for the same Rp50M:</b> their money came first, at the highest risk, and they built the platform, mostly unpaid.</li>
-    <li><b>Growth round:</b> about {rp(rnd['amount'], 0)} for about {pct(rnd['dilution'])} in {rnd_when}, only if TemanJourney's numbers prove the agent works. Riskia and TemanJourney can join to keep 20%; if not, they hold {pct(stake_after, 0)}.</li>
+    <li><b>Angel round:</b> about {rp(rnd['amount'], 0)} for about {pct(rnd['dilution'])} in {rnd_when}, from angel investors (warm introductions or cold email). Riskia and TemanJourney may join to keep 20%; if not, they hold {pct(stake_after, 0)}.</li>
   </ul>
   {viz.stacked([("Running costs to February 2027", running_part, "seg-r"), ("Notary and share registration", I.DEAL_ONE_OFFS['notary and share registration'], "seg-o"), ("Launch", I.DEAL_ONE_OFFS['launch costs'], "seg-t")], f"Total {rp(I.DEAL_CASH)}")}
   {table(["Use of the Rp30M", "Amount", "What it reaches"], [
@@ -406,7 +474,7 @@ add(f"""
     [f"Launch {EST}", rp(I.DEAL_ONE_OFFS['launch costs']), "Payment set-up; test week"],
   ], right=(1,))}
   {table(["Riskia's side gets", "Plan", "Slow case"], [
-    ["Ownership", f"20%; {pct(stake_after, 0)} after the growth round if they do not join", "The same"],
+    ["Ownership", f"20% now; {pct(stake_after, 0)} after the angel round unless they join", "The same"],
     ["TemanJourney's software", "Free for 12 months, then cost price", "The same"],
     [f"Dividends 2030 and 2031 ({pct(runner.DIVIDEND_SHARE)} of profit) {EST}", rp(sum(div_plan.values()), 0), rp(sum(div_slow.values()), 0)],
     ["Say", "Monthly update; first look at new tools; right to invest again", "The same"],
@@ -420,7 +488,7 @@ add(f"""
     <ol>
       <li>Invest Rp30M (TemanJourney Rp20M, Riskia Rp10M) for 20%: Riskia 16.1%, TemanJourney 3.9%.</li>
       <li>Run the sales agent on TemanJourney's WhatsApp from February 2027, and share the chat numbers.</li>
-      <li>Agree to a growth round of about {rp(rnd['amount'], 0)} in March 2027 if it works, with the right to join.</li>
+      <li>Help us reach angel investors for a {rp(rnd['amount'], 0)} round in {rnd_when}, with the right to join it.</li>
       <li>Name one person at TemanJourney to own the launch.</li>
       <li>Introduce 2 Jakarta bureaus by January 2027.</li>
       <li>Sign the term sheet by Friday 30 October 2026.</li>
@@ -429,15 +497,27 @@ add(f"""
 </section>""")
 
 # ---- appendix (detail behind each box of the pyramid)
-yr_rows = [[str(y), num(v['bureaus_end']), num(v['seats_end']), rp(v['plan']), rp(v['fees']), rp(v['copilot']),
+yr_rows = [[str(y), num(v['bureaus_end']), num(v['seats_end']), rp(v['plan']), rp(v['fees']), rp(v['copilot']) if v['copilot'] > 0.05 else "None",
             f"<b>{rp(v['revenue'])}</b>", rp(v['variable'] + v['fixed']), rp(v['tax']), f"<b>{rp(v['profit'])}</b>",
             pct(v['profit'] / v['revenue']), rp(v['cash_end'])] for y, v in Y.items()]
 cost_rows = []
-for key, name in (("base", "Cloud, AI and tools"), ("founders", "Three founders"), ("clinical", "Clinical quality checks"),
-                  ("workshops", "Workshops and marketing"), ("cs", "Customer support"), ("sales", "Sales people"),
-                  ("engineer", "Extra engineers"), ("office", "Office"), ("accountant", "Accountant")):
-    cost_rows.append([name] + [rp(Y[y][key]) if Y[y][key] > 0.05 else "None" for y in Y])
-cost_rows.append(["Variable: sales agent, AI per report, servers, onboarding"] + [rp(Y[y]['variable']) for y in Y])
+def _row(name, keys):
+    vals = [sum(Y[y][k] for k in keys) for y in Y]
+    return [name] + [rp(v) if v > 0.05 else "None" for v in vals]
+fp = I.FOUNDER_PAY_YEAR
+cost_rows.append(_row("Founders: Rp10M a month each in profit months (2027); full pay from 2028", ["founders"]))
+cost_rows.append(_row("Engineers: Zaki and the hires in the team plan", ["engineer"]))
+cost_rows.append(_row("Quality: test engineers", ["quality"]))
+cost_rows.append(_row("Support", ["cs"]))
+cost_rows.append(_row("Sales", ["sales"]))
+cost_rows.append(_row("Winning new bureaus: ads, referral credit, commission, set-up", ["acquisition", "onboarding"]))
+cost_rows.append(_row("Workshops and events", ["workshops"]))
+cost_rows.append(_row("Clinical quality checks", ["clinical"]))
+cost_rows.append(_row("Sales agent, AI per report, servers", ["agent", "ai", "server"]))
+cost_rows.append(_row("Cloud, AI and tools (today's running cost)", ["base"]))
+cost_rows.append(_row(f"Admin, legal and HR ({pct(I.GA_SHARE_OF_REVENUE[2027])} of revenue in 2027, {pct(I.GA_SHARE_OF_REVENUE[2028])} after)", ["ga"]))
+cost_rows.append(_row("Office and accountant", ["office", "accountant"]))
+cost_rows.append(["<b>Total costs</b>"] + [f"<b>{rp(Y[y]['variable'] + Y[y]['fixed'])}</b>" for y in Y])
 slow_rows = [[str(y), num(v['bureaus_end']), rp(v['revenue']), rp(v['profit']), pct(v['profit'] / v['revenue']), rp(v['cash_end'])] for y, v in SY.items()]
 assump = [
     ["Running cost today", rp(I.BASE_RUN_COST) + " a month", "Known"],
@@ -447,12 +527,13 @@ assump = [
     ["Psychologists per bureau", str(I.PSY_PER_BUREAU), "Estimate"],
     ["Paid payments per bureau a month", ", ".join(f"{y}: {v}" for y, v in I.PAYMENTS_PER_BUREAU.items()), "Estimate"],
     ["Share of psychologists in private bureaus", pct(I.SHARE_IN_BUREAUS), "Estimate"],
-    ["Bureaus that leave each month", pct(I.MONTHLY_CHURN, 1), "Estimate"],
+    ["Bureaus that leave each month", "8% in January 2027, 5% in December 2027, 2% from December 2028 (straight line between)", "Galih's plan, on industry benchmarks (3% to 7%)"],
     ["Sales agent cost per bureau", rp(I.AGENT_COST_PER_BUREAU, 2) + " a month", "Estimate"],
     ["Sales agent example", f"{num(X['inquiries'])} chats, {pct(X['after_hours_share'])} after hours, conversion {pct(X['conversion_now'])} to {pct(X['conversion_agent'])}, first purchase {rpk(X['first_purchase'])}", "Estimate, measured at TemanJourney first"],
     ["Psynthesia launch and use", "January 2028; 10% of bureau psychologists at launch, 40% Dec 2028, 55% Dec 2029, 60% Dec 2030", "Plan and estimate"],
     ["AI cost per Psynthesia seat", rp(I.AI_COST_PER_SEAT, 2) + " a month (about 15 reports at Rp8,000)", "Estimate"],
-    ["Founder pay", f"Rp10M each once monthly revenue reaches {rp(I.FOUNDER_PAY_TRIGGER, 0)}; Rp20M in 2030, Rp25M in 2031", "Estimate"],
+    ["Founder pay", f"2027: Rp10M a month each, only in profit months. From 2028: Galih {rp(fp['Galih'], 0)}, Riskia {rp(fp['Riskia'], 0)}, Adit {rp(fp['Adit'], 0)} a year", "Decided"],
+    ["Zaki's pay", "Rp10M a month in 2027 (same rule); Rp20M a month from 2028", "Estimate, to confirm"],
     ["Dividends", pct(runner.DIVIDEND_SHARE) + " of profit from 2030", "Proposal"],
 ]
 tests = [
@@ -470,7 +551,7 @@ add(f"""
   <p class="note">Bureaus and seats in December. Tax: 0.5% of revenue to 2029, then 11% of profit (to confirm with a tax consultant). TemanJourney is not counted.</p>
   <h3>Main costs by year</h3>
   {table(["Cost"] + [str(y) for y in Y], cost_rows, right=tuple(range(1, 6)))}
-  <p class="note">Costs start only when revenue can pay for them: founders at {rp(I.FOUNDER_PAY_TRIGGER, 0)} monthly revenue, one engineer per {rp(I.ENGINEER_EVERY_REVENUE, 0)}, office at {rp(I.OFFICE_TRIGGER, 0)}.</p>
+  <p class="note">2027: founders and Zaki get Rp10M a month each, only in a month that makes a profit (from {month_name(plan["founders_paid_from"])}). From {month_name(plan["full_pay_from"])}: Galih {rp(fp["Galih"], 0)}, Riskia {rp(fp["Riskia"], 0)} and Adit {rp(fp["Adit"], 0)} a year. Hires follow the team plan in section C1.</p>
   <h3>Slow case: half the bureaus</h3>
   {table(["Year", "Bureaus", "Revenue", "Profit", "Margin", "Cash (Dec)"], slow_rows, right=(1, 2, 3, 4, 5))}
   <p class="note">Lowest cash in the slow case: {rp(slow_low['cash'])} in {month_name(slow_low['month'])}.</p>
@@ -513,7 +594,7 @@ add(f"""
     ["CoreItera's share count (from the deed)", "1,000,000 as an example", "Sets the exact number of new shares"],
     ["How the earlier Rp50M and Rp20M are recorded", "Galih and Riskia", "The deed must match the cash table"],
     ["Number of private bureaus and practices in Indonesia", f"About {num(round(bureaus_market, -2))}", f"The {num(Y1)}-bureau goal is {pct(y1_share)} of this; HIMPSI does not publish it"],
-    ["Growth round size, price and timing", f"{rp(rnd['amount'], 0)} for {pct(rnd['dilution'])} in {rnd_when}", "Funds the year-1 push; Galih to decide"],
+    ["Angel round size, price and timing", f"{rp(rnd['amount'], 0)} for {pct(rnd['dilution'])} in {rnd_when}", "Angel round; the price is an estimate"],
     ["After-hours share of chats and conversion at TemanJourney", f"{pct(X['after_hours_share'])}; {pct(X['conversion_now'])} to {pct(X['conversion_agent'])}", "The lead product's whole promise"],
     ["Other shareholders of TemanJourney", "Not known", "They must approve the Rp20M"],
   ])}

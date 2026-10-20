@@ -161,3 +161,9 @@ div.c-rev{background:var(--teal)} div.c-cost{background:var(--slate)} div.c-ochr
 .seg-o{background:var(--slate)} .seg-r{background:var(--teal)} .seg-t{background:var(--ochre)}
 .chart .c-ochre{fill:var(--ochre)} .chart .c-rev{fill:var(--teal)} .chart .c-cost{fill:var(--slate)}
 .fw svg{max-width:480px}
+.chart .t-core{fill:var(--slate)} i.t-core{background:var(--slate)}
+.chart .t-eng{fill:var(--teal)} i.t-eng{background:var(--teal)}
+.chart .t-qa{fill:#7FB8B3} i.t-qa{background:#7FB8B3}
+.chart .t-cs{fill:var(--ochre)} i.t-cs{background:var(--ochre)}
+.chart .t-sales{fill:#C9A45C} i.t-sales{background:#C9A45C}
+.chart .refline{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4}

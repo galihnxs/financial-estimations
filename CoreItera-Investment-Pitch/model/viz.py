@@ -268,3 +268,60 @@ def positioning(points, xlab, ylab):
         g.append(f'<circle cx="{cx:.0f}" cy="{cy:.0f}" r="{9 if us else 6}" class="{"dot-us" if us else "dot"}"/>'
                  f'<text x="{cx + dx:.0f}" y="{cy + 4:.0f}" class="{"lab-us" if us else "lab"}" text-anchor="{anchor}">{name}</text>')
     return f'<div class="chart"><svg viewBox="0 0 {W} {H}" role="img" aria-label="Positioning map">' + "".join(g) + "</svg></div>"
+
+
+# ---------------------------------------------------------------- team growth (stacked headcount)
+def team_chart(periods, layers):
+    """periods: [label]; layers: [(name, css, [count per period])] stacked bottom-up."""
+    W, H, L, R, T, B = 760, 300, 40, 16, 24, 44
+    totals = [sum(l[2][i] for l in layers) for i in range(len(periods))]
+    top = max(5, math.ceil(max(totals) / 5) * 5)
+    def yv(v):
+        return T + (top - v) / top * (H - T - B)
+    step = (W - L - R) / len(periods)
+    bw = step * 0.56
+    g = []
+    for t in range(0, top + 1, 5):
+        g.append(f'<line x1="{L}" x2="{W - R}" y1="{yv(t):.1f}" y2="{yv(t):.1f}" class="grid"/>'
+                 f'<text x="{L - 8}" y="{yv(t) + 4:.1f}" class="ax" text-anchor="end">{t}</text>')
+    for i, p in enumerate(periods):
+        x = L + i * step + (step - bw) / 2
+        base = 0
+        for name, css, vals in layers:
+            v = vals[i]
+            if v:
+                g.append(f'<rect x="{x:.1f}" y="{yv(base + v):.1f}" width="{bw:.1f}" height="{yv(base) - yv(base + v):.1f}" class="{css}"/>')
+            base += v
+        g.append(f'<text x="{x + bw / 2:.1f}" y="{yv(base) - 6:.1f}" class="lab" text-anchor="middle">{base}</text>'
+                 f'<text x="{x + bw / 2:.1f}" y="{H - B + 18}" class="ax" text-anchor="middle">{p}</text>')
+    g.append(f'<line x1="{L + 4 * step:.1f}" x2="{L + 4 * step:.1f}" y1="{T - 10}" y2="{H - B + 30}" class="zero"/>')
+    leg = "".join(f'<span><i class="{css}"></i>{name}</span>' for name, css, _ in layers)
+    return (f'<div class="chart"><svg viewBox="0 0 {W} {H}" role="img" aria-label="People in the team">' + "".join(g) + "</svg>"
+            f'<div class="legend">{leg}<span>people at the end of each period</span></div></div>')
+
+
+# ---------------------------------------------------------------- simple line (e.g. churn % by month)
+def line_chart(points, ref=None, unit="%", label="", aria="Line chart"):
+    """points: [(x_label, value)]; ref: [(name, value)] dashed reference lines."""
+    W, H, L, R, T, B = 720, 240, 46, 150, 18, 40
+    vals = [v for _, v in points] + [v for _, v in (ref or [])]
+    top = math.ceil(max(vals) + 1)
+    def yv(v):
+        return T + (top - v) / top * (H - T - B)
+    n = len(points)
+    def xv(i):
+        return L + i / (n - 1) * (W - L - R)
+    g = []
+    for t in range(0, top + 1, 2):
+        g.append(f'<line x1="{L}" x2="{W - R}" y1="{yv(t):.1f}" y2="{yv(t):.1f}" class="grid"/>'
+                 f'<text x="{L - 8}" y="{yv(t) + 4:.1f}" class="ax" text-anchor="end">{t}{unit}</text>')
+    for name, v in (ref or []):
+        g.append(f'<line x1="{L}" x2="{W - R}" y1="{yv(v):.1f}" y2="{yv(v):.1f}" class="refline"/>'
+                 f'<text x="{W - R + 8}" y="{yv(v) + 4:.1f}" class="ax">{name}</text>')
+    g.append('<polyline fill="none" class="c-cash" points="' + " ".join(f"{xv(i):.1f},{yv(v):.1f}" for i, (_, v) in enumerate(points)) + '"/>')
+    for i, (lab, v) in enumerate(points):
+        if lab:
+            g.append(f'<circle cx="{xv(i):.1f}" cy="{yv(v):.1f}" r="4" class="c-cashdot"/>'
+                     f'<text x="{xv(i):.1f}" y="{yv(v) - 9:.1f}" class="lab" text-anchor="middle">{v:.0f}{unit}</text>'
+                     f'<text x="{xv(i):.1f}" y="{H - B + 20}" class="ax" text-anchor="middle">{lab}</text>')
+    return f'<div class="chart"><svg viewBox="0 0 {W} {H}" role="img" aria-label="{aria}">' + "".join(g) + f'</svg><div class="legend"><span>{label}</span></div></div>'

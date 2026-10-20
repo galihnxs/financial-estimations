@@ -38,9 +38,9 @@ COPILOT_SEAT = 0.3          # K  Rp300,000 per psychologist seat per month
 COPILOT_LAUNCH = (2028, 1)  # P  phase 2: copilot sold only after the proof gate (20 paying bureaus, Dec 2027)
 
 # Average plan price per paying bureau (mix of tiers). Small bureaus join first.
-AVG_PLAN_BY_YEAR = {2027: 1.4, 2028: 1.6, 2029: 1.7, 2030: 1.75, 2031: 1.8}   # E
+AVG_PLAN_BY_YEAR = {2026: 1.0, 2027: 1.4, 2028: 1.6, 2029: 1.7, 2030: 1.75, 2031: 1.8}   # E
 PSY_PER_BUREAU = 3          # E  average psychologists per paying bureau
-PAYMENTS_PER_BUREAU = {2027: 50, 2028: 60, 2029: 70, 2030: 75, 2031: 80}   # E  paid bookings/orders a month
+PAYMENTS_PER_BUREAU = {2026: 40, 2027: 50, 2028: 60, 2029: 70, 2030: 75, 2031: 80}   # E  paid bookings/orders a month
 
 # ---- Mission and impact (Augment proposal IS5007 Oct 2026 + CoreItera trial) -------
 MISSION = "CoreItera: enabling scalable mental health support worldwide, starting with Indonesia's psychology bureaus."  # K (Galih, 19 Oct 2026)
@@ -63,11 +63,39 @@ SHARE_IN_BUREAUS = 0.5      # E  share of psychologists in private practice (a b
 
 # ---- Growth plan: paying bureaus at the end of each period ------------------------
 # Net targets (after churn). TemanJourney is not counted: free year, then cost price.
-BUREAU_TARGETS = {          # P  Galih's goal: 700 bureaus in the first year (benchmark: Vibefam, 700+ gym locations)
-    (2027, 2): 0, (2027, 3): 20, (2027, 6): 150, (2027, 9): 400, (2027, 12): 700,
+BUREAU_TARGETS = {          # K  Galih, 20 Oct 2026: NEW paying bureaus per quarter; TemanJourney not counted (free year)
+    # Q4 2026: 2 (with TemanJourney = 3 bureaus) | Q1 2027: +21 (7 a month) | Q2: +40 | Q3: +80 | Q4: +100
+    (2026, 11): 0, (2026, 12): 2,
+    (2027, 3): 23, (2027, 6): 63, (2027, 9): 143, (2027, 12): 243,
+    (2028, 12): 700,                                  # year 2: 700 bureaus
+    (2029, 12): 1000, (2030, 12): 1250, (2031, 12): 1450,   # Indonesia only; Malaysia or Singapore from year 3 not counted
+}
+STRETCH_TARGETS = {         # P  Galih's 700-in-year-1 goal: only with the growth round (scenario)
+    (2026, 11): 0, (2026, 12): 1, (2027, 3): 20, (2027, 6): 150, (2027, 9): 400, (2027, 12): 700,
     (2028, 12): 1000, (2029, 12): 1150, (2030, 12): 1300, (2031, 12): 1450,
 }
-MONTHLY_CHURN = 0.015       # E  1.5% of paying bureaus leave each month
+# ---- Churn: bureaus that stop paying (logo churn) ---------------------------------------
+# Industry: small-business software loses 3% to 7% of customers a month (Vena 2025, from Recurly and Paddle data);
+# Focus Digital (2025-26, 15 verticals) puts SMB SaaS at 6.4% a month. Good SMB software aims for under 2%.
+# Most SMB churn happens in the first 90 days, so the first 3 paid months churn faster.
+# Galih, 20 Oct 2026: we start high because we are new (8%), fall to the industry middle (5%) by the end of
+# year 1, and reach the good-software level (2%) by the end of year 2. Straight line between the points.
+CHURN_CURVE = {(2026, 12): 0.08, (2027, 12): 0.05, (2028, 12): 0.02}   # P  monthly churn; flat after the last point
+MONTHLY_CHURN = 0.05        # K  industry middle, used only as a comparison
+EARLY_CHURN_MULTIPLIER = 1.0   # the curve already includes "new product" churn, so no extra first-months factor
+EARLY_MONTHS = 3
+CHURN_SCENARIOS = {         # name: curve
+    "Our plan: 8% falling to 2%": {(2026, 12): 0.08, (2027, 12): 0.05, (2028, 12): 0.02},
+    "Stays at 5% (industry middle)": {(2026, 12): 0.05},
+    "Stays at 8% (we never improve)": {(2026, 12): 0.08},
+    "Faster: 6% falling to 2% in year 1": {(2026, 12): 0.06, (2027, 12): 0.02},
+}
+# New bureaus are Galih's GROSS adds per quarter in year 1; from 2028 the targets are paying bureaus at year end.
+GROSS_ADDS = {(2026, 12): 2}
+GROSS_ADDS.update({(2027, m): 7 for m in (1, 2, 3)})
+GROSS_ADDS.update({(2027, m): 40 / 3 for m in (4, 5, 6)})
+GROSS_ADDS.update({(2027, m): 80 / 3 for m in (7, 8, 9)})
+GROSS_ADDS.update({(2027, m): 100 / 3 for m in (10, 11, 12)})
 FREE_FIRST_MONTH = True     # P  a new bureau pays from its second month
 
 # Psynthesia (psychologist copilot) seats from year 2 = adoption x psychologists in paying bureaus + psychologists working alone
@@ -105,20 +133,34 @@ ACCOUNTANT_TRIGGER = 10.0   # P/E start once monthly revenue reaches Rp10M
 CLINICAL_BY_YEAR = {2027: 3.0, 2028: 6.0, 2029: 10.0, 2030: 15.0, 2031: 20.0}   # E  psychologists who check copilot quality
 CLINICAL_TRIGGER = 10.0     # P  until copilot income reaches Rp10M a month, TemanJourney psychologists review drafts as design partner
 WORKSHOPS = {2027: 5.0, 2028: 10.0, 2029: 15.0, 2030: 20.0, 2031: 25.0}   # E  HIMPSI workshops, faculties, ads per month
-WORKSHOPS_FROM = (2027, 3)
-CAC_PER_NEW_BUREAU = 1.0   # E  ads, referral credit and sales commission for each new bureau (the free first month is on top)
-GA_SHARE_OF_REVENUE = 0.08 # E  admin, legal, HR, tools and payment operations as the company grows   # P  after the first paying bureaus
-FOUNDER_PAY_EACH = {2028: 10.0, 2029: 10.0, 2030: 20.0, 2031: 25.0}       # E  3 founders (Galih, Adit, Zaki)
-FOUNDERS = 3
-FOUNDER_PAY_TRIGGER = 60.0  # P/E founders paid once monthly revenue reaches Rp40M (ratchet)
-CS_PER_BUREAUS = 80         # E  one customer-success person per 50 paying bureaus
-CS_FROM_BUREAUS = 25        # E  founders onboard bureaus themselves until 25
-CS_PAY = 7.0                # E  incl. BPJS and THR
-SALES_FROM_BUREAUS = 25     # E  first sales person once 25 bureaus pay (founders sell until then)
-SALES_PAY = 8.0             # E
-SALES_EVERY_BUREAUS = 150    # E  one more sales person per 80 paying bureaus
-ENGINEER_EVERY_REVENUE = 150.0   # E  one more engineer for every Rp150M of monthly revenue (beyond the founding three)
-ENGINEER_PAY = 15.0         # E
+WORKSHOPS_FROM = (2027, 7)   # P  workshops only once the business makes a profit
+CAC_PER_NEW_BUREAU = 0.3   # E  ads and the referral credit for each new bureau
+COMMISSION_FIRST_PAYMENT = 0.10   # K  Galih: the person who closes the bureau (shared CS or sales) gets 10% of its FIRST plan payment only
+GA_SHARE_OF_REVENUE = {2027: 0.03, 2028: 0.08}  # E  admin, legal, HR, tools; founders do most of it in 2027   # P  after the first paying bureaus
+# Pay (Galih, 19 Oct 2026). 2027: Rp10M a month each, and only in a month that makes a profit.
+# From 2028: the full pay below, in months whose profit covers it (else Rp10M each if profit covers that).
+FOUNDER_PAY_2027_MONTH = 10.0                                          # K  per person per month
+FOUNDER_PAY_YEAR = {"Galih": 700.0, "Riskia": 700.0, "Adit": 500.0}   # K  Rp million a year, from 2028
+CORE_TEAM_PAY_MONTH = {2027: 10.0, 2028: 20.0}                         # E  Zaki, design lead: same rule as founders (Galih to confirm)
+PAID_PEOPLE_2027 = ["Galih", "Riskia", "Adit", "Zaki"]
+
+# Team plan: the MOST people we would want at the end of each period (P, Galih to adjust).
+# A hire only happens when last month's profit can pay that person (Galih: pay the first salary first).
+# Support today = one customer-service person shared with TemanJourney, paid by TemanJourney; she also sells.
+HIRE_ORDER = ["Sales", "Support", "Quality", "Engineers"]   # P  who is hired first when profit allows
+TEAM_PLAN = {
+    #              2027: Q1 Q2 Q3 Q4    then December of each year
+    "Sales":       {(2027, 1): 0, (2027, 2): 1, (2027, 3): 2, (2027, 4): 3, 2028: 4, 2029: 5, 2030: 5, 2031: 6},
+    "Support":     {(2027, 1): 0, (2027, 2): 0, (2027, 3): 1, (2027, 4): 2, 2028: 5, 2029: 8, 2030: 9, 2031: 10},
+    "Engineers":   {(2027, 1): 0, (2027, 2): 1, (2027, 3): 2, (2027, 4): 2, 2028: 4, 2029: 5, 2030: 6, 2031: 7},
+    "Quality":     {(2027, 1): 0, (2027, 2): 0, (2027, 3): 1, (2027, 4): 1, 2028: 2, 2029: 2, 2030: 3, 2031: 3},
+}
+TEAM_PAY = {               # E  Rp million a month incl. BPJS and THR
+    "Sales":     {2027: 2.0, 2028: 3.0},    #    K  Galih: first sales salary Rp2M a month + 10% of first payment
+    "Support":   {2027: 6.0, 2028: 7.0},
+    "Engineers": {2027: 15.0, 2028: 20.0},  #    beyond Adit and Zaki
+    "Quality":   {2027: 12.0, 2028: 15.0},  #    test engineer who checks every release and the sales agent's answers
+}
 OFFICE_TRIGGER = 200.0      # E  small Jakarta office once monthly revenue reaches Rp200M
 OFFICE = 10.0               # E
 INFRA_GROWTH_PER_YEAR = 0.15  # E  base cloud/tools cost grows 15% a year from 2028
@@ -128,8 +170,13 @@ FINAL_TAX_RATE = 0.005      # E  PP 55/2022: 0.5% of revenue while eligible (PT:
 FINAL_TAX_UNTIL = 2029
 PROFIT_TAX_RATE = 0.11      # E  22% corporate tax with the 50% small-business cut, from 2030
 
-USE_NEXT_ROUND = True       # P  the 700-bureau goal needs money before bureau income catches up
+USE_NEXT_ROUND = True       # P  Galih, 20 Oct 2026: the Rp150M angel round is in the main plan, to grow in a sustained way
+
+# ---- Year 3: first country outside Indonesia (Galih, 20 Oct 2026) ----------------
+ABROAD_FROM = (2029, 1)     # P  Malaysia or Singapore
+ABROAD_COST = 25.0          # E  Rp million a month: company set-up, local partner, data-law (PDPA) work, travel
+# Revenue from abroad is NOT counted in the numbers (upside).
 
 # ---- Exit and return for Riskia's side ---------------------------------------------------
-NEXT_ROUND = {"month": (2027, 3), "amount": 150.0, "dilution": 0.10}   # E/P  growth round after the phase 1 gate: needed for the 700-bureau push (Galih to decide)
+NEXT_ROUND = {"month": (2027, 3), "amount": 150.0, "dilution": 0.10}   # P/E  Galih, 20 Oct 2026: Rp150M angel seed (warm intro or cold email); price is an estimate
 REVENUE_MULTIPLE = {"low": 2.0, "mid": 4.0, "high": 6.0}   # E  company value = x times yearly revenue in 2031
