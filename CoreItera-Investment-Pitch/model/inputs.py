@@ -178,7 +178,8 @@ INFRA_GROWTH_PER_YEAR = 0.15  # E  base cloud/tools cost grows 15% a year from 2
 #    it applies to each founder's own salary tax (PPh 21), which is inside their gross pay.
 FINAL_TAX_RATE = 0.005
 FINAL_TAX_TURNOVER_LIMIT = 4800.0   # Rp M a year
-FINAL_TAX_LAST_YEAR = 2026          # P/E  assume CoreItera's 0.5% period ends by 2026 (to confirm: registration date)
+TAX_REGISTERED = "10 October 2025"  # K  Galih, 20 Oct 2026: PT CoreItera registered then, and uses the 0.5% scheme today
+FINAL_TAX_LAST_YEAR = 2027          # K  a PT keeps 0.5% for 3 tax years from registration: 2025, 2026, 2027 (registered before PP 20/2026)
 CORP_TAX_RATE = 0.22
 CORP_TAX_CUT_TURNOVER = 4800.0      # Pasal 31E: 50% cut on the profit share of the first Rp4.8 billion of turnover
 CORP_TAX_CUT_LIMIT = 50000.0        # ... only if turnover is up to Rp50 billion

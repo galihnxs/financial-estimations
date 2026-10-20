@@ -32,7 +32,7 @@ PRESENT_CSS = """
 .pbar button:focus-visible,.pbar a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .pbar .count{color:var(--muted);font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
 body{padding-top:76px}
-.slide{scroll-margin-top:68px;min-height:calc(100vh - 92px)}
+.slide{scroll-margin-top:68px}
 main{gap:18px}
 .stop-on{box-shadow:0 0 0 3px var(--teal-soft);border-radius:8px}
 @media (max-width:720px){.pbar .brand{display:none}.pbar .hint{display:none}}
@@ -87,6 +87,7 @@ PRESENT_JS = """
   document.getElementById('pnext').addEventListener('click', function(){ go(cur+1); });
   mark(0);
 })();
+
 """
 
 BAR = """

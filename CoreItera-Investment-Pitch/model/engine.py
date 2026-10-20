@@ -189,7 +189,10 @@ def run(I, with_round=False, _tax=None):
         # --- profit and tax ---
         before_tax = revenue - variable - fixed
         n_months = 3 if y == 2026 else 12           # the model starts in October 2026
-        tax = _tax.get(y, {}).get("tax", 0.0) / n_months   # booked evenly through the year (like monthly PPh 25 instalments)
+        if _tax.get(y, {}).get("rule") == "0.5% final":
+            tax = revenue * I.FINAL_TAX_RATE                 # 0.5% of each month's turnover, paid monthly
+        else:
+            tax = _tax.get(y, {}).get("tax", 0.0) / n_months   # profit tax booked evenly through the year
         profit = before_tax - tax
         r.update(gross=revenue - variable, before_tax=before_tax, tax=tax, profit=profit)
 

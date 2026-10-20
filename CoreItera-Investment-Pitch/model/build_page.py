@@ -185,7 +185,7 @@ pain_loop = viz.flywheel([
 # ---- PART B
 live = lambda t: f'<span class="pill live">{t}</span>'
 soon = lambda t: f'<span class="pill soon">{t}</span>'
-pain_fix_viz = viz.pain_fix([
+PF_ROWS = ([
     (1, "Hundreds of leads", "good and poor leads look the same", "Lead sorting", "the agent asks need, budget and time, and marks serious leads", "The admin sees serious leads first", soon("Feb 2027")),
     (2, "Slow replies", f"night chats wait; under {pct(X['conversion_now'])} close", "24-hour sales agent", "replies in minutes on WhatsApp (Instagram in May), offers open times and a payment link", f"Reply in under 5 minutes; closing {pct(X['conversion_now'])} → {pct(X['conversion_agent'], 1)}", soon("Feb 2027")),
     (3, "Founder re-teaches", "2 to 4 hours a week of SOPs", "SOP inside the agent", "written once, in the bureau's own style; the admin gets a summary of every lead", "Founder SOP time under 1 hour a week", soon("Feb 2027")),
@@ -193,6 +193,8 @@ pain_fix_viz = viz.pain_fix([
     (5, "No feedback asked", "good reviews lost", "Feedback and review requests", "asked the same day; happy clients get a Google Maps link", "Feedback from most sessions; new Google reviews every month", soon("Jan 2027")),
     (6, "More ads", "to replace lost clients", "Follow-ups and rebooking", "reminders bring clients back (email now, WhatsApp in Q1 2027); reviews and referrals bring new ones", "More clients book again; lower cost per new client", live("Email live")),
 ])
+pain_fix_win = viz.pain_fix(PF_ROWS[:3])
+pain_fix_keep = viz.pain_fix(PF_ROWS[3:])
 pos = viz.positioning([
     ("CoreItera", 88, 88, True),
     ("Admin on WhatsApp", 10, 50, False),
@@ -297,7 +299,7 @@ assump = [
     ["Founder pay", f"2027: Rp10M a month each, only in profit months. From 2028: Galih {rp(fp['Galih'], 0)}, Riskia {rp(fp['Riskia'], 0)}, Adit {rp(fp['Adit'], 0)} a year", "Decided"],
     ["Zaki's pay", "Rp10M a month in 2027 (same rule); Rp20M a month from 2028", "Estimate, to confirm"],
     ["Dividends", pct(runner.DIVIDEND_SHARE) + " of profit from 2030", "Proposal"],
-    ["Company tax", "22% of profit with the Pasal 31E cut (11% on the first Rp4.8 billion of turnover); 0.5% final scheme assumed not available from 2027", "Law; registration date to confirm"],
+    ["Company tax", f"0.5% of turnover to 2027 (registered {I.TAX_REGISTERED}); from 2028, 22% of profit with the Pasal 31E cut (11% on the first Rp4.8 billion of turnover)", "Law; a tax consultant to confirm"],
 ]
 tests = [
     ["1. Is the pain big?", "Late replies lose clients; founders re-teach selling.", "Medium: count late chats at TemanJourney, Dec 2026"],
@@ -368,13 +370,22 @@ slide("answer", "Start", "The answer in one picture", viz.pyramid(
             ("c2", "Cheap to run; we grow on our own income"),
             ("c3", "Rp50M in total for 20%; the 15% promise kept")])]))
 
-slide("numbers", "Start", "The plan in four numbers", f"""
-  <div class="tiles">
-    <div class="tile"><b>{num(B28)} bureaus</b><span>paying in year 2 (December 2028); {num(Y1)} in December 2027</span></div>
-    <div class="tile"><b>Rp1M to {rp(top_plan, 1)}</b><span>a month for a bureau; never more than one admin</span></div>
-    <div class="tile"><b>{month_name(first_profit)}</b><span>first month with a profit</span></div>
-    <div class="tile"><b>20%</b><span>for Rp50M in total: Riskia 16.1%, TemanJourney 3.9%</span></div>
-  </div>""")
+slide("summary", "Start", "Executive summary: a small, proven tool first, then 700 bureaus", f"""
+  <div class="exs">
+    <ol>
+      <li><b>Situation</b><span>Too few psychologists ({per100k:.0f} per 100,000 in ASEAN). Indonesian bureaus win clients in Instagram and WhatsApp chats.</span></li>
+      <li><b>Problem</b><span>Founders and admins are stuck in a loop: hundreds of leads, under {pct(X['conversion_now'])} close, founders re-teach SOPs 2 to 4 hours a week, schedules are matched in spreadsheets, feedback is never asked.</span></li>
+      <li><b>Solution</b><span>A small MVP that fixes each step: a 24-hour sales agent in the bureau's own style, self-booking, and feedback requests. Tested at TemanJourney first.</span></li>
+      <li><b>Plan</b><span>{num(SIGNED27 + B26)} bureaus signed by December 2027, {num(B28)} paying in year 2, Malaysia or Singapore in year 3. Psynthesia seats from year 2.</span></li>
+      <li><b>Ask</b><span>Rp30M now (TemanJourney Rp20M, Riskia Rp10M) for 20%: Riskia 16.1%, TemanJourney 3.9%.</span></li>
+    </ol>
+    <div class="kn">
+      <div><strong>{pct(more_clients)} more</strong><span>clients for a bureau from the sales agent (estimate)</span></div>
+      <div><strong>Rp1M to {rp(top_plan, 1)}</strong><span>a month for a bureau; never more than one admin</span></div>
+      <div><strong>{month_name(first_profit)}</strong><span>first month with a profit, on our own income</span></div>
+      <div><strong>{num(B28)} bureaus</strong><span>paying in year 2 (December 2028)</span></div>
+    </div>
+  </div>""", note="All numbers are estimates from the CoreItera model (model/inputs.py); details in the appendix.")
 
 # ------------------------------------------------------------------ A. why
 divider("part-a", "A", "A", "The need is big", ["Too few psychologists", "Founders and admins stuck in a loop", "Indonesia is the market to start"])
@@ -421,15 +432,16 @@ slide("a3", "A", "A3. Indonesia is the biggest market, and we can reach it first
 # ------------------------------------------------------------------ B. what
 divider("part-b", "B", "B", "One product first: the bureau tool", ["The MVP fixes each step of the loop", "More clients for less than one admin", "Only we sell 24 hours in the bureau's own style"])
 
-slide("b1", "B", "B1. Our MVP breaks the loop: one feature for each step", pain_fix_viz,
-      note="MVP = what TemanJourney runs by February 2027. Each proof number is checked before we sell to other bureaus. Targets are our estimates.")
+slide("b1", "B", "B1. Our MVP breaks the loop (1 of 2): it wins more clients", pain_fix_win,
+      note="Steps 1 to 3 of the loop: the leads, the replies and the founder's time. All live at TemanJourney by February 2027.")
+slide("b1-keep", "B", "B1. Our MVP breaks the loop (2 of 2): it serves and keeps them", pain_fix_keep,
+      note="Steps 4 to 6: the schedule, the feedback and the next visit. Every target is an estimate, checked at TemanJourney before we sell to others.")
 
 slide("b1-parts", "B", "B1. Most of the MVP is already built, so we can deliver", viz.product_stack([
-      ("Year 1", "ps-lead", "The bureau tool", [("Sales agent on WhatsApp", "Feb 2027"), ("Sales agent on Instagram", "May 2027"), ("Lead sorting", "Feb 2027"), ("Set up in one day", "Mar 2027"), ("Scheduling for any bureau", "Mar 2027"), ("Tests included", "Mar 2027"), ("Feedback and Google review requests", "Jan 2027"), ("Bureau's own style", "with the agent")]),
-      ("Already built", "ps-built", "What the agent sells", [("Booking and payment", "live 30 Nov 2026"), ("Chat counselling (Theta)", "live 30 Nov 2026"), ("Tests and reports", "live today"), ("Follow-up emails", "live")]),
-      ("Year 2", "ps-next", "Psynthesia: report copilot", [("AI drafts the report", "Rp300,000 a seat, from Jan 2028"), ("Psychologist signs", "always")]),
-      ("Year 3", "ps-later", "Beyond Indonesia", [("Malaysia or Singapore", "2029"), ("Local test norms", "from every test")]),
-  ]), note=f"Proof so far: 205 AI reports in our trial (scoring 60 → 10 minutes, writing 7 → 1 hour, quality {I.QUALITY_BEFORE} → {I.QUALITY_AFTER}+ out of 6). TemanJourney already buys our tests.")
+      ("Year 1", "ps-lead", "The bureau tool (new)", [("Sales agent on WhatsApp", "Feb 2027"), ("Lead sorting", "Feb 2027"), ("Feedback and review requests", "Jan 2027"), ("Self-serve set-up", "Mar 2027"), ("Scheduling for any bureau", "Mar 2027"), ("Sales agent on Instagram", "May 2027")]),
+      ("Already built", "ps-built", "What the agent sells into", [("Booking and payment", "live 30 Nov 2026"), ("Chat counselling (Theta)", "live 30 Nov 2026"), ("Tests and reports", "live today"), ("Follow-up emails", "live today")]),
+      ("Later", "ps-next", "Year 2: Psynthesia · Year 3: abroad", [("AI drafts the report", "Rp300,000 a seat, 2028"), ("Malaysia or Singapore", "2029")]),
+  ]), note="Proof: 205 AI reports in our trial (scoring 60 → 10 minutes, writing 7 → 1 hour). TemanJourney already buys our tests.")
 
 slide("b2", "B", "B2. The sales agent answers every chat and hands the best leads to the admin", table(["", "Admin away (night, weekend)", "Admin online"], [
     ["Who replies", "The agent, at once", "The agent first, then the admin"],
@@ -449,13 +461,14 @@ slide("b2-value", "B", "B2. A bureau gets more clients for less than the cost of
     <div class="card"><div class="eyebrow">The bureau pays</div><p class="lead"><b>{rp(lp_cost, 2)}</b> (Starter plan + payment fees) = about <b>{lp_return:.0f}×</b> back. The top plan never costs more than one admin ({rpk(top_plan)}).</p></div>
   </div>""", note=f"Example: {num(X['inquiries'])} chats a month, {SESSIONS_PER_CLIENT} paid sessions per client. Easy to start (set up in one day), easy to run (all in one place), tests included (no fee to other test sites, which charge Rp{TEST_FEE_LOW:,} to Rp{TEST_FEE_HIGH:,} per person).")
 
-slide("b3", "B", "B3. Only CoreItera sells for a bureau 24 hours, in its own style, into its real calendar", pos + table(["", "CoreItera", "Admin on WhatsApp", "Generic chatbots", "Global software", "Counselling apps"], [
+slide("b3", "B", "B3. Only CoreItera sells for a bureau 24 hours, in its own style, into its real calendar", pos, note="Placement is our own judgement from public product pages (October 2026).")
+slide("b3-matrix", "B", "B3. Feature by feature, the alternatives each miss a step of the loop", table(["", "CoreItera", "Admin on WhatsApp", "Generic chatbots", "Global software", "Counselling apps"], [
     ["Replies 24 hours", yes, no, yes, no, "Only for the app"],
     ["Bureau's own style", yes, yes, "Set by hand", no, no],
     ["Books real free times", yes, "By hand", no, yes, yes],
     ["Asks for feedback and reviews", yes, "If someone remembers", no, "Partly", "For the app"],
     ["Client belongs to the bureau", yes, yes, yes, yes, no],
-  ]), note="Placement is our own judgement from public product pages (October 2026).")
+  ]), note="Only CoreItera has every row: the loop needs all of them together.")
 
 slide("b3-moat", "B", "B3. Each new bureau makes the agent better, which brings the next bureau", viz.flywheel([("More bureaus", "join for clients"), ("More chats", "answered 24 h"), ("Smarter agent", "every correction"), ("More clients", "bureaus earn more"), ("Referrals", "bureaus bring bureaus")], ("More people helped", "per psychologist")),
       note=f"Hard to copy: each bureau's style lives in its agent; its clients and bookings live in CoreItera; TemanJourney, HIMPSI and universities are trust channels; we cost {rp(I.BASE_RUN_COST)} a month to run, so we can price low.")
@@ -463,13 +476,14 @@ slide("b3-moat", "B", "B3. Each new bureau makes the agent better, which brings 
 # ------------------------------------------------------------------ C. how
 divider("part-c", "C", "C", "A safe plan and deal", ["Year 1 bureaus, year 2 Psynthesia, year 3 abroad", "Cheap to run; steady growth", "Rp50M in total for 20%"])
 
-slide("c1", "C", "C1. Year 1: bureaus only, TemanJourney first. Year 2: 700 bureaus and Psynthesia. Year 3: abroad", road,
+slide("c1", "C", "C1. Roadmap: bureaus in year 1, 700 bureaus in year 2, abroad in year 3", road,
       note=f"Why {num(B28)}: Vibefam (Singapore) runs 700+ gyms and studios on one system; bureaus need the same things. We build up step by step in year 1 ({num(B26)}, then +{num(Q_NEW[0])}, +{num(Q_NEW[1])}, +{num(Q_NEW[2])}, +{num(Q_NEW[3])} a quarter).")
 
 slide("c1-build", "C", "C1. Three engineers ship one main build at a time", eng,
       note="Proposed owners. Psynthesia work starts in September 2027; it is sold from January 2028.")
 
-slide("c1-team", "C", "C1. We hire only when profit can pay the first salary", team_viz + table(["Role", "Mar 2027", "Jun", "Sep", "Dec 2027", "Dec 2028", "Dec 2031", "Pay and job"], team_rows, right=(1, 2, 3, 4, 5, 6)),
+slide("c1-team", "C", "C1. We hire only when profit can pay the first salary", team_viz, note="Sales first, then support, then quality and engineering. Galih and Riskia are the deal makers until the first sales hire.")
+slide("c1-team-roles", "C", "C1. Who we hire, when, and what they cost", table(["Role", "Mar 2027", "Jun", "Sep", "Dec 2027", "Dec 2028", "Dec 2031", "Pay and job"], team_rows, right=(1, 2, 3, 4, 5, 6)),
       note="Galih and Riskia are the deal makers until the first sales hire. Galih: strategy and money. Adit: sales agent, scheduling, chat. Zaki: screens, set-up, writing style, Psynthesia. Riskia: runs TemanJourney and opens doors.")
 
 slide("c1-risks", "C", "C1. We know what could stop us, and what we do then", table(["Risk", "Early sign", "What we do"], [
@@ -487,18 +501,23 @@ slide("c2", "C", f"C2. We are cheap to run and grow on our own income, but cash 
     <div class="tile"><b>{starter_needed} bureaus</b><span>on the Rp1M plan cover it</span></div>
     <div class="tile"><b>{month_name(first_profit)}</b><span>first month with a profit</span></div>
     <div class="tile"><b>{rp(low27)}</b><span>lowest cash in 2027 ({month_name(low27_m)}): under 2 months of costs</span></div>
-  </div>""" + viz.quarter_chart(plan['quarters']) + table(["Quarter", "Revenue", "Costs", "New money", "Net cash", "Cash at end"], q_rows, right=(1, 2, 3, 4, 5)),
+  </div>""" + viz.quarter_chart(plan['quarters']),
       note=f"New money = only the Rp30M from this deal (TemanJourney Rp20M, Riskia Rp10M) in Q4 2026. No other outside money is in this plan. The risk: if no bureau pays before April 2027, cash falls to {rp(late['cash'])} in {month_name(late['month'])}; then we slow sign-ups and spending.")
+
+slide("c2-cashq", "C", "C2. Cash by quarter: income catches up with costs from mid-2027", table(["Quarter", "Revenue", "Costs", "New money", "Net cash", "Cash at end"], q_rows, right=(1, 2, 3, 4, 5)),
+      note="New money = only the Rp30M from this deal. Costs include the cost of winning each new bureau, paid before it pays us.")
 
 slide("c2-revenue", "C", "C2. Revenue grows from the bureau tool first, then Psynthesia seats", viz.revenue_chart(Y),
       note=f"2027 income comes only from the bureau tool. Psynthesia adds income from 2028 and brings {pct(Y[2031]['copilot'] / Y[2031]['revenue'])} of revenue by 2031. With half the bureaus we still make a profit every year from {slow_profit_year}. Income from abroad is not counted.")
 
-slide("c2-churn", "C", "C2. Churn starts at 8% because we are new, and falls to 2% by year 2", churn_viz + viz.hbars([
+slide("c2-churn", "C", "C2. Churn starts at 8% because we are new, and falls to 2% by year 2", churn_viz,
+      note="Industry: small-business software loses 3% to 7% of customers a month (Vena 2025; Focus Digital 6.4%). Most churn happens in the first 90 days.")
+slide("c2-churn-count", "C", "C2. Churn means we must keep signing new bureaus", viz.hbars([
       ("Signed in 2027", SIGNED27, "c-cost", f"{num(SIGNED27)} bureaus"),
       ("Left during 2027", LOST27, "c-ochre", f"{num(LOST27)} bureaus"),
       ("Still paying in December 2027", Y1, "c-rev", f"{num(Y1)} bureaus"),
       ("New bureaus needed in 2028 to reach 700", Y[2028]['new'], "c-cost", f"{num(Y[2028]['new'])} (because {num(Y[2028]['churned'])} leave)"),
-  ]), note="Industry: small-business software loses 3% to 7% of customers a month (Vena 2025, from Recurly and Paddle data; Focus Digital: 6.4%). Most churn happens in the first 90 days, so onboarding matters most.")
+  ]), note=f"Each bureau that leaves must be replaced: in 2028 we need {num(Y[2028]['new'])} new bureaus to end the year with {num(B28)}.")
 
 slide("c2-churn-cases", "C", "C2. Getting churn down saves hundreds of bureaus of sales work", table(["Churn path", "Jan 2027 → Dec 2027 → Dec 2028", "Paying Dec 2027", "New needed in 2028", "Profit 2028", "Profit 2031"], churn_rows, right=(2, 3, 4, 5)),
       note="How we keep churn low: a set-up call in week 1, a monthly extra-clients report, and the first month free so only serious bureaus pay.")
@@ -541,20 +560,22 @@ slide("ask", "Ask", "What we ask Riskia and TemanJourney", f"""
 
 # ------------------------------------------------------------------ appendix (one table per slide)
 divider("appendix", "Appendix", "+", "Appendix: the detail behind the numbers", ["Profit and loss, costs, slow case", "Prices, tests, launch plan", "Assumptions and what to confirm"])
-slide("x-pnl", "Appendix", "Five-year profit and loss (estimates)", table(["Year", "Bureaus", "Seats", "Plans", "Payment fees", "Copilot", "Revenue", "Costs", "Tax", "Profit", "Margin", "Cash (Dec)"], yr_rows, right=tuple(range(1, 12))),
+slide("x-pnl", "Appendix", "Five-year profit and loss (estimates)", table(["Year", "Bureaus", "Seats", "Revenue", "Costs", "Tax", "Profit", "Margin", "Cash (Dec)"], [[r[0], r[1], r[2], r[6], r[7], r[8], r[9], r[10], r[11]] for r in yr_rows], right=tuple(range(1, 9))),
       note="Bureaus and seats in December. Tax: company income tax under Indonesian rules (see the tax slide); a tax consultant must confirm. TemanJourney is not counted.")
-slide("x-costs", "Appendix", "Main costs by year", table(["Cost"] + [str(y) for y in Y], cost_rows, right=tuple(range(1, 6))),
+slide("x-costs", "Appendix", "Main costs by year", table(["Cost"] + [str(y) for y in Y], cost_rows, right=tuple(range(1, 6)), cls="compact"),
       note=f"2027: founders and Zaki get Rp10M a month each, only in a month that makes a profit (from {month_name(plan['founders_paid_from'])}). From {month_name(plan['full_pay_from'])}: Galih {rp(fp['Galih'], 0)}, Riskia {rp(fp['Riskia'], 0)} and Adit {rp(fp['Adit'], 0)} a year.")
 TP_ = plan["tax_plan"]
 tax_rows = [[str(y), rp(Y[y]["revenue"]), rp(Y[y]["before_tax"]), TP_[y]["rule"], pct(TP_[y]["rate"], 1) + (" of turnover" if TP_[y]["rule"] == "0.5% final" else " of profit"), f"<b>{rp(TP_[y]['tax'])}</b>"] for y in Y]
-slide("x-tax", "Appendix", "Tax: 22% of profit, with the small-company cut", table(["Year", "Turnover", "Profit before tax", "Rule", "Average rate", "Tax"], tax_rows, right=(1, 2, 4, 5)) + table(["Rule", "What it means for PT CoreItera"], [
-    ["0.5% of turnover (PP 55/2022)", "Only for turnover up to Rp4.8 billion a year, and for a PT only for its first 3 tax years. Since PP 20/2026 (April 2026), a PT can no longer start using it; PTs already using it keep it until their 3 years end. We assume our period is over by 2027 (to confirm)."],
+slide("x-tax", "Appendix", "Tax: 0.5% of turnover in 2027, then 22% of profit with the small-company cut", table(["Year", "Turnover", "Profit before tax", "Rule", "Average rate", "Tax"], tax_rows, right=(1, 2, 4, 5)),
+      note="Checked against DJP and tax-news sources (DDTC, IKPI), October 2026. Not tax advice: a tax consultant should confirm.")
+slide("x-tax-rules", "Appendix", "Tax rules behind the numbers", table(["Rule", "What it means for PT CoreItera"], [
+    ["0.5% of turnover (PP 55/2022)", f"Only for turnover up to Rp4.8 billion a year, and for a PT only for its first 3 tax years. Since PP 20/2026 (April 2026), a PT can no longer start using it, but PTs already using it keep it until their 3 years end. PT CoreItera was registered on {I.TAX_REGISTERED} and uses it today, so it keeps 0.5% for tax years 2025, 2026 and 2027."],
     ["22% of profit (UU HPP)", "The normal company tax, on profit after costs, not on turnover."],
     ["Pasal 31E cut", "If turnover is up to Rp50 billion, the part of profit that matches the first Rp4.8 billion of turnover pays half (11%). So the average rate rises from 11% as turnover grows."],
     ["Losses", "A loss year pays no company tax, and the loss lowers taxable profit for the next 5 years."],
     ["PTKP", "The personal allowance is for people, not for a PT. It lowers each founder's own salary tax (PPh 21), which is already inside their gross pay."],
     ["Cash timing", "Each month we pay last year's tax / 12 (PPh 25); the rest of last year's tax is paid in April (PPh 29)."],
-  ]), note="Checked against DJP and tax-news sources (DDTC, IKPI), October 2026. Not tax advice: a tax consultant must confirm, especially CoreItera's registration date and whether it ever used the 0.5% scheme. VAT (PPN) is charged on top of our prices once turnover passes Rp4.8 billion, so it is not a cost in this model.")
+  ]), note="Checked against DJP and tax-news sources (DDTC, IKPI), October 2026. Not tax advice: a tax consultant should confirm, especially that 2027 is the last 0.5% year. VAT (PPN) is charged on top of our prices once turnover passes Rp4.8 billion, so it is not a cost in this model.")
 slide("x-slow", "Appendix", "Slow case: half the bureaus", table(["Year", "Bureaus", "Revenue", "Profit", "Margin", "Cash (Dec)"], slow_rows, right=(1, 2, 3, 4, 5)),
       note=f"Lowest cash in the slow case: {rp(slow_low['cash'])} in {month_name(slow_low['month'])}.")
 slide("x-prices", "Appendix", "Prices", table(["Plan", "Psychologists", "Price a month", "Per psychologist"], [
@@ -574,7 +595,8 @@ slide("x-launch", "Appendix", "Launch at TemanJourney on 30 November 2026", tabl
     ["Test week: real bookings, payments and chats", "Fri 27 Nov", "All"],
     ["<b>Theta live for TemanJourney clients</b>", "<b>Mon 30 Nov</b>", "All"],
   ], right=(1,)))
-slide("x-assume", "Appendix", "Main assumptions", table(["Assumption", "Value", "Status"], assump),
+slide("x-assume", "Appendix", "Main assumptions (1 of 2)", table(["Assumption", "Value", "Status"], assump[:8], cls="compact"))
+slide("x-assume-2", "Appendix", "Main assumptions (2 of 2)", table(["Assumption", "Value", "Status"], assump[8:], cls="compact"),
       note="All in model/inputs.py; rebuild with model/build_page.py.")
 slide("x-confirm", "Appendix", "To confirm before signing", table(["Number", "Used here", "Why it matters"], [
     ["CoreItera's share count (from the deed)", "1,000,000 as an example", "Sets the exact number of new shares"],
@@ -583,7 +605,6 @@ slide("x-confirm", "Appendix", "To confirm before signing", table(["Number", "Us
     ["Optional round: size, price and timing", f"{rp(rnd['amount'], 0)} for {pct(rnd['dilution'])}, {rnd_when} at the earliest", "Only with traction; the price is an estimate"],
     ["Closing rate with the agent, and after-hours share", f"{pct(X['conversion_agent'], 1)}; {pct(X['after_hours_share'])}", "The lead product's whole promise"],
     ["Other shareholders of TemanJourney", "Not known", "They must approve the Rp20M"],
-    ["CoreItera's tax registration date and current tax scheme", "0.5% final not available from 2027", "Decides 2027 tax; ask a tax consultant"],
   ]))
 slide("x-alt", "Appendix", "The other way to price the deal", table(["", "Recommended (15% kept, then cash)", "Cash only"], [
     ["Riskia at the end", "16.1%", "12.6%"], ["TemanJourney at the end", "3.9%", "7.4%"], ["Together", "20.0%", "20.0%"],
@@ -592,17 +613,38 @@ slide("x-alt", "Appendix", "The other way to price the deal", table(["", "Recomm
 
 
 # ------------------------------------------------------------------ render
+TRACK = [("Start", "Summary"), ("A", "A. Need"), ("B", "B. Product"), ("C", "C. Plan and deal"), ("Ask", "Ask")]
+AGENDA = [("A", "The need is big", ["Too few psychologists", "Founders and admins stuck in a loop", "Indonesia is the market to start"]),
+          ("B", "One product first: the bureau tool", ["The MVP fixes each step of the loop", "More clients for less than one admin", "Only we sell 24 hours in the bureau's own style"]),
+          ("C", "A safe plan and deal", ["Year 1 bureaus, year 2 Psynthesia, year 3 abroad", "Cheap to run; own income", "Rp50M in total for 20%"]),
+          ("Ask", "What we ask", [])]
+
+
+def tracker(sec):
+    if sec == "Appendix":
+        return '<div class="trk"><span class="on">Appendix</span></div>'
+    return '<div class="trk">' + "".join(f'<span class="{"on" if k == sec else ""}">{lab}</span>' for k, lab in TRACK) + "</div>"
+
+
 def render(sl, n, total):
+    foot = f'<div class="sfoot"><span class="src">{sl.get("note", "")}</span><span class="pg">CoreItera · {n}</span></div>'
     if sl["kind"] == "divider":
-        pts = "".join(f"<li>{p}</li>" for p in sl["points"])
-        return (f'<section class="slide divider" id="{sl["id"]}" data-sec="{sl["sec"]}"><div class="slide-top"><span>{sl["sec"]}</span><span>{n} / {total}</span></div>'
-                f'<div class="dv"><span class="dv-letter">{sl["letter"]}</span><div><h2 class="stitle">{sl["title"]}</h2><ul class="dv-points">{pts}</ul></div></div></section>')
+        if sl["sec"] == "Appendix":
+            rows = f'<div class="ag on"><b>+</b><span>{sl["title"]}</span><ul>' + "".join(f"<li>{p}</li>" for p in sl["points"]) + "</ul></div>"
+        else:
+            rows = "".join(f'<div class="ag {"on" if k == sl["sec"] else ""}"><b>{k if k != "Ask" else "→"}</b><span>{t}</span>'
+                           + (("<ul>" + "".join(f"<li>{p}</li>" for p in pts) + "</ul>") if k == sl["sec"] and pts else "") + "</div>"
+                           for k, t, pts in AGENDA)
+        return (f'<section class="slide divider" id="{sl["id"]}" data-sec="{sl["sec"]}"><div class="eyebrow">Agenda</div>'
+                f'<div class="agenda">{rows}</div>{foot}</section>')
     lead = f'<p class="slead">{sl["lead"]}</p>' if sl.get("lead") else ""
-    note = f'<p class="snote">{sl["note"]}</p>' if sl.get("note") else ""
     cls = "slide " + {"cover": "cover", "ask": "askslide"}.get(sl["kind"], "")
-    head = f'<h1 class="stitle">{sl["title"]}</h1>' if sl["kind"] == "cover" else f'<h2 class="stitle">{sl["title"]}</h2>'
-    return (f'<section class="{cls}" id="{sl["id"]}" data-sec="{sl["sec"]}"><div class="slide-top"><span>{sl["sec"]}</span><span>{n} / {total}</span></div>'
-            f'{head}{lead}<div class="sbody">{sl["body"]}</div>{note}</section>')
+    if sl["kind"] == "cover":
+        return (f'<section class="{cls}" id="{sl["id"]}" data-sec="{sl["sec"]}"><div class="eyebrow">CoreItera</div>'
+                f'<h1 class="stitle">{sl["title"]}</h1>{lead}<div class="sbody">{sl["body"]}</div></section>')
+    return (f'<section class="{cls}" id="{sl["id"]}" data-sec="{sl["sec"]}">{tracker(sl["sec"])}'
+            f'<h2 class="stitle">{sl["title"]}</h2>{lead}<div class="sbody">{sl["body"]}</div>'
+            + (f'<p class="snote">{sl["note"]}</p>' if sl.get("note") else "") + f'{foot}</section>')
 
 
 S = [render(sl, i + 1, len(SL)) for i, sl in enumerate(SL)]
@@ -621,6 +663,38 @@ footer = """
   Sources: CoreItera trial data (205 reports rated over 6 months); TemanJourney 2027 financial model (October 2026); WHO (2025, 2026), Mental Health Atlas 2024; UN World Population Prospects 2024; GBD 2021 ASEAN Mental Disorders Collaborators (2025); HIMPSI (2026, 2021); Rettew et al. (2009); Augment proposal (IS5007, October 2026) for the typical week, assessment hours, the 6 to 15 a week calculation and Law 23/2022; Kemenkes, Survei Kesehatan Indonesia 2023; SimplePractice prices from third-party guides (2026); Riliv from Fortune Indonesia (2023); Klinik Pintar from Dealroom and e27; Vibefam from its June 2026 funding release and Product Hunt (700+ locations, 26 countries); Jakarta minimum wage 2026 (Rp5,729,876) from Bisnis.com; KantorKu test prices via the Augment proposal. US$1 = Rp16,500. A notary and a tax consultant must confirm the legal and tax steps.
 </footer>"""
 
+
+FIT_JS = """
+(function(){
+  function fit(){
+    var bar = document.querySelector('.pbar');
+    var w = document.documentElement.clientWidth - 32;
+    var h = bar ? window.innerHeight - bar.offsetHeight - 20 : Infinity;
+    var z = Math.max(0.2, Math.min(w / 1280, h / 720));
+    document.querySelectorAll('.slide').forEach(function(s){ s.style.zoom = z; });
+  }
+  var q = location.search;
+  var only = (q.match(/only=([A-Za-z0-9_-]+)/) || [])[1];
+  if (only) {                       // one slide at 1280 x 720, for screenshots
+    var bar = document.querySelector('.pbar'); if (bar) bar.remove();
+    document.body.style.padding = '0'; document.body.style.margin = '0';
+    document.querySelectorAll('.slide').forEach(function(s){ if (s.id !== only) s.remove(); else { s.style.zoom = 1; s.style.border = '0'; s.style.boxShadow = 'none'; } });
+    var f = document.querySelector('footer'); if (f) f.remove();
+    document.querySelector('main').style.gap = '0';
+    return;
+  }
+  fit(); window.addEventListener('resize', fit);
+  if (q.indexOf('check') >= 0) {    // list slides whose content does not fit
+    var bad = [];
+    document.querySelectorAll('.slide').forEach(function(s, i){
+      var b = s.querySelector('.sbody'); var over = b ? b.scrollHeight - b.clientHeight : 0;
+      var wide = Array.prototype.some.call(s.querySelectorAll('.tablewrap,.chart'), function(e){ return e.scrollWidth > e.clientWidth + 2; });
+      if (over > 2 || wide) bad.push({n: i + 1, id: s.id, over: over, wide: wide});
+    });
+    var pre = document.createElement('pre'); pre.id = 'fitcheck'; pre.textContent = JSON.stringify(bad); document.body.appendChild(pre);
+  }
+})();
+"""
 html = f"""<title>Theta Partnership Proposal</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -632,6 +706,7 @@ html = f"""<title>Theta Partnership Proposal</title>
 {''.join(S)}
 {footer}
 </main>
+<script>{FIT_JS}</script>
 """
 
 with open(OUT_HTML, "w") as f:
@@ -640,7 +715,7 @@ with open(OUT_HTML, "w") as f:
 import present
 OUT_PRESENT = os.path.join(HERE, "..", "proposal", "theta-partnership-proposal-present.html")
 with open(OUT_PRESENT, "w") as f:
-    f.write(present.standalone("Theta Partnership Proposal", css, f"<main>\n{''.join(S)}\n{footer}\n</main>"))
+    f.write(present.standalone("Theta Partnership Proposal", css, f"<main>\n{''.join(S)}\n{footer}\n</main><script>{FIT_JS}</script>"))
 print("wrote", os.path.normpath(OUT_PRESENT))
 runner.main()
 print("wrote", os.path.normpath(OUT_HTML))
