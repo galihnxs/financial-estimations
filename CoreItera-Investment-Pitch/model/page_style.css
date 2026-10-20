@@ -154,7 +154,7 @@ div.c-rev{background:var(--teal)} div.c-cost{background:var(--slate)} div.c-ochr
 .chart .fw-arc{fill:none;stroke:var(--teal);stroke-width:2.5}
 .chart .fw-head{fill:var(--teal)}
 .chart .fw-node{fill:var(--teal-soft);stroke:var(--teal);stroke-width:1.5}
-.chart .fw-t{fill:var(--ink);font:700 13.5px var(--body)}
+.chart .fw-t{fill:var(--ink);font:700 12.5px var(--body)}
 .chart .fw-s{fill:var(--muted);font:12px var(--body)}
 .chart .fw-c{fill:var(--teal);font:700 17px var(--display)}
 .bar.tall{height:40px}
@@ -167,3 +167,41 @@ div.c-rev{background:var(--teal)} div.c-cost{background:var(--slate)} div.c-ochr
 .chart .t-cs{fill:var(--ochre)} i.t-cs{background:var(--ochre)}
 .chart .t-sales{fill:#C9A45C} i.t-sales{background:#C9A45C}
 .chart .refline{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4}
+.pl .fw-arc{stroke:var(--risk)} .pl .fw-head{fill:var(--risk)} .pl .fw-node{fill:var(--ochre-soft);stroke:var(--risk)} .pl .fw-c{fill:var(--risk)}
+/* pain -> fix */
+.pf{display:flex;flex-direction:column;gap:8px}
+.pf-head,.pf-row{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1.25fr) minmax(0,.9fr);gap:10px;align-items:stretch}
+.pf-head{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+.pf-pain,.pf-fix,.pf-proof{border-radius:6px;padding:10px 12px;font-size:14.5px;line-height:1.4;display:flex;gap:10px;min-width:0}
+.pf-pain{background:var(--ochre-soft);border:1px solid var(--line)}
+.pf-pain b{color:var(--risk)}
+.pf-fix{background:var(--teal-soft);border:1px solid var(--teal);justify-content:space-between;align-items:flex-start}
+.pf-proof{background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:14px}
+.pf-pain div,.pf-fix div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pf-pain span:not(.pf-n),.pf-fix div span{font-size:13.5px;color:var(--muted)}
+.pf-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--risk);color:var(--paper);display:flex;align-items:center;justify-content:center;font:600 12.5px var(--mono)}
+.pf-arrow{display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:20px;font-weight:700}
+.pf-fix .pill{flex:none;margin-top:2px}
+@media (max-width:820px){.pf-head{display:none}.pf-row{grid-template-columns:1fr;gap:4px}.pf-arrow{transform:rotate(90deg);height:18px}}
+/* ===== slides (v9): one message per slide ===== */
+main{gap:26px;max-width:1040px}
+.slide{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px 30px 20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.slide-top{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stitle{font-family:var(--display);font-size:clamp(22px,2.7vw,30px);font-weight:600;line-height:1.22;margin:0;border:0;padding:0;text-wrap:balance}
+.slead{font-size:18px;color:var(--muted);margin:0;max-width:none}
+.sbody{display:flex;flex-direction:column;gap:14px;min-width:0}
+.snote{font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:auto;max-width:none}
+.slide .tile,.slide .card,.slide .tablewrap,.slide .chart,.slide .hb,.slide .bars,.slide .pyr-col,.slide .ps-layer,.slide .rm-wrap{background:var(--paper)}
+.slide th{background:var(--surface)}
+.cover{border-top:6px solid var(--teal);padding-block:44px 30px}
+.cover .stitle{font-size:clamp(34px,5vw,54px);font-weight:700}
+.cover .mission-text{max-width:none}
+.divider{background:var(--slate);border-color:var(--slate);color:var(--paper)}
+.divider .slide-top{color:var(--paper);opacity:.75}
+.dv{display:flex;gap:26px;align-items:center;padding:34px 0 26px}
+.dv-letter{font-family:var(--display);font-size:84px;font-weight:700;line-height:1}
+.divider .stitle{color:var(--paper);font-size:clamp(28px,4vw,42px)}
+.dv-points{color:var(--paper);opacity:.9;margin-top:12px;font-size:17px;padding-left:20px}
+.askslide{border:2px solid var(--teal)}
+.ask-list{font-size:18px;gap:10px;max-width:none}
+@media (max-width:600px){.slide{padding:18px 16px}.dv{flex-direction:column;align-items:flex-start;gap:10px}.dv-letter{font-size:56px}}

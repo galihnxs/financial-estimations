@@ -112,10 +112,10 @@ AGENT_COST_PER_BUREAU = 0.10        # E  AI replies + WhatsApp template messages
 
 # Worked example for one bureau (per month) - estimates, to be measured at TemanJourney first
 EXAMPLE = {
-    "inquiries": 200,          # E  chats from Instagram and WhatsApp a month
+    "inquiries": 300,          # K/E  Galih: hundreds of leads a month
     "after_hours_share": 0.40, # E  share that arrive when the admin is not working
-    "conversion_now": 0.15,    # E  share of chats that become paying clients today
-    "conversion_agent": 0.20,  # E  with instant replies 24 hours and admin closing hot leads
+    "conversion_now": 0.05,    # K  Galih: closing rate today is under 5%
+    "conversion_agent": 0.075, # E  with replies in minutes, 24 hours, and the admin closing hot leads (+50%)
     "first_purchase": 0.4,     # E  Rp400,000 average first purchase (session or assessment)
 }
 

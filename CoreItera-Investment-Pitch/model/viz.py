@@ -5,9 +5,10 @@ import math
 def quarter_chart(qs):
     W, H, L, R, T, B = 720, 300, 60, 20, 20, 50
     vals = [q["revenue"] for q in qs] + [q["costs"] for q in qs] + [q["cash_end"] for q in qs]
-    top = max(vals)
-    top = math.ceil(top / 50) * 50
-    bottom = min(0, math.floor(min(vals) / 10) * 10)
+    raw = max(vals)
+    step_ = next(st for st in (10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000) if raw / st <= 7)
+    top = math.ceil(raw / step_) * step_
+    bottom = min(0, math.floor(min(vals) / step_) * step_)
     span = top - bottom
     def yv(v):
         return T + (top - v) / span * (H - T - B)
@@ -15,9 +16,9 @@ def quarter_chart(qs):
     step = (W - L - R) / n
     bw = step * 0.28
     g = []
-    for t in range(int(bottom), int(top) + 1, 50):
+    for t in range(int(bottom), int(top) + 1, step_):
         g.append(f'<line x1="{L}" x2="{W - R}" y1="{yv(t):.1f}" y2="{yv(t):.1f}" class="grid"/>'
-                 f'<text x="{L - 8}" y="{yv(t) + 4:.1f}" class="ax" text-anchor="end">{t}</text>')
+                 f'<text x="{L - 8}" y="{yv(t) + 4:.1f}" class="ax" text-anchor="end">{t:,}</text>')
     g.append(f'<line x1="{L}" x2="{W - R}" y1="{yv(0):.1f}" y2="{yv(0):.1f}" class="zero"/>')
     pts = []
     for i, q in enumerate(qs):
@@ -208,26 +209,26 @@ def gantt(items, start, months):
 
 
 # ---------------------------------------------------------------- flywheel
-def flywheel(nodes, center):
+def flywheel(nodes, center, mid="fw-arrow", extra=""):
     W = H = 480
     cx, cy, R = W / 2, H / 2, 160
     n = len(nodes)
     pts = [(cx + R * math.sin(2 * math.pi * i / n), cy - R * math.cos(2 * math.pi * i / n)) for i in range(n)]
-    g = ['<defs><marker id="fw-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
+    g = [f'<defs><marker id="{mid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
          '<path d="M0,0 L10,5 L0,10 z" class="fw-head"/></marker></defs>']
     for i in range(n):
         a0 = 2 * math.pi * (i + 0.18) / n
         a1 = 2 * math.pi * (i + 0.82) / n
         x0, y0 = cx + R * math.sin(a0), cy - R * math.cos(a0)
         x1, y1 = cx + R * math.sin(a1), cy - R * math.cos(a1)
-        g.append(f'<path d="M{x0:.1f},{y0:.1f} A{R},{R} 0 0,1 {x1:.1f},{y1:.1f}" class="fw-arc" marker-end="url(#fw-arrow)"/>')
+        g.append(f'<path d="M{x0:.1f},{y0:.1f} A{R},{R} 0 0,1 {x1:.1f},{y1:.1f}" class="fw-arc" marker-end="url(#{mid})"/>')
     for (x, y), (title, sub) in zip(pts, nodes):
-        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="60" class="fw-node"/>'
+        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="68" class="fw-node"/>'
                  f'<text x="{x:.1f}" y="{y - 4:.1f}" class="fw-t" text-anchor="middle">{title}</text>'
                  f'<text x="{x:.1f}" y="{y + 14:.1f}" class="fw-s" text-anchor="middle">{sub}</text>')
     g.append(f'<text x="{cx}" y="{cy - 4}" class="fw-c" text-anchor="middle">{center[0]}</text>'
              f'<text x="{cx}" y="{cy + 16}" class="fw-s" text-anchor="middle">{center[1]}</text>')
-    return f'<div class="chart fw"><svg viewBox="0 0 {W} {H}" role="img" aria-label="Growth flywheel">' + "".join(g) + "</svg></div>"
+    return f'<div class="chart fw {extra}"><svg viewBox="0 0 {W} {H}" role="img" aria-label="{center[0]}">' + "".join(g) + "</svg></div>"
 
 
 # ---------------------------------------------------------------- ownership bars
@@ -325,3 +326,15 @@ def line_chart(points, ref=None, unit="%", label="", aria="Line chart"):
                      f'<text x="{xv(i):.1f}" y="{yv(v) - 9:.1f}" class="lab" text-anchor="middle">{v:.0f}{unit}</text>'
                      f'<text x="{xv(i):.1f}" y="{H - B + 20}" class="ax" text-anchor="middle">{lab}</text>')
     return f'<div class="chart"><svg viewBox="0 0 {W} {H}" role="img" aria-label="{aria}">' + "".join(g) + f'</svg><div class="legend"><span>{label}</span></div></div>'
+
+
+# ---------------------------------------------------------------- pain -> MVP fix -> proof
+def pain_fix(rows):
+    """rows: [(n, pain, pain_sub, fix, fix_sub, proof, status_html)]"""
+    out = ['<div class="pf-head"><span>The loop today</span><span></span><span>Our MVP fix</span><span>How we prove it at TemanJourney</span></div>']
+    for n, pain, psub, fix, fsub, proof, status in rows:
+        out.append(f'<div class="pf-row"><div class="pf-pain"><span class="pf-n">{n}</span><div><b>{pain}</b><span>{psub}</span></div></div>'
+                   f'<div class="pf-arrow" aria-hidden="true">→</div>'
+                   f'<div class="pf-fix"><div><b>{fix}</b><span>{fsub}</span></div>{status}</div>'
+                   f'<div class="pf-proof">{proof}</div></div>')
+    return f'<div class="pf" role="table" aria-label="Each pain and its fix">{"".join(out)}</div>'

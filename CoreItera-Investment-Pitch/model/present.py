@@ -2,7 +2,7 @@
 
 Wraps the same page body in a full HTML document: charset, viewport, the artifact's base reset,
 embedded fonts, a presenter bar (section links, light/dark, full screen) and keyboard steps:
-  → / Space / Page Down = next stop     ← / Page Up = previous stop
+  → / Space / Page Down = next slide    ← / Page Up = previous slide
   F = full screen                       T = light / dark                 Home = top
 """
 import os
@@ -32,7 +32,8 @@ PRESENT_CSS = """
 .pbar button:focus-visible,.pbar a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .pbar .count{color:var(--muted);font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
 body{padding-top:76px}
-section,.part,header{scroll-margin-top:72px}
+.slide{scroll-margin-top:68px;min-height:calc(100vh - 92px)}
+main{gap:18px}
 .stop-on{box-shadow:0 0 0 3px var(--teal-soft);border-radius:8px}
 @media (max-width:720px){.pbar .brand{display:none}.pbar .hint{display:none}}
 @media print{.pbar{display:none}body{padding-top:0}}
@@ -41,11 +42,7 @@ section,.part,header{scroll-margin-top:72px}
 
 PRESENT_JS = """
 (function(){
-  var parts = document.querySelectorAll('.part');
-  var names = ['part-a','part-b','part-c','appendix'];
-  parts.forEach(function(p,i){ if(!p.id) p.id = names[i] || ('part-'+i); });
-  var ids = ['mission','answer','part-a','a1','a2','a3','part-b','b1','b2','b3','part-c','c1','c2','c3','ask','appendix'];
-  var stops = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var stops = Array.prototype.slice.call(document.querySelectorAll('.slide'));
   var links = document.querySelectorAll('.pbar nav a');
   var count = document.getElementById('pcount');
   var cur = 0, lockUntil = 0;
@@ -53,15 +50,18 @@ PRESENT_JS = """
   function mark(i){
     cur = Math.max(0, Math.min(stops.length-1, i));
     count.textContent = (cur+1) + ' / ' + stops.length;
-    var id = stops[cur].id, group = id[0] === 'a' && id.length===2 ? 'part-a' : id[0] === 'b' && id.length===2 ? 'part-b' : id[0] === 'c' && id.length===2 ? 'part-c' : id;
-    links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href') === '#'+group); });
+    var sec = stops[cur].getAttribute('data-sec');
+    links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-sec') === sec); });
   }
   function go(i){ mark(i); lockUntil = Date.now() + 900; stops[cur].scrollIntoView({behavior: smooth ? 'smooth' : 'auto', block: 'start'}); }
-  var obs = new IntersectionObserver(function(es){
+  var ticking = false;
+  function onScroll(){
     if (Date.now() < lockUntil) return;
-    es.forEach(function(e){ if(e.isIntersecting){ var i = stops.indexOf(e.target); if(i>=0) mark(i); } });
-  }, {rootMargin: '-80px 0px -70% 0px'});
-  stops.forEach(function(s){ obs.observe(s); });
+    var best = 0;
+    for (var i = 0; i < stops.length; i++) { if (stops[i].getBoundingClientRect().top <= 120) best = i; else break; }
+    mark(best);
+  }
+  window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(function(){ ticking = false; onScroll(); }); } }, {passive: true});
   document.addEventListener('keydown', function(e){
     if (e.target.closest && e.target.closest('input,textarea,select')) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -93,14 +93,14 @@ BAR = """
 <div class="pbar" role="navigation" aria-label="Presenter">
   <span class="brand">CoreItera</span>
   <nav>
-    <a href="#mission">Mission</a><a href="#answer">Answer</a><a href="#part-a">A. Need</a><a href="#part-b">B. Product</a>
-    <a href="#part-c">C. Plan and deal</a><a href="#ask">The ask</a><a href="#appendix">Appendix</a>
+    <a href="#cover" data-sec="Start">Answer</a><a href="#part-a" data-sec="A">A. Need</a><a href="#part-b" data-sec="B">B. Product</a>
+    <a href="#part-c" data-sec="C">C. Plan and deal</a><a href="#ask" data-sec="Ask">The ask</a><a href="#appendix" data-sec="Appendix">Appendix</a>
   </nav>
   <span class="ctl">
     <span class="hint" style="color:var(--muted)">← → to move</span>
     <button id="pprev" type="button" aria-label="Previous section">←</button>
     <button id="pnext" type="button" aria-label="Next section">→</button>
-    <span class="count" id="pcount">1 / 16</span>
+    <span class="count" id="pcount">1</span>
     <button id="ptheme" type="button">Dark</button>
     <button id="pfull" type="button">Full screen</button>
   </span>

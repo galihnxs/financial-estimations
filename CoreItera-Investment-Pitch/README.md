@@ -19,7 +19,7 @@ The next Rp30M (TemanJourney Rp20M, Riskia Rp10M; Rp50M in total from Riskia's s
 | `model/build_page_v5_ibs5116_order.py` | The older builder in the IS5116 11-section order, kept for reference. |
 | `model/page_style.css` | Page styles (TemanJourney slate blue, CoreItera teal). |
 | `model/cap_table_calc.py` | The two-step share issue (15% completed, then cash to 20% combined) and the cash-only alternative. |
-| `output/` | Model results. Generated: do not edit by hand. |
+| `output/` | Model results. Generated: do not edit by hand. `output/slides.json` = the deck outline (one entry per slide: section, title, lead, note, body HTML) for the later slide deck. |
 | `proposal/` | The proposal page. Generated: do not edit by hand. Published at https://claude.ai/artifact/RfDM9C2LhJpqV5XF5L4KgN |
 | `proposal/theta-partnership-proposal-present.html` | Offline presenter version (double-click to open): full HTML page, fonts embedded, presenter bar, ← → steps through 16 sections, F full screen, T light/dark. Built by `model/present.py`. |
 | `model/fonts_embedded.css` | Gelasio, Source Sans 3 and IBM Plex Mono as embedded files, so the presenter version needs no internet. |
@@ -31,7 +31,11 @@ The next Rp30M (TemanJourney Rp20M, Riskia Rp10M; Rp50M in total from Riskia's s
 cd model && python3 -I build_page.py
 ```
 
-## Structure of the proposal (v7: MECE pyramid)
+## Structure of the proposal (v9: deck-ready, one message per slide)
+
+39 slides: cover, answer (pyramid), four numbers; A divider + A1, A2 (loop, cost, night chats), A3; B divider + B1 (pain to fix, MVP parts), B2 (how the agent works, value), B3 (positioning, flywheel); C divider + C1 (roadmap, build plan, team, risks), C2 (cash, angel round, churn, churn cases, revenue), C3 (deal, use of money); the ask; appendix divider + 9 detail slides. Every slide title is its message.
+
+### Older structure (v7: MECE pyramid)
 
 Mission → the answer (governing thought + pyramid picture) → A. The need (A1 world/ASEAN gap, A2 bureaus lose clients, A3 Indonesia market) → B. One product first (B1 year-1 bureau use case: easy to start, easy to run, tests included, led by the sales agent; B2 already built; B3 why we win) → C. Plan and deal (C1 roadmap with proof gates, one build at a time, team, risks; C2 money incl. the growth round; C3 the deal) → the ask → appendix (5-year P&L, costs, slow case, prices, five tests, launch workback, assumptions, sale value, alternative pricing, numbers to confirm). The IS5116 sections are all still covered.
 
