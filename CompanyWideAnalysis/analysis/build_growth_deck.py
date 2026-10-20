@@ -672,7 +672,7 @@ notes(s, "Grey bar taller than blue: we spend more than we sell that month. The 
 mark("timing")
 
 # ================================================================== Divider: How do we grow B2B, our main engine?
-divider('A', 'PART A OF D', 'How do we grow B2B, our main engine?', 'Win the head office, spread to its branches, keep the client with EAP, and sell 4 to 6 months before the work.', [(pc(B2B_SH), "of 2027 sales"), ("17 Oct", "BI proposal deadline")], ['Who do we sell to, and in what order?', 'Which deals must we sign, and by when?', 'What do we charge, and is it fair?', 'When must we start selling?', 'How do we depend less on BI?', 'Who sells with us?'], 0, (1, 3))
+divider('A', 'PART A OF D', 'How do we grow B2B, our main engine?', 'Win the head office, spread to its branches, keep the client with EAP, and sell 4 to 6 months before the work.', [(pc(B2B_SH), "of 2027 sales"), ("17 Oct", "BI proposal deadline")], ['Who do we sell to, and in what order?', 'Which deals must we sign, and by when?', 'What do we charge, and is it fair?', 'When must we start selling?', 'How do we depend less on BI?', 'Who sells with us, and how are partners paid?'], 0, (1, 3))
 mark("d_a")
 
 # ================================================================== A1. B2B strategy
@@ -926,6 +926,51 @@ text(s, 0.5, 5.65, 7.0, 1.2, [[B("Co-founder "), N("= a partner who owns part of
 notes(s, "A sales co-founder fixes the limit that matters most today: who sells to regulators and banks. Marketing can be hired as staff for less.")
 
 mark("cofounder")
+
+# ================================================================== Partner program (commission-only sales partners)
+_pr = lambda p, c: p - c - 0.02 * p                                  # event profit as the partner contract defines it
+_bon = lambda v: 18 if v >= 400 else 9 if v >= 250 else 3 if v >= 100 else 1 if v >= 50 else 0
+_kcp = sorted([m for m, n in zip(range(15), WB["Volume"].iter_rows(min_row=25, max_row=25, min_col=5, max_col=19, values_only=True).__next__())
+               for _ in range(int(n or 0)) if m >= 3])
+_deals = sorted([(m, "kcp") for m in _kcp] + [(9, "eap")])          # EAP 3 starts Jul-27 (month index 9)
+_kcp_p = WB["PnL"]["D8"].value / max(1, len(_kcp))                   # blended state/private bank price
+P_COMM, _h = 0.0, [0.0, 0.0]
+for i, (m, k) in enumerate(_deals):
+    P_COMM += (0.10 if i < 4 else 0.125) * _pr(_kcp_p, WB["Inputs"]["C18"].value) if k == "kcp" else 1.5
+    _h[0 if m < 9 else 1] += _kcp_p if k == "kcp" else 12 * WB["Inputs"]["C12"].value
+P_ONPLAN = P_COMM + sum(_bon(v) for v in _h)
+P_ROWS = [("closes the bank deals already in our plan", P_ONPLAN, (F27["N"] - P_ONPLAN) / F27["R"])]
+for add in (200, 400, 600):
+    _prof = 0.70 * add
+    _earn = 0.11 * _prof + 2 * _bon(add / 2)
+    P_ROWS.append((f"adds Rp{add}M of new sales", _earn, (F27["N"] + _prof - _earn) / (F27["R"] + add)))
+s = new_slide("Partners earn commission only after clients pay", accent="after clients pay", tag="b2b",
+              sub="A commission-only partner opens banks and companies for us. The price list is the floor; profit stays above 15% per deal.",
+              source="Partner contract (Pasal 4-9) and partner deck 'Program Mitra'. " + CUR + ". Partner scenarios are estimates, not in the model yet.")
+EARN = [("Non-EAP deals", "10% / 12.5%", "of event profit for closing deals 1-4 / from the 5th; no commission for only introducing"),
+        ("EAP", "Rp1.5M fixed", "per new annual contract (Rp0.5M for a 3-month package, Rp1M per renewal)"),
+        ("Above the list price", "30%", "of the amount above the list; nothing below the list without the Director"),
+        ("6-month bonus", "Rp1M to Rp18M", "from Rp50M of deals in 6 months; our packages are big, so 1 EAP + 1 training day already passes it")]
+for i, (h, v, lab) in enumerate(EARN):
+    x, y = 0.5 + (i % 2) * 3.2, 1.55 + (i // 2) * 2.05
+    card(s, x, y, 3.05, 1.9, [[(h, {"bold": True, "color": MUTED, "size": 11})],
+                              [(v, {"font": HEAD, "bold": True, "size": 20, "color": TERRA})], [(lab, {"size": 11})]], space=3)
+text(s, 6.95, 1.5, 5.85, 0.4, "What it does to our 2027 margin (now " + pc(F27["m"], 1) + ")", size=14, bold=True, color=INK_D,
+     font=HEAD, margin=0.02)
+table(s, 6.95, 1.95, 5.85, [3.05, 1.35, 1.45], [["If the partner...", "Partner earns", "Our margin"]] +
+      [[t, rp(e), pc(mm, 1)] for t, e, mm in P_ROWS], size=12, row_h=0.5, fills={(1, j): RED_BG for j in range(3)})
+text(s, 6.95, 4.55, 5.85, 0.95, [[B("Read it: "), N("paying commission on deals we would win anyway costs margin. Paying it on new deals "
+                                                    "raises margin, because our running cost does not grow with them.")]],
+     size=11, margin=0.02)
+callout(s, 0.5, 5.75, 12.3, 1.1, [[B("Guardrails in the contract: "), N("every deal keeps at least 15% margin after commission  ·  "
+                                                                        "renewal commission only with client contact we can verify, and it ends after 24 months  ·  "
+                                                                        "one institution with many offices (BI and its regional offices) is one client  ·  paid only after the client pays.")]],
+        size=12)
+notes(s, "The partner program pays for new business, not for business we already have. The first row is the risk case: if the partner "
+         "is credited with the bank deals already in our plan (bank events and EAP 3), commission is a pure cost. The other rows "
+         "assume new deals with about 70% event profit. Full scheme, price list and worked examples: the partner deck (Program Mitra).")
+mark("partner")
+
 
 # ================================================================== Divider: Can B2C pay for our clinic?
 divider('B', 'PART B OF D', 'Can B2C pay for our clinic?', 'Yes, from about April 2027: Instagram, referral and Theta vouchers grow B2C until it pays our part-time psychologists.', [(pc(1 - B2B_SH), "of 2027 sales"), (f"{B2C['ltvcac_ref'][14]:.1f}x", "referral: profit per client / cost")], ['How do followers turn into paid sessions?', 'What does it cost to win one client?'], 1, (4, 2))
@@ -1571,6 +1616,6 @@ callout(s, 0.5, 6.2, 12.3, 0.7, [[B("Next step: "), N("register on MagangHub thi
 mark("magang")
 
 fill_refs()
-assert len(prs.slides) == 42, len(prs.slides)
+assert len(prs.slides) == 43, len(prs.slides)
 prs.save(OUT)
 print("wrote", OUT, len(prs.slides), "slides")

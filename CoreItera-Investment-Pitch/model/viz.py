@@ -42,13 +42,15 @@ def quarter_chart(qs):
 
 def revenue_chart(years):
     W, H, L, R, T, B = 720, 280, 70, 20, 20, 40
-    top = math.ceil(max(v["revenue"] for v in years.values()) / 2000) * 2000
+    raw = max(v["revenue"] for v in years.values())
+    gstep = next(st for st in (1000, 2000, 5000, 10000, 20000) if raw / st <= 6)
+    top = math.ceil(raw / gstep) * gstep
     def yv(v):
         return T + (top - v) / top * (H - T - B)
     step = (W - L - R) / len(years)
     bw = step * 0.5
     g = []
-    for t in range(0, int(top) + 1, 2000):
+    for t in range(0, int(top) + 1, gstep):
         g.append(f'<line x1="{L}" x2="{W - R}" y1="{yv(t):.1f}" y2="{yv(t):.1f}" class="grid"/>'
                  f'<text x="{L - 8}" y="{yv(t) + 4:.1f}" class="ax" text-anchor="end">{t / 1000:.0f}</text>')
     for i, (y, v) in enumerate(years.items()):
@@ -201,7 +203,7 @@ def gantt(items, start, months):
         g.append(f'<text x="{L - 10}" y="{y + 19}" class="lab" text-anchor="end">{build}</text>')
         w = x(a + n) - x(a) - 4
         g.append(f'<rect x="{x(a) + 2:.1f}" y="{y + 5}" width="{w:.1f}" height="20" rx="4" class="{css}"/>')
-        if w >= 6.5 * len(owner):
+        if w >= 10 * len(owner):
             g.append(f'<text x="{x(a) + 8:.1f}" y="{y + 19}" class="inbar">{owner}</text>')
         else:
             g.append(f'<text x="{x(a + n) + 6:.1f}" y="{y + 19}" class="lab">{owner}</text>')
@@ -210,8 +212,8 @@ def gantt(items, start, months):
 
 # ---------------------------------------------------------------- flywheel
 def flywheel(nodes, center, mid="fw-arrow", extra=""):
-    W = H = 480
-    cx, cy, R = W / 2, H / 2, 160
+    W = H = 540
+    cx, cy, R = W / 2, H / 2, 178
     n = len(nodes)
     pts = [(cx + R * math.sin(2 * math.pi * i / n), cy - R * math.cos(2 * math.pi * i / n)) for i in range(n)]
     g = [f'<defs><marker id="{mid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
@@ -223,7 +225,7 @@ def flywheel(nodes, center, mid="fw-arrow", extra=""):
         x1, y1 = cx + R * math.sin(a1), cy - R * math.cos(a1)
         g.append(f'<path d="M{x0:.1f},{y0:.1f} A{R},{R} 0 0,1 {x1:.1f},{y1:.1f}" class="fw-arc" marker-end="url(#{mid})"/>')
     for (x, y), (title, sub) in zip(pts, nodes):
-        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="68" class="fw-node"/>'
+        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="84" class="fw-node"/>'
                  f'<text x="{x:.1f}" y="{y - 4:.1f}" class="fw-t" text-anchor="middle">{title}</text>'
                  f'<text x="{x:.1f}" y="{y + 14:.1f}" class="fw-s" text-anchor="middle">{sub}</text>')
     g.append(f'<text x="{cx}" y="{cy - 4}" class="fw-c" text-anchor="middle">{center[0]}</text>'
@@ -350,3 +352,31 @@ def journey(steps):
         if i < len(steps) - 1:
             out.append('<div class="jy-arrow" aria-hidden="true">→</div>')
     return f'<div class="jy" role="list">{"".join(out)}</div>'
+
+
+# ---------------------------------------------------------------- loop as readable cards (replaces the small ring)
+def loop_cards(nodes, center, kind=""):
+    """nodes: [(title, sub)], 5 or 6. Row 1 runs left to right, row 2 right to left, arrows close the loop."""
+    n = len(nodes)
+    top = (n + 1) // 2
+    cells = []
+    def card(i, col, row):
+        t, sub = nodes[i]
+        return (f'<div class="lc-card" style="grid-column:{col};grid-row:{row}"><span class="lc-n">{i + 1}</span>'
+                f'<div><b>{t}</b><span>{sub}</span></div></div>')
+    for i in range(top):
+        cells.append(card(i, 1 + 2 * i, 1))
+        if i < top - 1:
+            cells.append(f'<div class="lc-arr" style="grid-column:{2 + 2 * i};grid-row:1">→</div>')
+    rest = nodes[top:]
+    cols = [5, 3, 1] if len(rest) == 3 else [5, 1]
+    for k in range(len(rest)):
+        cells.append(card(top + k, cols[k], 3))
+        if k < len(rest) - 1:
+            a = 2 if cols[k + 1] == 3 else 2
+            span = f"{cols[k + 1] + 1} / {cols[k]}"
+            cells.append(f'<div class="lc-arr" style="grid-column:{span};grid-row:3">←</div>')
+    cells.append('<div class="lc-arr v" style="grid-column:5;grid-row:2">↓</div>')
+    cells.append('<div class="lc-arr v" style="grid-column:1;grid-row:2">↑</div>')
+    cells.append(f'<div class="lc-mid" style="grid-column:2 / 5;grid-row:2"><b>{center[0]}</b><span>{center[1]}</span></div>')
+    return f'<div class="lc {kind}" role="group" aria-label="{center[0]}">{"".join(cells)}</div>'

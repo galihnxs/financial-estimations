@@ -15,6 +15,7 @@ The next Rp30M (TemanJourney Rp20M, Riskia Rp10M; Rp50M in total from Riskia's s
 | `model/engine.py` | Monthly engine, October 2026 to December 2031: bureaus, seats, revenue, costs (fixed costs switch on by revenue or volume), tax, cash. |
 | `model/run.py` | Runs the plan and the slow case (half the bureaus); writes `output/results.json` and `output/tables.md`. |
 | `model/build_page.py` | Builds `proposal/theta-partnership-proposal.html` from the model (v7: pyramid order). Prose lives in this script; numbers come from the engine. |
+| `model/check_slides.sh` | Headless-Chrome check: `./check_slides.sh` lists slides whose content does not fit the 1280x720 page; `./check_slides.sh shots b1 c2` writes PNGs of single slides to `output/shots/`. Run it after every change. |
 | `model/viz.py` | Every visual (pyramid, bars, 24-hour band, product stack, roadmap, Gantt, flywheel, positioning map, cash and revenue charts), drawn to scale from model numbers. |
 | `model/build_page_v5_ibs5116_order.py` | The older builder in the IS5116 11-section order, kept for reference. |
 | `model/page_style.css` | Page styles (TemanJourney slate blue, CoreItera teal). |

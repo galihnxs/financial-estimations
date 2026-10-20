@@ -51,7 +51,7 @@ shows model version numbers.
 | `TemanJourney_Model_2027_v15.xlsx` | **The current model.** Monthly sales, costs, profit and cash, with real timing, the pay plan, the growth plan and the roadmap. Open **Outlook** and **Roadmap** first. |
 | `TemanJourney_Model_2027_v14.xlsx` | The previous model (fair pay in one step). Kept for comparison. |
 | `TemanJourney_Model_2027_v13.xlsx` | The previous model. It assumes sales from October 2026. Kept unchanged for comparison. |
-| `TemanJourney_Growth_Recommendation.pptx` / `.pdf` | The growth plan deck: 42 slides (appendix includes two slides on lowering the cost of winning clients and trainers, with a DuPont-style profit tree). Pyramid: summary first; each part (goal and problem, A. B2B, B. B2C, C. people, D. money, next steps, appendix) opens with a dark slide that asks the question it answers. |
+| `TemanJourney_Growth_Recommendation.pptx` / `.pdf` | The growth plan deck: 43 slides (slide 16 summarises the partner program; appendix includes two slides on lowering the cost of winning clients and trainers, with a DuPont-style profit tree). Pyramid: summary first; each part (goal and problem, A. B2B, B. B2C, C. people, D. money, next steps, appendix) opens with a dark slide that asks the question it answers. |
 | `projection guide.docx` | Written review of model v13. **Out of date:** its numbers are v13, not v15. |
 | `analysis/` | Python scripts that build the model, run it, and build the deck (see below). |
 | `output/model_runs.json` | Results of v15 under several settings, calculated by Excel. The deck and the Summary sheet read this file. |
@@ -147,3 +147,10 @@ save it as PDF. With AppleScript, the file must sit in `~/Library/Containers/com
 10. Update `projection guide.docx` to v15.
 
 The full list of estimates is on the **To_Fill** sheet and on slide 24 of the deck.
+
+## Partner program (Program Mitra)
+
+| File | What it is |
+|---|---|
+| `TemanJourney_Program_Mitra.pptx` / `.pdf` | 10-slide partner deck in Bahasa Indonesia: strategy and partner role, price list (training and EAP), profit-sharing scheme, semester bonus, worked examples, rules. Built by `analysis/build_partner_deck.py` (reuses the growth-deck design helpers). |
+| `../SPKnProposalAnalysis/Kemitraan Strategic Partnership - Iza/` | The partner contract (.md + .docx). Lampiran A (examples), B (standard costs) and C (price list) hold the same numbers as the deck: change both together. |

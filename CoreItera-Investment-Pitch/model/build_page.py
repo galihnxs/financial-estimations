@@ -172,14 +172,14 @@ yes, no = '<span class="yes">Yes</span>', '<span class="no">No</span>'
 
 # ---- the answer (top of the pyramid)
 
-pain_loop = viz.flywheel([
+pain_loop = viz.loop_cards([
     ("Hundreds of leads", "Instagram, WhatsApp"),
     ("Slow replies", "under 5% close"),
     ("Founder re-teaches", "2 to 4 h a week"),
     ("Spreadsheet matching", "clients give up"),
     ("No feedback asked", "good reviews lost"),
     ("More ads", "to replace lost clients"),
-], ("The endless loop", "for founders and admins"), mid="pl-arrow", extra="pl")
+], ("The endless loop", "for founders and admins"), kind="pl")
 # ---- PART A
 
 # ---- PART B
@@ -470,13 +470,13 @@ slide("b3-matrix", "B", "B3. Feature by feature, the alternatives each miss a st
     ["Client belongs to the bureau", yes, yes, yes, yes, no],
   ]), note="Only CoreItera has every row: the loop needs all of them together.")
 
-slide("b3-moat", "B", "B3. Each new bureau makes the agent better, which brings the next bureau", viz.flywheel([("More bureaus", "join for clients"), ("More chats", "answered 24 h"), ("Smarter agent", "every correction"), ("More clients", "bureaus earn more"), ("Referrals", "bureaus bring bureaus")], ("More people helped", "per psychologist")),
+slide("b3-moat", "B", "B3. Each new bureau makes the agent better, which brings the next bureau", viz.loop_cards([("More bureaus", "join for clients"), ("More chats", "answered 24 hours a day"), ("Smarter agent", "learns from every correction"), ("More clients", "so bureaus earn more"), ("Referrals", "bureaus bring bureaus")], ("More people helped", "per psychologist")),
       note=f"Hard to copy: each bureau's style lives in its agent; its clients and bookings live in CoreItera; TemanJourney, HIMPSI and universities are trust channels; we cost {rp(I.BASE_RUN_COST)} a month to run, so we can price low.")
 
 # ------------------------------------------------------------------ C. how
 divider("part-c", "C", "C", "A safe plan and deal", ["Year 1 bureaus, year 2 Psynthesia, year 3 abroad", "Cheap to run; steady growth", "Rp50M in total for 20%"])
 
-slide("c1", "C", "C1. Roadmap: bureaus in year 1, 700 bureaus in year 2, abroad in year 3", road,
+slide("c1", "C", "C1. Roadmap: bureaus in year 1, 700 in year 2, abroad in year 3", road,
       note=f"Why {num(B28)}: Vibefam (Singapore) runs 700+ gyms and studios on one system; bureaus need the same things. We build up step by step in year 1 ({num(B26)}, then +{num(Q_NEW[0])}, +{num(Q_NEW[1])}, +{num(Q_NEW[2])}, +{num(Q_NEW[3])} a quarter).")
 
 slide("c1-build", "C", "C1. Three engineers ship one main build at a time", eng,
@@ -495,7 +495,7 @@ slide("c1-risks", "C", "C1. We know what could stop us, and what we do then", ta
     ["Family and company mix", "Decisions only in conversation", "Write everything down; both companies approve."],
   ]))
 
-slide("c2", "C", f"C2. We are cheap to run and grow on our own income, but cash is thin until {month_name('2027-04').split()[0]} 2027", f"""
+slide("c2", "C", "C2. We grow on our own income, but cash is thin until April 2027", f"""
   <div class="tiles">
     <div class="tile"><b>{rp(I.BASE_RUN_COST)}</b><span>a month to run today; no salaries</span></div>
     <div class="tile"><b>{starter_needed} bureaus</b><span>on the Rp1M plan cover it</span></div>
@@ -528,7 +528,7 @@ slide("c2-angel", "C", f"C2. An optional {rp(rnd['amount'], 0)} round, only if w
     ["Cash at the end of 2027", rp(Y[2027]['cash_end']), rp(WY[2027]['cash_end'])],
     ["What the money is for", "None needed to stay above zero", "Scale: hire sales and support earlier, push faster to 700"],
     ["Ownership of Riskia's side", "20%", f"{pct(stake_after, 0)} unless they join the round"],
-  ], right=(1, 2)), note=f"Traction = TemanJourney's closing rate rising and at least {num(B27[(2027, 3)])} paying bureaus by March 2027. Angel investors through warm introductions or cold email. The round would cost about {pct(rnd['dilution'])} of CoreItera {EST}. We do not count on it.")
+  ]), note=f"Traction = TemanJourney's closing rate rising and at least {num(B27[(2027, 3)])} paying bureaus by March 2027. Angel investors through warm introductions or cold email. The round would cost about {pct(rnd['dilution'])} of CoreItera {EST}. We do not count on it.")
 
 slide("c3", "C", "C3. Riskia's side pays Rp50M in total for 20%, and the 15% promise is kept", viz.cap_bars([
       ("Today", [(0.90, "seg-o", "Current owners 90%"), (0.10, "seg-r", "10%")]),
@@ -575,7 +575,7 @@ slide("x-tax-rules", "Appendix", "Tax rules behind the numbers", table(["Rule", 
     ["Losses", "A loss year pays no company tax, and the loss lowers taxable profit for the next 5 years."],
     ["PTKP", "The personal allowance is for people, not for a PT. It lowers each founder's own salary tax (PPh 21), which is already inside their gross pay."],
     ["Cash timing", "Each month we pay last year's tax / 12 (PPh 25); the rest of last year's tax is paid in April (PPh 29)."],
-  ]), note="Checked against DJP and tax-news sources (DDTC, IKPI), October 2026. Not tax advice: a tax consultant should confirm, especially that 2027 is the last 0.5% year. VAT (PPN) is charged on top of our prices once turnover passes Rp4.8 billion, so it is not a cost in this model.")
+  ], cls="compact"), note="Checked against DJP and tax-news sources (DDTC, IKPI), October 2026. Not tax advice: a tax consultant should confirm that 2027 is the last 0.5% year. VAT (PPN) is added to our prices once turnover passes Rp4.8 billion, so it is not a cost here.")
 slide("x-slow", "Appendix", "Slow case: half the bureaus", table(["Year", "Bureaus", "Revenue", "Profit", "Margin", "Cash (Dec)"], slow_rows, right=(1, 2, 3, 4, 5)),
       note=f"Lowest cash in the slow case: {rp(slow_low['cash'])} in {month_name(slow_low['month'])}.")
 slide("x-prices", "Appendix", "Prices", table(["Plan", "Psychologists", "Price a month", "Per psychologist"], [
@@ -594,7 +594,7 @@ slide("x-launch", "Appendix", "Launch at TemanJourney on 30 November 2026", tabl
     ["Release practised on a copy of the live database", "Fri 20 Nov", "Galih, Adit, Zaki"],
     ["Test week: real bookings, payments and chats", "Fri 27 Nov", "All"],
     ["<b>Theta live for TemanJourney clients</b>", "<b>Mon 30 Nov</b>", "All"],
-  ], right=(1,)))
+  ], right=(1,), cls="compact"))
 slide("x-assume", "Appendix", "Main assumptions (1 of 2)", table(["Assumption", "Value", "Status"], assump[:8], cls="compact"))
 slide("x-assume-2", "Appendix", "Main assumptions (2 of 2)", table(["Assumption", "Value", "Status"], assump[8:], cls="compact"),
       note="All in model/inputs.py; rebuild with model/build_page.py.")
