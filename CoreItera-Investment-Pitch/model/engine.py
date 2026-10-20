@@ -28,7 +28,46 @@ def interp(points, ym, before=0.0):
     return points[keys[-1]]
 
 
-def run(I, with_round=False):
+def yearly_tax(I, years_rev, years_pbt):
+    """Company income tax per year (Rp M), with the 0.5% final scheme, Pasal 31E and loss carry-forward."""
+    out, losses = {}, []          # losses: [year, amount left]
+    for y in sorted(years_rev):
+        T, P = years_rev[y], years_pbt[y]
+        if y <= I.FINAL_TAX_LAST_YEAR and T <= I.FINAL_TAX_TURNOVER_LIMIT:
+            out[y] = {"tax": T * I.FINAL_TAX_RATE, "rule": "0.5% final", "rate": I.FINAL_TAX_RATE}
+            continue
+        losses = [l for l in losses if y - l[0] <= I.LOSS_CARRY_YEARS]
+        if P <= 0:
+            losses.append([y, -P])
+            out[y] = {"tax": 0.0, "rule": "loss, no tax", "rate": 0.0}
+            continue
+        taxable = P
+        for l in losses:
+            use = min(l[1], taxable)
+            l[1] -= use
+            taxable -= use
+        losses = [l for l in losses if l[1] > 0]
+        if T <= I.CORP_TAX_CUT_LIMIT:
+            share = min(1.0, I.CORP_TAX_CUT_TURNOVER / T) if T > 0 else 1.0
+            rate = share * I.CORP_TAX_RATE / 2 + (1 - share) * I.CORP_TAX_RATE
+            rule = "22% with Pasal 31E cut"
+        else:
+            rate, rule = I.CORP_TAX_RATE, "22%"
+        out[y] = {"tax": taxable * rate, "rule": rule, "rate": rate, "taxable": taxable}
+    return out
+
+
+def run(I, with_round=False, _tax=None):
+    if _tax is None:
+        first = run(I, with_round, _tax={})
+        rows0 = first["rows"]
+        years = sorted({r["ym"][0] for r in rows0})
+        rev = {y: sum(r["revenue"] for r in rows0 if r["ym"][0] == y) for y in years}
+        pbt = {y: sum(r["before_tax"] for r in rows0 if r["ym"][0] == y) for y in years}
+        tax_plan = yearly_tax(I, rev, pbt)
+        res = run(I, with_round, _tax=tax_plan)
+        res["tax_plan"] = tax_plan
+        return res
     rows = []
     cash = I.CASH_TODAY
     bureaus_prev = 0.0
@@ -149,10 +188,8 @@ def run(I, with_round=False):
 
         # --- profit and tax ---
         before_tax = revenue - variable - fixed
-        if y <= I.FINAL_TAX_UNTIL:
-            tax = revenue * I.FINAL_TAX_RATE
-        else:
-            tax = max(0.0, before_tax) * I.PROFIT_TAX_RATE
+        n_months = 3 if y == 2026 else 12           # the model starts in October 2026
+        tax = _tax.get(y, {}).get("tax", 0.0) / n_months   # booked evenly through the year (like monthly PPh 25 instalments)
         profit = before_tax - tax
         r.update(gross=revenue - variable, before_tax=before_tax, tax=tax, profit=profit)
 
@@ -160,8 +197,19 @@ def run(I, with_round=False):
         deal = I.DEAL_CASH if ym == I.DEAL_MONTH else 0.0
         one_offs = sum(I.DEAL_ONE_OFFS.values()) if ym == I.DEAL_MONTH else 0.0
         round_in = I.NEXT_ROUND["amount"] if (with_round and ym == I.NEXT_ROUND["month"]) else 0.0
-        cash = cash + profit + deal + round_in - one_offs
-        r.update(deal=deal, one_offs=one_offs, round_in=round_in, cash=cash)
+        # tax CASH (Indonesian practice): monthly PPh 25 instalments this year = last year's tax / 12;
+        # the rest of last year's tax (PPh 29) is paid in April. The 0.5% final tax is paid in the same month.
+        t_prev = _tax.get(y - 1, {}).get("tax", 0.0)
+        t_prev2 = _tax.get(y - 2, {}).get("tax", 0.0)
+        if _tax.get(y, {}).get("rule") == "0.5% final":
+            cash_tax = tax
+        else:
+            final_prev = _tax.get(y - 1, {}).get("rule") == "0.5% final"
+            cash_tax = 0.0 if final_prev else t_prev / 12
+            if m == 4 and not final_prev:
+                cash_tax += max(0.0, t_prev - (0.0 if _tax.get(y - 2, {}).get("rule") == "0.5% final" else t_prev2))
+        cash = cash + before_tax - cash_tax + deal + round_in - one_offs
+        r.update(deal=deal, one_offs=one_offs, round_in=round_in, cash=cash, cash_tax=cash_tax)
         rows.append(r)
         bureaus_prev = bureaus
         prev_revenue = revenue

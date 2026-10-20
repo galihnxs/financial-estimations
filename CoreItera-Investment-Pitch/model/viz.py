@@ -338,3 +338,15 @@ def pain_fix(rows):
                    f'<div class="pf-fix"><div><b>{fix}</b><span>{fsub}</span></div>{status}</div>'
                    f'<div class="pf-proof">{proof}</div></div>')
     return f'<div class="pf" role="table" aria-label="Each pain and its fix">{"".join(out)}</div>'
+
+
+# ---------------------------------------------------------------- journey (what we tried)
+def journey(steps):
+    """steps: [(n, name, saw, built, result, css)]; css 'jy-now' marks the current step."""
+    out = []
+    for i, (n, name, saw, built, result, css) in enumerate(steps):
+        out.append(f'<div class="jy-step {css}"><div class="jy-head"><span class="jy-n">{n}</span><b>{name}</b></div>'
+                   f'<dl><dt>We saw</dt><dd>{saw}</dd><dt>We built</dt><dd>{built}</dd><dt>What happened</dt><dd>{result}</dd></dl></div>')
+        if i < len(steps) - 1:
+            out.append('<div class="jy-arrow" aria-hidden="true">→</div>')
+    return f'<div class="jy" role="list">{"".join(out)}</div>'

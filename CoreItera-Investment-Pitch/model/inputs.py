@@ -43,7 +43,9 @@ PSY_PER_BUREAU = 3          # E  average psychologists per paying bureau
 PAYMENTS_PER_BUREAU = {2026: 40, 2027: 50, 2028: 60, 2029: 70, 2030: 75, 2031: 80}   # E  paid bookings/orders a month
 
 # ---- Mission and impact (Augment proposal IS5007 Oct 2026 + CoreItera trial) -------
-MISSION = "CoreItera: enabling scalable mental health support worldwide, starting with Indonesia's psychology bureaus."  # K (Galih, 19 Oct 2026)
+VISION = "CoreItera is a global technology company that provides AI services for the next million responsible businesses."  # K (Galih, 20 Oct 2026)
+FIRST_STEP = "We start by helping mental health firms grow from 10 to their first 1,000 clients in 2027, with minimum resources."  # K
+MISSION = "2027 to 2031: reduce mental health stress by helping expert firms operate at scale."  # K
 WORLD = {"people_with_condition_bn": 1.0,      # K  WHO 2025: over 1 billion people
          "lost_usd_trillion": 1.0,             # K  WHO 2026: US$1 trillion a year lost to depression and anxiety at work
          "workers_per_100k": 13}               # K  WHO Mental Health Atlas 2024, world median
@@ -166,11 +168,23 @@ OFFICE = 10.0               # E
 INFRA_GROWTH_PER_YEAR = 0.15  # E  base cloud/tools cost grows 15% a year from 2028
 
 # ---- Tax (confirm with a tax consultant) -----------------------------------------------
-FINAL_TAX_RATE = 0.005      # E  PP 55/2022: 0.5% of revenue while eligible (PT: first 4 tax years)
-FINAL_TAX_UNTIL = 2029
-PROFIT_TAX_RATE = 0.11      # E  22% corporate tax with the 50% small-business cut, from 2030
+# Indonesian company income tax for PT CoreItera (checked 20 Oct 2026; a tax consultant must confirm):
+# 1) Final 0.5% of turnover (PP 55/2022) only for gross turnover up to Rp4.8 billion a year, and for a PT only for
+#    3 tax years from registration. PP 20/2026 (from April 2026): PTs are no longer NEW users of the 0.5% scheme;
+#    PTs already using it keep it until their 3 years end.
+# 2) Otherwise: 22% of taxable profit (UU HPP). Pasal 31E: if turnover is up to Rp50 billion, the share of profit that
+#    matches the first Rp4.8 billion of turnover is taxed at half (11%).
+# 3) Losses can be carried forward for 5 years. PTKP (the personal allowance) is for people, not for a PT:
+#    it applies to each founder's own salary tax (PPh 21), which is inside their gross pay.
+FINAL_TAX_RATE = 0.005
+FINAL_TAX_TURNOVER_LIMIT = 4800.0   # Rp M a year
+FINAL_TAX_LAST_YEAR = 2026          # P/E  assume CoreItera's 0.5% period ends by 2026 (to confirm: registration date)
+CORP_TAX_RATE = 0.22
+CORP_TAX_CUT_TURNOVER = 4800.0      # Pasal 31E: 50% cut on the profit share of the first Rp4.8 billion of turnover
+CORP_TAX_CUT_LIMIT = 50000.0        # ... only if turnover is up to Rp50 billion
+LOSS_CARRY_YEARS = 5
 
-USE_NEXT_ROUND = True       # P  Galih, 20 Oct 2026: the Rp150M angel round is in the main plan, to grow in a sustained way
+USE_NEXT_ROUND = False      # P  Galih, 20 Oct 2026: the main plan runs on own income; the Rp150M round is an option
 
 # ---- Year 3: first country outside Indonesia (Galih, 20 Oct 2026) ----------------
 ABROAD_FROM = (2029, 1)     # P  Malaysia or Singapore
@@ -178,5 +192,5 @@ ABROAD_COST = 25.0          # E  Rp million a month: company set-up, local partn
 # Revenue from abroad is NOT counted in the numbers (upside).
 
 # ---- Exit and return for Riskia's side ---------------------------------------------------
-NEXT_ROUND = {"month": (2027, 3), "amount": 150.0, "dilution": 0.10}   # P/E  Galih, 20 Oct 2026: Rp150M angel seed (warm intro or cold email); price is an estimate
+NEXT_ROUND = {"month": (2027, 4), "amount": 150.0, "dilution": 0.10}   # P/E  OPTIONAL: only if we have traction by January 2027; closed by April 2027 at the earliest; price is an estimate
 REVENUE_MULTIPLE = {"low": 2.0, "mid": 4.0, "high": 6.0}   # E  company value = x times yearly revenue in 2031

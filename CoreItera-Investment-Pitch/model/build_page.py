@@ -148,10 +148,15 @@ Y1 = round(Y[2027]['bureaus_end'])
 y1_share = Y1 / bureaus_market
 rnd = I.NEXT_ROUND
 rnd_when = month_name(f"{rnd['month'][0]}-{rnd['month'][1]:02d}")
-stake_after = plan["riskia_side"]["stake_after_round"]
+stake_after = plan["riskia_side"]["stake"] * (1 - I.NEXT_ROUND["dilution"])   # if the optional round happens and they do not join
 top_plan = I.PLAN_TIERS[-1][3]
-noangel = engine.run(I, False)
-NY = noangel["years"]
+withangel = engine.run(I, True)
+WY = withangel["years"]
+_s = __import__("types").SimpleNamespace(**{k: v for k, v in vars(I).items() if k.isupper()})
+_s.GROSS_ADDS = {k: (0 if k <= (2027, 3) else v) for k, v in I.GROSS_ADDS.items()}
+late = engine.run(_s, False)["lowest_cash"]          # stress: no bureau pays before April 2027
+low27 = min(r["cash"] for r in plan["rows"] if r["ym"][0] == 2027)
+low27_m = min((r for r in plan["rows"] if r["ym"][0] == 2027), key=lambda r: r["cash"])["label"]
 Q_NEW = [round(sum(v for k, v in GA.items() if k[0] == 2027 and (k[1] - 1) // 3 == q)) for q in range(4)]
 B26 = round(GA[(2026, 12)])
 B28 = Y[2028]["bureaus_end"]
@@ -203,7 +208,7 @@ road = viz.roadmap([
                "Money": f"Rp30M in; {rp(I.BASE_RUN_COST)} a month", "Team": "3 founders + TemanJourney psychologists"}},
     {"name": f"2. Grow steadily", "when": "Apr to Dec 2027", "gate": f"{num(Y1)} bureaus still paying; churn down to 5% a month",
      "cells": {"Product": "Set up in one day; tests; Instagram agent", "Customers": f"+{num(Q_NEW[1])} in Q2, +{num(Q_NEW[2])} in Q3, +{num(Q_NEW[3])} in Q4: {num(SIGNED27)} signed, {num(Y1)} still paying by December",
-               "Money": f"Angel round {rp(rnd['amount'], 0)} in {rnd_when}; first profit {month_name(first_profit)}", "Team": f"Each hire when profit pays it. By December: {hc_at("2027-12")["Sales"]} sales, {hc_at("2027-12")["Support"]} support, {hc_at("2027-12")["Engineers"]} engineers, {hc_at("2027-12")["Quality"]} quality"}},
+               "Money": f"Own income; first profit {month_name(first_profit)}. Optional {rp(rnd['amount'], 0)} round from {rnd_when} if traction is good", "Team": f"Each hire when profit pays it. By December: {hc_at("2027-12")["Sales"]} sales, {hc_at("2027-12")["Support"]} support, {hc_at("2027-12")["Engineers"]} engineers, {hc_at("2027-12")["Quality"]} quality"}},
     {"name": f"3. Year 2: {num(B28)} bureaus + Psynthesia", "when": "2028", "gate": f"{num(B28)} bureaus pay; churn 2% a month; 40% buy a seat",
      "cells": {"Product": "Psynthesia, Rp300,000 a seat", "Customers": f"{num(Y[2028]['bureaus_end'])} bureaus",
                "Money": f"Full founder pay from {month_name(plan['full_pay_from'])}", "Team": "Clinical lead; more engineers and quality"}},
@@ -292,6 +297,7 @@ assump = [
     ["Founder pay", f"2027: Rp10M a month each, only in profit months. From 2028: Galih {rp(fp['Galih'], 0)}, Riskia {rp(fp['Riskia'], 0)}, Adit {rp(fp['Adit'], 0)} a year", "Decided"],
     ["Zaki's pay", "Rp10M a month in 2027 (same rule); Rp20M a month from 2028", "Estimate, to confirm"],
     ["Dividends", pct(runner.DIVIDEND_SHARE) + " of profit from 2030", "Proposal"],
+    ["Company tax", "22% of profit with the Pasal 31E cut (11% on the first Rp4.8 billion of turnover); 0.5% final scheme assumed not available from 2027", "Law; registration date to confirm"],
 ]
 tests = [
     ["1. Is the pain big?", "Late replies lose clients; founders re-teach selling.", "Medium: count late chats at TemanJourney, Dec 2026"],
@@ -318,8 +324,34 @@ def divider(sid, sec, letter, title, points):
 
 # ------------------------------------------------------------------ opening
 slide("cover", "Start", "Theta Partnership Proposal", f"""
-  <p class="mission-text">{I.MISSION}</p>
-  <p class="meta">CoreItera · proposal for Riskia and TemanJourney · Galih Muji Agung, CEO · 20 October 2026 · Draft, version 9</p>""", kind="cover")
+  <p class="mission-text">Helping TemanJourney, and then every psychology bureau, serve more clients with less work.</p>
+  <p class="meta">CoreItera · proposal for Riskia and TemanJourney · Galih Muji Agung, CEO · 20 October 2026 · Draft, version 10</p>""", kind="cover")
+
+slide("look-back", "Start", "Before the pitch: we built many things, but not the one TemanJourney needed most", viz.journey([
+    (1, "The first idea", "Riskia working long hours to write one psychologist report",
+     "An online testing platform, not a simple report helper she could use", "It brought some business, but her report time did not fall", ""),
+    (2, "Synthesia", "Psychologists need help with the whole workflow",
+     "A big psychologist workspace as our first product", "Too big: nobody really tested it", ""),
+    (3, "B2B testing", "A company client asked for online tests",
+     "Online testing for companies", "Revenue came, but daily operations stayed hard", ""),
+    (4, "Theta, now", "TemanJourney's B2B grew; Riskia was exhausted running B2C",
+     "A platform to help TemanJourney run as a bureau", "We found the real problems: admin training, money on ads, deals not closing, feedback lost", "jy-now"),
+  ]), note="Each step taught us something. The pattern: we built what was interesting to build, and too much at once, before checking it solved Riskia's daily problem.")
+
+slide("lessons", "Start", "This time: small, right, and tested at TemanJourney first", table(["What went wrong", "What we do now", "Where you see it"], [
+    ["We built what was interesting, not what Riskia needed every day", "Start from TemanJourney's daily problem: the endless loop of leads, slow replies, re-teaching, matching and lost feedback", "A2"],
+    ["The MVP was too big, and nobody tested it", "A small MVP, used by TemanJourney first; we sell it to others only after the proof numbers are met", "B1, C1"],
+    ["Features made money but did not fix operations", "Every feature fixes one step of the loop and has one proof number", "B1"],
+    ["Too many products at once", "One product in year 1 (the bureau tool); Psynthesia only in year 2; abroad only in year 3", "C1"],
+    ["Growth before the base was strong", "Make TemanJourney succeed first; it becomes the proof for every other bureau", "C1, the ask"],
+  ]), note="Just enough, and right: no feature is built unless it solves a real problem for TemanJourney and helps it grow.")
+
+slide("vision", "Start", "Our vision and mission, set right this time", f"""
+  <div class="vm">
+    <div class="card wide"><b class="k">Vision</b><p>{I.VISION}</p></div>
+    <div class="card"><b class="k">First step (2027)</b><p>{I.FIRST_STEP}</p></div>
+    <div class="card"><b class="k">Mission (2027 to 2031)</b><p>{I.MISSION.split(': ', 1)[1][0].upper() + I.MISSION.split(': ', 1)[1][1:]}</p></div>
+  </div>""", note="Responsible business: firms whose work changes people's lives, where quality and trust matter more than speed. Mental health firms are the first.")
 
 slide("answer", "Start", "The answer in one picture", viz.pyramid(
       f"Invest <b>Rp30M</b> for <b>20%</b>. We use it to help <b>TemanJourney</b> win more clients with a <b>24-hour sales agent</b>. Then we sign <b>{num(SIGNED27 + B26)} bureaus</b> by December 2027, reach <b>{num(B28)}</b> in year 2, and enter <b>Malaysia or Singapore</b> in year 3.",
@@ -333,7 +365,7 @@ slide("answer", "Start", "The answer in one picture", viz.pyramid(
             ("b3", "Only we sell 24 hours in the bureau's own style")]),
        ("C", "A safe plan and deal", [
             ("c1", "Year 1: bureaus only. Year 2: Psynthesia"),
-            ("c2", f"Cheap to run; a {rp(rnd['amount'], 0)} angel round keeps growth steady"),
+            ("c2", "Cheap to run; we grow on our own income"),
             ("c3", "Rp50M in total for 20%; the 15% promise kept")])]))
 
 slide("numbers", "Start", "The plan in four numbers", f"""
@@ -445,25 +477,21 @@ slide("c1-risks", "C", "C1. We know what could stop us, and what we do then", ta
     ["Meta limits messaging", "A warning on WhatsApp or Instagram", "Official Meta tools only; answers about the bureau's services only."],
     ["Agent does not add clients", "No rise at TemanJourney in February", "Stop. No growth spending until it works."],
     ["Bureaus leave after a few months", "Churn not below 5% a month by December 2027", "Set-up call in week 1; monthly extra-clients report."],
-    [f"{num(B28)} in year 2 is too ambitious", f"Under {num(Y1)} bureaus paying by December 2027", "Slow hiring; keep the angel money as a buffer."],
+    [f"{num(B28)} in year 2 is too ambitious", f"Under {num(Y1)} bureaus paying by December 2027", "Slow hiring and sign-ups; raise the optional round only with traction."],
     ["Family and company mix", "Decisions only in conversation", "Write everything down; both companies approve."],
   ]))
 
-slide("c2", "C", "C2. We are cheap to run, and cash never runs out", f"""
+slide("c2", "C", f"C2. We are cheap to run and grow on our own income, but cash is thin until {month_name('2027-04').split()[0]} 2027", f"""
   <div class="tiles">
     <div class="tile"><b>{rp(I.BASE_RUN_COST)}</b><span>a month to run today; no salaries</span></div>
     <div class="tile"><b>{starter_needed} bureaus</b><span>on the Rp1M plan cover it</span></div>
     <div class="tile"><b>{month_name(first_profit)}</b><span>first month with a profit</span></div>
-    <div class="tile"><b>{rp(low['cash'])}</b><span>lowest cash, {month_name(low['month'])}</span></div>
+    <div class="tile"><b>{rp(low27)}</b><span>lowest cash in 2027 ({month_name(low27_m)}): under 2 months of costs</span></div>
   </div>""" + viz.quarter_chart(plan['quarters']) + table(["Quarter", "Revenue", "Costs", "New money", "Net cash", "Cash at end"], q_rows, right=(1, 2, 3, 4, 5)),
-      note=f"New money: Q4 2026 = the Rp30M from this deal (TemanJourney Rp20M, Riskia Rp10M). Q1 2027 = the {rp(rnd['amount'], 0)} angel round (warm introductions or cold email).")
+      note=f"New money = only the Rp30M from this deal (TemanJourney Rp20M, Riskia Rp10M) in Q4 2026. No other outside money is in this plan. The risk: if no bureau pays before April 2027, cash falls to {rp(late['cash'])} in {month_name(late['month'])}; then we slow sign-ups and spending.")
 
-slide("c2-angel", "C", f"C2. The {rp(rnd['amount'], 0)} angel round is a safety buffer, not a lifeline", table(["", "With the angel round", "Without it"], [
-    ["Outside money", f"Rp30M + {rp(rnd['amount'], 0)}", "Rp30M only"],
-    ["Cash at the end of 2027", rp(Y[2027]['cash_end']), rp(NY[2027]['cash_end'])],
-    ["Lowest cash in 2027", rp(min(r['cash'] for r in plan['rows'] if r['ym'][0] == 2027)), rp(min(r['cash'] for r in noangel['rows'] if r['ym'][0] == 2027))],
-    ["Ownership of Riskia's side", f"{pct(stake_after, 0)} unless they join the round", "20%"],
-  ], right=(1, 2)), note=f"With these targets, bureau income alone keeps cash above zero. The round pays for a slow month, an earlier hire, or a faster push. It costs about {pct(rnd['dilution'])} of CoreItera {EST}.")
+slide("c2-revenue", "C", "C2. Revenue grows from the bureau tool first, then Psynthesia seats", viz.revenue_chart(Y),
+      note=f"2027 income comes only from the bureau tool. Psynthesia adds income from 2028 and brings {pct(Y[2031]['copilot'] / Y[2031]['revenue'])} of revenue by 2031. With half the bureaus we still make a profit every year from {slow_profit_year}. Income from abroad is not counted.")
 
 slide("c2-churn", "C", "C2. Churn starts at 8% because we are new, and falls to 2% by year 2", churn_viz + viz.hbars([
       ("Signed in 2027", SIGNED27, "c-cost", f"{num(SIGNED27)} bureaus"),
@@ -475,8 +503,13 @@ slide("c2-churn", "C", "C2. Churn starts at 8% because we are new, and falls to 
 slide("c2-churn-cases", "C", "C2. Getting churn down saves hundreds of bureaus of sales work", table(["Churn path", "Jan 2027 → Dec 2027 → Dec 2028", "Paying Dec 2027", "New needed in 2028", "Profit 2028", "Profit 2031"], churn_rows, right=(2, 3, 4, 5)),
       note="How we keep churn low: a set-up call in week 1, a monthly extra-clients report, and the first month free so only serious bureaus pay.")
 
-slide("c2-revenue", "C", "C2. Revenue grows from the bureau tool first, then Psynthesia seats", viz.revenue_chart(Y),
-      note=f"2027 income comes only from the bureau tool. Psynthesia adds income from 2028 and brings {pct(Y[2031]['copilot'] / Y[2031]['revenue'])} of revenue by 2031. With half the bureaus we still make a profit every year from {slow_profit_year}. Income from abroad is not counted.")
+slide("c2-angel", "C", f"C2. An optional {rp(rnd['amount'], 0)} round, only if we have traction by January", table(["", "Main plan (own income)", "With the optional round"], [
+    ["When", "No round", f"Traction by January 2027; closed by {rnd_when} at the earliest"],
+    ["Outside money", "Rp30M (this deal)", f"Rp30M + {rp(rnd['amount'], 0)} from angel investors"],
+    ["Cash at the end of 2027", rp(Y[2027]['cash_end']), rp(WY[2027]['cash_end'])],
+    ["What the money is for", "None needed to stay above zero", "Scale: hire sales and support earlier, push faster to 700"],
+    ["Ownership of Riskia's side", "20%", f"{pct(stake_after, 0)} unless they join the round"],
+  ], right=(1, 2)), note=f"Traction = TemanJourney's closing rate rising and at least {num(B27[(2027, 3)])} paying bureaus by March 2027. Angel investors through warm introductions or cold email. The round would cost about {pct(rnd['dilution'])} of CoreItera {EST}. We do not count on it.")
 
 slide("c3", "C", "C3. Riskia's side pays Rp50M in total for 20%, and the 15% promise is kept", viz.cap_bars([
       ("Today", [(0.90, "seg-o", "Current owners 90%"), (0.10, "seg-r", "10%")]),
@@ -490,7 +523,7 @@ slide("c3", "C", "C3. Riskia's side pays Rp50M in total for 20%, and the 15% pro
   ], right=(1, 2, 3, 4)), note="Price: Rp480M before the new money, Rp510M after: 2.5× the price of Riskia's first 10%; her 16.1% is worth about Rp82M on paper. Founders own more for the same Rp50M because their money came first and they built the platform, mostly unpaid.")
 
 slide("c3-gets", "C", "C3. The Rp30M goes straight into making TemanJourney succeed", viz.stacked([("Running costs to February 2027", running_part, "seg-r"), ("Notary and share registration", I.DEAL_ONE_OFFS['notary and share registration'], "seg-o"), ("Launch", I.DEAL_ONE_OFFS['launch costs'], "seg-t")], f"Total {rp(I.DEAL_CASH)}") + table(["Riskia's side gets", "Plan", "Slow case"], [
-    ["Ownership", f"20% now; {pct(stake_after, 0)} after the angel round unless they join", "The same"],
+    ["Ownership", f"20%; {pct(stake_after, 0)} only if the optional round happens and they do not join", "The same"],
     ["TemanJourney's software", "Free for 12 months, then cost price", "The same"],
     [f"Dividends 2030 and 2031 ({pct(runner.DIVIDEND_SHARE)} of profit) {EST}", rp(sum(div_plan.values()), 0), rp(sum(div_slow.values()), 0)],
     ["Say", "Monthly update; first look at new tools; right to invest again", "The same"],
@@ -500,7 +533,7 @@ slide("ask", "Ask", "What we ask Riskia and TemanJourney", f"""
   <ol class="ask-list">
     <li><b>Invest Rp30M</b> (TemanJourney Rp20M, Riskia Rp10M) for 20%: Riskia 16.1%, TemanJourney 3.9%.</li>
     <li><b>Run the sales agent</b> on TemanJourney's WhatsApp from February 2027, and share the chat numbers.</li>
-    <li><b>Help us reach angel investors</b> for a {rp(rnd['amount'], 0)} round in {rnd_when}, with the right to join it.</li>
+    <li><b>If we have traction by January,</b> help us reach angel investors for an optional {rp(rnd['amount'], 0)} round by {rnd_when}, with the right to join it.</li>
     <li><b>Name one person</b> at TemanJourney to own the launch.</li>
     <li><b>Introduce 2 Jakarta bureaus</b> by January 2027.</li>
     <li><b>Sign the term sheet</b> by Friday 30 October 2026.</li>
@@ -509,9 +542,19 @@ slide("ask", "Ask", "What we ask Riskia and TemanJourney", f"""
 # ------------------------------------------------------------------ appendix (one table per slide)
 divider("appendix", "Appendix", "+", "Appendix: the detail behind the numbers", ["Profit and loss, costs, slow case", "Prices, tests, launch plan", "Assumptions and what to confirm"])
 slide("x-pnl", "Appendix", "Five-year profit and loss (estimates)", table(["Year", "Bureaus", "Seats", "Plans", "Payment fees", "Copilot", "Revenue", "Costs", "Tax", "Profit", "Margin", "Cash (Dec)"], yr_rows, right=tuple(range(1, 12))),
-      note="Bureaus and seats in December. Tax: 0.5% of revenue to 2029, then 11% of profit (to confirm with a tax consultant). TemanJourney is not counted.")
+      note="Bureaus and seats in December. Tax: company income tax under Indonesian rules (see the tax slide); a tax consultant must confirm. TemanJourney is not counted.")
 slide("x-costs", "Appendix", "Main costs by year", table(["Cost"] + [str(y) for y in Y], cost_rows, right=tuple(range(1, 6))),
       note=f"2027: founders and Zaki get Rp10M a month each, only in a month that makes a profit (from {month_name(plan['founders_paid_from'])}). From {month_name(plan['full_pay_from'])}: Galih {rp(fp['Galih'], 0)}, Riskia {rp(fp['Riskia'], 0)} and Adit {rp(fp['Adit'], 0)} a year.")
+TP_ = plan["tax_plan"]
+tax_rows = [[str(y), rp(Y[y]["revenue"]), rp(Y[y]["before_tax"]), TP_[y]["rule"], pct(TP_[y]["rate"], 1) + (" of turnover" if TP_[y]["rule"] == "0.5% final" else " of profit"), f"<b>{rp(TP_[y]['tax'])}</b>"] for y in Y]
+slide("x-tax", "Appendix", "Tax: 22% of profit, with the small-company cut", table(["Year", "Turnover", "Profit before tax", "Rule", "Average rate", "Tax"], tax_rows, right=(1, 2, 4, 5)) + table(["Rule", "What it means for PT CoreItera"], [
+    ["0.5% of turnover (PP 55/2022)", "Only for turnover up to Rp4.8 billion a year, and for a PT only for its first 3 tax years. Since PP 20/2026 (April 2026), a PT can no longer start using it; PTs already using it keep it until their 3 years end. We assume our period is over by 2027 (to confirm)."],
+    ["22% of profit (UU HPP)", "The normal company tax, on profit after costs, not on turnover."],
+    ["Pasal 31E cut", "If turnover is up to Rp50 billion, the part of profit that matches the first Rp4.8 billion of turnover pays half (11%). So the average rate rises from 11% as turnover grows."],
+    ["Losses", "A loss year pays no company tax, and the loss lowers taxable profit for the next 5 years."],
+    ["PTKP", "The personal allowance is for people, not for a PT. It lowers each founder's own salary tax (PPh 21), which is already inside their gross pay."],
+    ["Cash timing", "Each month we pay last year's tax / 12 (PPh 25); the rest of last year's tax is paid in April (PPh 29)."],
+  ]), note="Checked against DJP and tax-news sources (DDTC, IKPI), October 2026. Not tax advice: a tax consultant must confirm, especially CoreItera's registration date and whether it ever used the 0.5% scheme. VAT (PPN) is charged on top of our prices once turnover passes Rp4.8 billion, so it is not a cost in this model.")
 slide("x-slow", "Appendix", "Slow case: half the bureaus", table(["Year", "Bureaus", "Revenue", "Profit", "Margin", "Cash (Dec)"], slow_rows, right=(1, 2, 3, 4, 5)),
       note=f"Lowest cash in the slow case: {rp(slow_low['cash'])} in {month_name(slow_low['month'])}.")
 slide("x-prices", "Appendix", "Prices", table(["Plan", "Psychologists", "Price a month", "Per psychologist"], [
@@ -537,9 +580,10 @@ slide("x-confirm", "Appendix", "To confirm before signing", table(["Number", "Us
     ["CoreItera's share count (from the deed)", "1,000,000 as an example", "Sets the exact number of new shares"],
     ["How the earlier Rp50M and Rp20M are recorded", "Galih and Riskia", "The deed must match the cash table"],
     ["Number of private bureaus and practices in Indonesia", f"About {num(round(bureaus_market, -2))}", "HIMPSI does not publish it"],
-    ["Angel round size, price and timing", f"{rp(rnd['amount'], 0)} for {pct(rnd['dilution'])} in {rnd_when}", "The price is an estimate"],
+    ["Optional round: size, price and timing", f"{rp(rnd['amount'], 0)} for {pct(rnd['dilution'])}, {rnd_when} at the earliest", "Only with traction; the price is an estimate"],
     ["Closing rate with the agent, and after-hours share", f"{pct(X['conversion_agent'], 1)}; {pct(X['after_hours_share'])}", "The lead product's whole promise"],
     ["Other shareholders of TemanJourney", "Not known", "They must approve the Rp20M"],
+    ["CoreItera's tax registration date and current tax scheme", "0.5% final not available from 2027", "Decides 2027 tax; ask a tax consultant"],
   ]))
 slide("x-alt", "Appendix", "The other way to price the deal", table(["", "Recommended (15% kept, then cash)", "Cash only"], [
     ["Riskia at the end", "16.1%", "12.6%"], ["TemanJourney at the end", "3.9%", "7.4%"], ["Together", "20.0%", "20.0%"],
