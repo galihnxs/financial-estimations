@@ -153,6 +153,27 @@ callout(s, 0.5, 6.0, 12.3, 0.87, [[B("Kenapa EAP penting: "), N("EAP membuat kli
                                                                "Kerahasiaan: manajemen klien hanya menerima laporan agregat anonim.")]], size=12)
 src(s, "Perjanjian Kemitraan, Lampiran C bagian B. Paket Jeda Tahunan disorot karena menjadi kontrak EAP utama.")
 
+# ================================================================== 5b. EAP monthly payment option
+MONTHLY = [("Jeda", 12e6, 4.8e6), ("Tumbuh", 20e6, 8e6), ("Seperjalanan", 31.5e6, 12.6e6)]   # (paket, di muka, per bulan)
+s = new_slide("Paket EAP: bayar di muka atau bayar bulanan", accent="bayar bulanan", tag="harga",
+              sub="Paket 3 bulan bisa dibayar bulanan. Totalnya 20% lebih mahal; bayar di muka lebih hemat.")
+rows = [["Paket", "Bayar di muka", "Bayar bulanan", "Total bulanan", "Hemat di muka"]]
+for n, up, m in MONTHLY:
+    rows.append([n, rpf(up), rpf(m) + " x 3", rpf(3 * m), rpf(3 * m - up)])
+table(s, 0.5, 1.5, 7.4, [1.6, 1.45, 1.75, 1.35, 1.25], rows, size=12, row_h=0.62)
+bar(s, 8.2, 1.45, 4.6, 4.3, [n for n, _, _ in MONTHLY],
+    [("Bayar di muka", [up / 1e6 for _, up, _ in MONTHLY]), ("Total bulanan", [3 * m / 1e6 for _, _, m in MONTHLY])],
+    "Total yang dibayar klien (Rp juta)", colors=[BLUE, TERRA], fmt='0.0', size=12, legend=True)
+card(s, 0.5, 4.35, 7.4, 1.1, [[B("Pembanding: "), N("Jeda Tahunan Rp11.000.000 per kuartal, atau sekitar Rp3.670.000 per bulan, "
+                                                   "dengan isi lebih lengkap dari Jeda (ada Mental Health Check-Up dan laporan). "
+                                                   "Klien yang ingin bayar bulanan untuk waktu lama paling hemat memilih kontrak tahunan.")]], size=12)
+callout(s, 0.5, 6.0, 12.3, 0.87, [[B("Aturan opsi bulanan: "), N("satu SPK untuk 3 bulan penuh, ditagih di awal setiap bulan, tidak bisa berhenti "
+                                                                 "sebelum bulan ketiga. Total bulanan adalah Harga Daftar opsi ini, jadi tidak dihitung "
+                                                                 "sebagai selisih di atas Daftar Harga.")]], size=12)
+src(s, "Perjanjian Kemitraan, Lampiran C bagian B (opsi bayar bulanan). Komisi EAP Rp500 ribu per paket dibayar setelah pembayaran bulan pertama.")
+notes(s, "Bayar bulanan = harga di muka dibagi 3, ditambah 20%. Selisih menutup biaya tagihan tambahan dan risiko "
+         "pembayaran. Margin naik menjadi 44% sampai 48%.")
+
 # ================================================================== 6. Scheme
 s = new_slide("Cara bagi hasil: tiga bagian, satu aturan harga", accent="tiga bagian", tag="skema",
               sub="Non-EAP dihitung dari profit. EAP memakai komisi tetap. Harga di atas Daftar Harga dibagi 30% untuk Anda.")
@@ -258,6 +279,6 @@ callout(s, 0.5, 6.05, 12.3, 0.82, [[B("Denda dan keadaan kahar: "), N("pelanggar
                                                                   "paling lambat 2 hari; bila 21 hari tetap tidak bisa dipenuhi, dibatalkan bersama.")]], size=12)
 src(s, "Perjanjian Kemitraan, Pasal 4, 8, 9, 10, 12, 15 dan 19.")
 
-assert len(prs.slides) == 10, len(prs.slides)
+assert len(prs.slides) == 11, len(prs.slides)
 prs.save(OUT)
 print("wrote", OUT, len(prs.slides), "slides")

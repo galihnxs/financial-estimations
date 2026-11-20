@@ -152,5 +152,5 @@ The full list of estimates is on the **To_Fill** sheet and on slide 24 of the de
 
 | File | What it is |
 |---|---|
-| `TemanJourney_Program_Mitra.pptx` / `.pdf` | 10-slide partner deck in Bahasa Indonesia: strategy and partner role, price list (training and EAP), profit-sharing scheme, semester bonus, worked examples, rules. Built by `analysis/build_partner_deck.py` (reuses the growth-deck design helpers). |
+| `TemanJourney_Program_Mitra.pptx` / `.pdf` | 11-slide partner deck in Bahasa Indonesia: strategy and partner role, price list (training and EAP, with the EAP monthly payment option), profit-sharing scheme, semester bonus, worked examples, rules. Built by `analysis/build_partner_deck.py` (reuses the growth-deck design helpers). |
 | `../SPKnProposalAnalysis/Kemitraan Strategic Partnership - Iza/` | The partner contract (.md + .docx). Lampiran A (examples), B (standard costs) and C (price list) hold the same numbers as the deck: change both together. |

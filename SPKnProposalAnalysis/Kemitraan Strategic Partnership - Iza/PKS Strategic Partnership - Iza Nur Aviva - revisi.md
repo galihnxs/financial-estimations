@@ -361,3 +361,13 @@ Harga dasar, belum termasuk PPN. Harga untuk kegiatan di luar Jakarta belum term
 | Tumbuh | 24 sesi konseling online, 1 putaran Mental Health Check-Up, laporan agregat anonim, 1 webinar | 3 bulan | Rp20.000.000 |
 | Seperjalanan | 36 sesi konseling online, 2 putaran Mental Health Check-Up (pre dan post), hasil individual untuk pegawai, laporan agregat dengan perbandingan, 1 seminar offline | 3 bulan | Rp31.500.000 |
 | Sesi tambahan | Konseling online 60 menit | per sesi | Rp500.000 |
+
+**Opsi bayar bulanan untuk paket 3 bulan**
+
+| Paket | Bayar di muka (sekali) | Bayar bulanan | Total bayar bulanan | Hemat bila bayar di muka |
+|---|---|---|---|---|
+| Jeda | Rp12.000.000 | Rp4.800.000 per bulan x 3 | Rp14.400.000 | Rp2.400.000 |
+| Tumbuh | Rp20.000.000 | Rp8.000.000 per bulan x 3 | Rp24.000.000 | Rp4.000.000 |
+| Seperjalanan | Rp31.500.000 | Rp12.600.000 per bulan x 3 | Rp37.800.000 | Rp6.300.000 |
+
+Opsi bayar bulanan memakai satu SPK untuk 3 (tiga) bulan penuh, ditagih 3 (tiga) kali di awal setiap bulan, dan tidak dapat dihentikan sebelum bulan ketiga. Isi layanan sama dengan paket bayar di muka. Untuk opsi ini, Harga Daftar adalah Total bayar bulanan, sehingga selisih antara harga bayar di muka dan harga bayar bulanan tidak dihitung sebagai Selisih di Atas Harga Daftar (Pasal 7 ayat (1)).
