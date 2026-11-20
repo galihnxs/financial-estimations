@@ -1,6 +1,6 @@
 # Product line analysis: input for the sales deck and master pricing sheet
 
-Date: 19 Nov 2026. Source: every proposal, RAB, model and contract in this repo (11 folders, about 45 documents).
+Date: 19 Nov 2026 (structure and segment pricing updated 20 Nov 2026, see section 6). Source: every proposal, RAB, model and contract in this repo (11 folders, about 45 documents).
 Money in Rupiah. "M" = million. Prices exclude VAT (TJ and Coreitera are both Non-PKP).
 
 ## 1. The answer in one paragraph
@@ -31,6 +31,8 @@ with one cost table (Lampiran B, extended) and one margin rule applied to all.
 | `_brand/` | Brand assets | n/a | Yes, for the deck design |
 
 ## 3. The product catalog (what sales can sell today)
+
+> Snapshot of 19 Nov 2026, kept as the record of what the source documents said. Final prices by segment are in `01_Daftar_Produk_Final.md`.
 
 ### A. Training and capacity building (B2B, Teman Journey)
 
@@ -162,9 +164,24 @@ defines commission differently (10-12.5% of net, EAP fixed fees). Pick one.
 3. **Psychologist cost basis**: DECIDED (revised): B2B sessions (EAP, MHCU) cost a flat Rp350k for every tier; B2C uses the tier share (60/65/65/70%).
 4. **MHCU and Jeda Tahunan**: DECIDED: MHCU Flash Rp500k, Deep Rp750k (fixed). MHCU test cost corrected to Rp7k max (Galih, 19 Nov 2026), so the individual add-on stays Rp70k (44%). Jeda Tahunan modelled with MHCU for 70 employees, as the proposal promises. EAP (revised): all EAP packages keep today's price ("Harga tetap"); Jeda Tahunan (18%) and the extra session (19%) are below 30% and need Director approval when sold.
 5. **Language**: DECIDED: Bahasa Indonesia for both the deck and the spreadsheet.
+6. **Structure** (DECIDED 20 Nov 2026, replaces the 8 families A-H): 2 business units, **6 product lines** grouped by the client's
+   need (1. Asesmen, 2. Konseling dan pendampingan, 3. Pembelajaran dan psikoedukasi, 4. Pengalaman dan komunitas,
+   5. Konsultasi organisasi, 6. Coreitera), and every product has a role: entry, core or retention.
+   See `05_Struktur_Produk_dan_Segmen.md`.
+7. **Pricing by client segment** (DECIDED 20 Nov 2026, replaces "30% for everything" and "EAP keeps today's price"): one cost per
+   product; price = cost raised to the segment's target net margin. Education and community 30% (floor, minimum Rp10M per contract,
+   school share at most 10%); corporate and government 50%; regulators toward 50%, never below 30%, sold as programs with the SBM budget
+   ceiling as a reference, and items they already bought keep their old price. Corporate and regulator prices never go below today's price.
+   Reasons: `06_Strategi_ke_Produk_dan_Harga.md`; market check: `07_Benchmark_Kompetitor.md`.
+8. **Entry products**: free or below market only when the delivery cost is close to zero (self-test, burnout snapshot, recorded webinar).
+   Everything that uses psychologist time per person is core and never free. MHCU Flash and Deep are core products.
+9. **Corporate EAP** (DECIDED 20 Nov 2026): a new retainer product (TJ-EAP-06, Rp13.5M a month for 300 employees at the 50% target),
+   so the 2027 plan's EAP line (Rp15M a month) is backed by a real product. Jeda / Tumbuh / Seperjalanan stay for small offices and education.
+10. **New costs** (DECIDED 20 Nov 2026): 20 new services costed from repo rates; 8 new rates (speaker fee per tier, co-facilitator,
+    documentation, event psychologist Rp500k, webinar production, worksheet, materials). See `08_Kalkulasi_Biaya_Layanan.md`.
 
-## 7. Final outputs (19 Nov 2026)
+## 7. Final outputs (updated 20 Nov 2026)
 
-- `Master_Produk_dan_Harga.xlsx`: 69 products, 186 cost lines, quote simulator. Built by `build/build_master_sheet.py`.
+- `Master_Produk_dan_Harga.xlsx`: 105 products in 6 lines, 325 cost lines, prices for 3 segments, quote simulator with segment and colour status. Built by `build/build_master_sheet.py` (run with `/opt/homebrew/bin/python3 -I`; the `python3` on PATH is miniforge and has no openpyxl).
 - `01_Daftar_Produk_Final.md`: the final product list with prices and margins, exported by `build/export_product_list.py`. Input for the sales deck.
 - Costs and net profits match the source RABs exactly for BI Fit and Proper, BI Jampurnas and BSN.

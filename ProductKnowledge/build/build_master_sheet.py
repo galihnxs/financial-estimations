@@ -68,7 +68,7 @@ ws.title = "Panduan"
 ws.column_dimensions["A"].width = 26
 ws.column_dimensions["B"].width = 110
 put(ws, "A1", "Master Produk dan Harga: Teman Journey + Coreitera", TITLE)
-put(ws, "A2", "Satu sumber harga untuk tim sales. Dibuat 19 Nov 2026 dari semua proposal, RAB, model 2027 v15, "
+put(ws, "A2", "Satu sumber harga untuk tim sales. Dibuat 19 Nov 2026, struktur lini dan segmen 20 Nov 2026, dari semua proposal, RAB, model 2027 v15, "
               "Daftar Harga Kemitraan (Lampiran B dan C) dan model Coreitera. Semua angka Rupiah, belum termasuk PPN "
               "(Teman Journey dan Coreitera Non-PKP).")
 ws["A2"].alignment = WRAP
@@ -80,30 +80,30 @@ rows = [
     ("Teks hitam", "Rumus. Jangan ditimpa."),
     ("Teks hijau", "Mengambil angka dari sheet lain."),
     ("Isian kuning", "Estimasi yang perlu diganti dengan angka asli."),
-    ("ATURAN HARGA (keputusan 19 Nov 2026)", None),
-    ("Aturan harga", "Margin bersih paling sedikit 30% setelah PPh 23 yang dipotong klien dan komisi 10% dari laba kotor "
-                     "(keputusan 19 Nov 2026: hanya aturan margin, tanpa aturan kelipatan 3x)."),
-    ("Kelipatan (opsional)", "Kolom kelipatan atas biaya luar grup tetap ditampilkan sebagai informasi. Batas kelipatan di Input = 0, "
-                             "artinya tidak dipakai. Isi angka (misal 2) hanya jika ingin menambah batas kedua."),
-    ("Berlaku untuk", "Produk dengan Aturan harga = 'Penuh' (B2B Teman Journey dan produk berbayar Coreitera). "
-                      "Batas margin bisa diatur per keluarga produk di sheet Input."),
-    ("Pengecualian", "'Pasar' = harga mengikuti pasar dan bagi hasil psikolog (konseling B2C, tes B2C, event bertiket). "
-                     "Margin tetap ditampilkan, harga tidak dinaikkan otomatis. 'Harga pokok' = dijual sekitar biaya "
-                     "(mesin tes white-label Coreitera). 'Harga tetap' = harga hari ini dipertahankan (paket EAP, keputusan 19 Nov 2026); margin bersih tetap dicek dan ditandai bila di bawah batas."),
-    ("Biaya psikolog", "B2C: harga x bagi hasil tier psikolog (60/65/65/70%). B2B (EAP, MHCU): flat Rp350rb per sesi 60 menit "
-                       "untuk semua tier (keputusan 19 Nov 2026). Kerja dokumen Rp110rb/jam, tatap muka asesmen Rp350rb/jam."),
-    ("Harga daftar baru", "Jika harga saat ini lolos kedua aturan, harga tidak berubah. Jika tidak lolos, harga naik ke "
-                          "harga minimum aturan, dibulatkan ke atas (Rp1rb di bawah Rp100rb, Rp25rb di bawah Rp1 jt, Rp100rb di bawah Rp10 jt, "
-                          "Rp500rb di atasnya). Harga saat ini tetap tampil sebagai pembanding. Kolom 'Harga ditetapkan' di Katalog (biru) mengganti harga hasil rumus bila diisi (MHCU Flash dan Deep)."),
+    ("ATURAN HARGA (keputusan 20 Nov 2026)", None),
+    ("Satu biaya, harga per segmen", "Setiap produk punya satu biaya dasar (Rincian_Biaya). Harga = biaya dinaikkan sampai target margin "
+                                     "segmen: Pendidikan dan komunitas 30%, Korporat dan pemerintah 50%, Regulator menuju 50%. Margin bersih "
+                                     "dihitung setelah PPh 23 yang dipotong klien dan komisi 10% dari laba kotor."),
+    ("Pengaman harga", "Korporat dan Regulator: harga saat ini yang sudah lebih tinggi tidak diturunkan. Regulator: item yang sudah "
+                       "pernah dibeli (kolom 'Regulator dibekukan' = Ya) tetap memakai harga saat ini. Kolom 'Harga regulator "
+                       "ditetapkan' (biru) mengganti harga regulator bila diisi, misalnya untuk menyesuaikan pagu SBM."),
+    ("Aturan harga per produk", "'Penuh' = harga per segmen dari rumus. 'Langganan' = satu harga untuk biro (Coreitera), minimal 30%. "
+                                "'Pasar' = harga mengikuti pasar dan bagi hasil psikolog (konseling dan tes individu, event bertiket). "
+                                "'Harga pokok' = dijual sekitar biaya (mesin tes white-label). 'Pintu masuk' = gratis, biaya antar hampir nol."),
+    ("Peran produk", "Pintu masuk (membuka hubungan), Inti (membawa laba), Retensi (kontrak berulang). Pintu masuk hanya boleh gratis "
+                     "kalau biaya antarnya hampir nol; semua yang memakai waktu psikolog per orang adalah Inti dan tidak pernah gratis."),
+    ("Biaya psikolog", "Tatap muka (konseling, wawancara, fasilitasi) Rp350rb/jam; kerja dokumen Rp110rb/jam; pembicara per kegiatan 2 jam "
+                       "menurut tier (Rp1,5 / 2,5 / 3 / 4 jt). B2C: harga x bagi hasil tier psikolog (60/65/65/70%)."),
+    ("Pembulatan", "Harga dibulatkan ke atas: Rp1rb di bawah Rp100rb, Rp25rb di bawah Rp1 jt, Rp100rb di bawah Rp10 jt, Rp500rb di atasnya."),
     ("SHEET", None),
-    ("Ringkasan", "Jumlah produk, berapa yang lolos aturan, dan dampak kenaikan harga per keluarga."),
-    ("Katalog", "Semua produk: isi, pembeli, satuan, harga saat ini, biaya, harga minimum, harga daftar baru, margin."),
-    ("Rincian_Biaya", "Biaya tiap produk per komponen: jumlah x tarif. Inilah sumber kolom Biaya di Katalog."),
-    ("Tarif_Biaya", "Satu tarif untuk tiap sumber daya (jam psikolog, alat tes, webinar, server, AI)."),
-    ("Input", "PPh 23, komisi, tier psikolog EAP, aturan per keluarga, harga dan bagi hasil tier, pembulatan."),
-    ("Simulasi_Penawaran", "Pilih kode produk dan jumlah, isi diskon: keluar total harga, laba bersih, margin, dan siapa yang harus menyetujui."),
-    ("Aturan_Penjualan", "Aturan diskon, pembayaran, perjalanan, dan persetujuan untuk sales dan mitra."),
-    ("Sumber_Konflik", "Harga yang dulu berbeda antar dokumen, dan bagaimana master ini menyelesaikannya."),
+    ("Ringkasan", "Jumlah produk per lini, produk baru, dan margin rata-rata per segmen."),
+    ("Katalog", "Semua produk: lini, peran, segmen, harga saat ini, biaya dasar, harga Pendidikan, Korporat, Regulator, dan margin masing-masing."),
+    ("Rincian_Biaya", "Biaya tiap produk per komponen: jumlah x tarif. Inilah sumber kolom Biaya dasar di Katalog."),
+    ("Tarif_Biaya", "Satu tarif untuk tiap sumber daya (jam psikolog, pembicara, co-fasilitator, alat tes, webinar, server, AI)."),
+    ("Input", "PPh 23, komisi, target margin per segmen, lini produk, harga dan bagi hasil tier psikolog, pembulatan."),
+    ("Simulasi_Penawaran", "Pilih kode produk, segmen, jumlah, dan diskon: keluar total harga, laba bersih, margin, status warna, dan siapa yang menyetujui."),
+    ("Aturan_Penjualan", "Aturan segmen, pintu masuk, diskon, bagi hasil, pembayaran, perjalanan, dan persetujuan."),
+    ("Sumber_Konflik", "Harga yang dulu berbeda antar dokumen, preseden harga khusus, dan bagaimana master ini menyelesaikannya."),
 ]
 r = 4
 for a, b in rows:
@@ -145,33 +145,54 @@ for k, p, v, u, s, src, fmt in params:
     name(k, f"Input!$C${r}")
     r += 1
 
-FAM_START = 15
-put(wi, f"A{FAM_START-2}", "Aturan per keluarga produk", BOLD, fill=SECTION)
+SEG_START = 15
+put(wi, f"A{SEG_START-2}", "Target margin bersih per segmen klien (keputusan 20 Nov 2026)", BOLD, fill=SECTION)
+for col in "BCDEF":
+    wi[f"{col}{SEG_START-2}"].fill = SECTION
+for i, lab in enumerate(["Kunci", "Segmen", "Target margin bersih", "Siapa", "Status", "Aturan"], 1):
+    c = wi.cell(row=SEG_START - 1, column=i, value=lab)
+    c.font, c.fill = HDR_FONT, HDR_FILL
+segments = [
+    ("SEG_EDU", "Pendidikan dan komunitas", 0.30, "Sekolah, kampus, yayasan, komunitas",
+     "Batas bawah. Versi produk lebih ringan; minimal Rp10 jt per kontrak; bagi hasil sekolah maks. 10%."),
+    ("SEG_KORP", "Korporat dan pemerintah", 0.50, "Bank, BUMN, swasta, kementerian, pemda",
+     "Harga saat ini yang lebih tinggi tidak diturunkan."),
+    ("SEG_REG", "Regulator", 0.50, "BI, OJK, LPS",
+     "Target menuju 50%, tidak di bawah 30%; dijual sebagai program dan paket, acuan pagu SBM. Item lama dibekukan."),
+]
+for i, (k, seg, m, who, rule) in enumerate(segments):
+    rr = SEG_START + i
+    put(wi, f"A{rr}", k, BOLD)
+    put(wi, f"B{rr}", seg)
+    put(wi, f"C{rr}", m, BLUE, PCT)
+    put(wi, f"D{rr}", who)
+    put(wi, f"E{rr}", "Keputusan")
+    put(wi, f"F{rr}", rule, align=WRAP)
+    name(k, f"Input!$C${rr}")
+SEG_END = SEG_START + len(segments) - 1
+
+FAM_START = SEG_END + 4
+put(wi, f"A{FAM_START-2}", "Lini produk (struktur 20 Nov 2026)", BOLD, fill=SECTION)
 for col in "BCDEF":
     wi[f"{col}{FAM_START-2}"].fill = SECTION
-for i, lab in enumerate(["Keluarga", "Kelipatan min (0 = tidak dipakai)", "Margin bersih min", "Catatan"], 1):
+for i, lab in enumerate(["Lini", "Pertanyaan klien", "Unit bisnis"], 1):
     c = wi.cell(row=FAM_START - 1, column=i, value=lab)
     c.font, c.fill = HDR_FONT, HDR_FILL
 families = [
-    ("A. Pelatihan", "Program pelatih dan program bank."),
-    ("B. EAP", "Keputusan 19 Nov 2026: EAP memakai harga hari ini (aturan 'Harga tetap'). Margin bersih tetap dicek."),
-    ("C. Asesmen", "Seleksi, pemetaan massal, MHCU. MHCU Flash Rp500rb dan Deep Rp750rb (keputusan 19 Nov 2026)."),
-    ("D. Jasa ahli dan psikoedukasi", "Juri, webinar, seminar, event publik."),
-    ("E. B2C Konseling", "Aturan 'Pasar': hanya untuk dibaca."),
-    ("F. B2C Tes", "Aturan 'Pasar': hanya untuk dibaca."),
-    ("G. Coreitera Software", "Theta, Synthesia, biaya transaksi."),
-    ("H. Coreitera Asesmen", "Mesin tes white-label dan tes mandiri."),
+    ("1. Asesmen", "Siapa orang-orang ini, dan bagaimana kondisinya?", "Teman Journey"),
+    ("2. Konseling dan pendampingan", "Siapa yang menemani orang kami saat tidak baik-baik saja?", "Teman Journey"),
+    ("3. Pembelajaran dan psikoedukasi", "Bagaimana orang kami belajar dan berubah?", "Teman Journey"),
+    ("4. Pengalaman dan komunitas", "Acara apa yang bermakna untuk komunitas kami?", "Teman Journey"),
+    ("5. Konsultasi organisasi", "Bagaimana sistem dan program kami jadi lebih baik?", "Teman Journey"),
+    ("6. Coreitera", "Bagaimana biro saya bekerja lebih cepat?", "Coreitera"),
 ]
-for i, (fam, note) in enumerate(families):
+for i, (fam, q, bu) in enumerate(families):
     rr = FAM_START + i
     put(wi, f"A{rr}", fam, BOLD)
-    put(wi, f"B{rr}", 0, BLUE, MULT)
-    put(wi, f"C{rr}", 0.30, BLUE, PCT)
-    put(wi, f"D{rr}", note)
+    put(wi, f"B{rr}", q)
+    put(wi, f"C{rr}", bu)
 FAM_END = FAM_START + len(families) - 1
 name("FAM", f"Input!$A${FAM_START}:$A${FAM_END}")
-name("FAM_MULT", f"Input!$B${FAM_START}:$B${FAM_END}")
-name("FAM_MARG", f"Input!$C${FAM_START}:$C${FAM_END}")
 
 TIER_START = FAM_END + 4
 put(wi, f"A{TIER_START-2}", "Tier psikolog: harga online 60 menit dan bagi hasil", BOLD, fill=SECTION)
@@ -239,10 +260,23 @@ rates = [
     ("THETA_AGENT", "Agen AI balas chat + template WA per biro", 100000, "per biro/bulan", "Estimasi", "Model Coreitera: AGENT_COST_PER_BUREAU"),
     ("THETA_ONB", "Onboarding biro baru (dibagi 12 bulan)", 300000, "per biro", "Estimasi", "Model Coreitera: ONBOARDING_PER_NEW_BUREAU"),
     ("TEST_SERVER", "Server dan storage per peserta tes", 1500, "per peserta", "Estimasi", "Estimasi dari RAB BSN (storage + email per peserta)"),
-    ("EVENT_KIT", "Activity kit event komunitas", 30000, "per peserta", "Pasti", "RAB Lyfe at 30s"),
+    ("EVENT_KIT", "Activity kit per peserta (juga dipakai untuk kit seni dan kit Teman Kecil)", 30000, "per peserta", "Pasti",
+     "RAB Lyfe at 30s. Pengganti sementara harga kit seni / kit rumah yang belum ada (disetujui 20 Nov 2026)"),
     ("EVENT_FNB", "Makan-minum venue (nett)", 50000, "per peserta", "Pasti", "Penawaran Kanteen n Co"),
     ("EVENT_ADS", "Iklan event komunitas (batas)", 300000, "per event", "Pasti", "Final proposal Lyfe at 30s"),
-    ("EVENT_PSI", "Psikolog event komunitas", 150000, "per event", "Pasti", "RAB Lyfe at 30s"),
+    ("EVENT_PSI", "Psikolog event komunitas (sekitar 2 jam)", 500000, "per event", "Pasti",
+     "RAB Lyfe at 30s Paket 1-3 (Okt 2026). Disetujui Galih 20 Nov 2026 (dulu Rp150rb)"),
+    ("SPK_T1", "Fee psikolog pembicara Tier 1, kegiatan 2 jam", 1500000, "per kegiatan", "Pasti",
+     "Ratecard internal pembicara (Canva, Okt 2026). Tambahan per jam = setengahnya. Disetujui 20 Nov 2026"),
+    ("SPK_T2", "Fee psikolog pembicara Tier 2, kegiatan 2 jam", 2500000, "per kegiatan", "Pasti", "Sama"),
+    ("SPK_T3", "Fee psikolog pembicara Tier 3, kegiatan 2 jam", 3000000, "per kegiatan", "Pasti", "Sama"),
+    ("SPK_T4", "Fee psikolog pembicara Tier 4, kegiatan 2 jam", 4000000, "per kegiatan", "Pasti", "Sama"),
+    ("COFAS", "Co-fasilitator / MC / admin acara", 300000, "per acara", "Pasti", "RAB Lyfe at 30s. Disetujui 20 Nov 2026"),
+    ("DOKUM", "Dokumentasi acara", 150000, "per acara", "Pasti", "RAB Lyfe at 30s. Disetujui 20 Nov 2026"),
+    ("WEB_PROD", "Produksi webinar oleh TJ (platform 500 orang, desain dan e-sertifikat, host)", 2300000, "per webinar", "Pasti",
+     "Costing BI Sibolga v4: Rp1,3 jt + Rp0,5 jt + Rp0,5 jt. Disetujui 20 Nov 2026"),
+    ("WORKSHEET", "Worksheet / lembar kerja cetak", 5500, "per peserta", "Pasti", "Budget OSH 'Friends of Friend'. Disetujui 20 Nov 2026"),
+    ("MATERI", "Materi ringkas dan poster", 200000, "per sesi", "Pasti", "Costing BI Sibolga v3. Disetujui 20 Nov 2026"),
 ]
 for i, (k, lab, v, u, s, src) in enumerate(rates):
     rr = 5 + i
@@ -321,21 +355,21 @@ def eap_lines(sessions, mhcu_people=0, rounds=0, webinar=0, seminar=0):
     return lines
 
 add("TJ-EAP-01", TJ, "B. EAP", "EAP Jeda", "15 sesi konseling online, 1 webinar psikoedukasi; sekitar 5 pegawai",
-    "HR / unit SDM instansi dan perusahaan", "per 3 bulan", "Aktif", "Harga tetap", "Ya", 12000000,
+    "HR / unit SDM instansi dan perusahaan", "per 3 bulan", "Aktif", "Penuh", "Ya", 12000000,
     "Model Biaya BI Sibolga, Lampiran C", eap_lines(15, webinar=1))
 add("TJ-EAP-02", TJ, "B. EAP", "EAP Jeda Tahunan (per kuartal)",
     "Per kuartal: 15 sesi online, MHCU untuk 70 pegawai, laporan agregat, 1 webinar. Kontrak 12 bulan (4 kuartal)",
-    "HR / unit SDM instansi dan perusahaan", "per kuartal", "Aktif", "Harga tetap", "Ya", 11000000,
+    "HR / unit SDM instansi dan perusahaan", "per kuartal", "Aktif", "Penuh", "Ya", 11000000,
     "Model Biaya BI Sibolga, Lampiran C", eap_lines(15, mhcu_people=70, rounds=1, webinar=1))
 add("TJ-EAP-03", TJ, "B. EAP", "EAP Tumbuh", "24 sesi online, 1 putaran MHCU, laporan agregat, 1 webinar; sekitar 8 pegawai",
-    "HR / unit SDM instansi dan perusahaan", "per 3 bulan", "Aktif", "Harga tetap", "Ya", 20000000,
+    "HR / unit SDM instansi dan perusahaan", "per 3 bulan", "Aktif", "Penuh", "Ya", 20000000,
     "Model Biaya BI Sibolga, Lampiran C", eap_lines(24, mhcu_people=8, rounds=1, webinar=1))
 add("TJ-EAP-04", TJ, "B. EAP", "EAP Seperjalanan",
     "36 sesi online, 2 putaran MHCU (pre/post), hasil individual, laporan perbandingan, 1 seminar offline; sekitar 12 pegawai",
-    "HR / unit SDM instansi dan perusahaan", "per 3 bulan", "Aktif", "Harga tetap", "Ya", 31500000,
+    "HR / unit SDM instansi dan perusahaan", "per 3 bulan", "Aktif", "Penuh", "Ya", 31500000,
     "Model Biaya BI Sibolga, Lampiran C", eap_lines(36, mhcu_people=12, rounds=2, seminar=1))
 add("TJ-EAP-05", TJ, "B. EAP", "Sesi konseling tambahan EAP", "Konseling online 60 menit di luar kuota paket",
-    "Klien EAP", "per sesi", "Aktif", "Harga tetap", "Ya", 500000, "Lampiran C, Model BI Sibolga",
+    "Klien EAP", "per sesi", "Aktif", "Penuh", "Ya", 500000, "Lampiran C, Model BI Sibolga",
     [L("Fee psikolog", 1, "sesi", "PSI_EAP"), L("Administrasi dan platform", 1, "sesi", "ADM_SESI")])
 
 # C. Assessment
@@ -403,12 +437,6 @@ add("TJ-EDU-01", TJ, "D. Jasa ahli dan psikoedukasi", "Juri Ahli Kompetisi",
     "Panitia lomba instansi (BI, kementerian, kampus)", "per acara", "Aktif", "Penuh", "Ya", 15000000, "RAB BI Jampurnas",
     [L("Fee juri", 2, "juri", "JURI_FEE"), L("Project manager", 1, "proyek", "PM_PROJ"),
      L("Administrasi Coreitera", 1, "proyek", "CORE_ADMIN", internal="Ya")])
-add("TJ-EDU-02", TJ, "D. Jasa ahli dan psikoedukasi", "Webinar Psikoedukasi", "Webinar online 60-90 menit oleh psikolog, materi sesuai kebutuhan",
-    "HR, komunitas, kampus", "per sesi", "Aktif", "Penuh", "Ya", None, "Lampiran B (biaya). Belum pernah dijual terpisah",
-    [L("Webinar oleh psikolog", 1, "sesi", "WEBINAR"), L("Kontrak", 1, "SPK", "KONTRAK")])
-add("TJ-EDU-03", TJ, "D. Jasa ahli dan psikoedukasi", "Seminar Psikoedukasi Offline", "Seminar tatap muka di Jakarta oleh psikolog",
-    "HR, komunitas, kampus", "per sesi", "Aktif", "Penuh", "Ya", None, "Lampiran B (biaya). Belum pernah dijual terpisah",
-    [L("Seminar oleh psikolog", 1, "sesi", "SEMINAR"), L("Kontrak", 1, "SPK", "KONTRAK")])
 add("TJ-EDU-04", TJ, "D. Jasa ahli dan psikoedukasi", "Event Psikoedukasi Publik", "Event untuk umum, dikelola TJ (venue, materi, fasilitator)",
     "Instansi sponsor, CSR", "per event", "Aktif", "Penuh", "Ya", 24000000, "Lampiran C, Model v15 (Rp20 jt di model lama)",
     [L("Biaya event", 1, "event", "EVENT_PUB"), L("Kontrak", 1, "SPK", "KONTRAK")])
@@ -479,6 +507,202 @@ add("CI-ASM-02", CI, "H. Coreitera Asesmen", "Tes Mandiri + Upgrade 'Ditandatang
     [L("Laporan AI", 1, "laporan", "AI_LAPORAN"), L("Server dan storage", 1, "peserta", "TEST_SERVER")])
 
 # ---------------------------------------------------------------------------------------------
+# 4b. New products and variants (Canva inventory + approved costs, 20 Nov 2026; see 08_Kalkulasi_Biaya_Layanan.md)
+# ---------------------------------------------------------------------------------------------
+A1, A2, A3, A4, A5, A6 = ("1. Asesmen", "2. Konseling dan pendampingan", "3. Pembelajaran dan psikoedukasi",
+                          "4. Pengalaman dan komunitas", "5. Konsultasi organisasi", "6. Coreitera")
+NEW = "Baru (20 Nov 2026)"
+
+# Line 1. Asesmen
+add("TJ-ASM-11", TJ, A1, "MHCU Skrining (L1)", "Skrining DASS-21 online, review psikolog SIPP, laporan individual maks. 48 jam; tanpa konseling",
+    "Perusahaan, sekolah, komunitas", "per orang", NEW, "Penuh", "Ya", None, "Proposal Mr DIY (Canva, Nov 2026): Rp250rb",
+    [L("Alat ukur MHCU", 1, "orang", "MHCU_TOOL"), L("Review dan laporan psikolog", 0.25, "jam", "PSI_DOC"),
+     L("Administrasi dan platform", 1, "orang", "ADM_SESI")])
+add("TJ-ASM-12", TJ, A1, "MHCU Ringkas 15 menit (L2)", "5 instrumen klinis, review psikolog, laporan personal, konseling 15 menit; khusus pendidikan dan komunitas",
+    "Komunitas, kampus, sekolah", "per orang", NEW, "Penuh", "Ya", None, "Telering (Canva Okt 2026) Rp242rb = setara L2",
+    [L("Alat ukur MHCU", 1, "orang", "MHCU_TOOL"), L("Konseling 15 menit", 0.25, "sesi", "PSI_EAP"),
+     L("Review manual dan laporan", 0.25, "jam", "PSI_DOC"), L("Administrasi dan platform", 1, "sesi", "ADM_SESI")])
+add("TJ-ASM-13", TJ, A1, "Asesmen Manajerial", "Tes BFI + DISC, wawancara psikolog 1 jam, laporan dan rekomendasi per peserta",
+    "HC perusahaan dan bank", "per peserta", NEW, "Penuh", "Ya", None, "Disusun dari blok RAB BI Fit and Proper",
+    [L("Tes BFI + DISC", 1, "peserta", "BFI_DISC"), L("Wawancara psikolog", 1, "jam", "PSI_F2F"),
+     L("Skoring wawancara", 0.5, "jam", "PSI_DOC"), L("Laporan", 2, "jam", "PSI_DOC"), L("Review mutu", 0.5, "jam", "PSI_DOC"),
+     L("Administrasi", 1, "peserta", "ADM_SESI")])
+add("TJ-ASM-14", TJ, A1, "Asesmen Eksekutif", "Tes, wawancara mendalam 2 jam, simulasi bisnis dengan 2 psikolog, laporan senior",
+    "Direksi dan komisaris", "per peserta", NEW, "Penuh", "Ya", None, "Disusun dari blok RAB BI Fit and Proper",
+    [L("Tes BFI + DISC", 1, "peserta", "BFI_DISC"), L("Wawancara mendalam", 2, "jam", "PSI_F2F"),
+     L("Simulasi bisnis: 2 psikolog x 2 jam", 4, "jam", "PSI_F2F"), L("Skoring", 2, "jam", "PSI_DOC"),
+     L("Laporan senior", 3, "jam", "PSI_DOC"), L("Review mutu", 1, "jam", "PSI_DOC"),
+     L("Transport 2 psikolog", 2, "orang-hari", "TRANSPORT"), L("Administrasi", 1, "peserta", "ADM_SESI")])
+SCHOOL_BASE = [L("Administrasi klasikal: psikolog 2,5 jam x 2 kelas / 50 siswa", 0.1, "jam", "PSI_F2F"),
+               L("Asisten pengawas 2 kelas / 50 siswa", 0.04, "acara", "COFAS"),
+               L("Platform dan skoring Coreitera", 1, "siswa", "CORE_FEE", internal="Ya"),
+               L("Review dan laporan psikolog", 0.25, "jam", "PSI_DOC"), L("Kontrak / 50 siswa", 0.02, "SPK", "KONTRAK")]
+add("TJ-ASM-15", TJ, A1, "Paket Tes Sekolah Dasar", "Tes klasikal (IQ, minat, gaya belajar) + laporan per siswa; minimal 50 siswa",
+    "Sekolah", "per siswa", NEW, "Penuh", "Ya", None, "Proposal Asisi (Canva, Nov 2026): IQ klasikal Rp250rb", SCHOOL_BASE)
+add("TJ-ASM-16", TJ, A1, "Paket Tes Sekolah Standar", "Paket Dasar + laporan rekap dan rekomendasi untuk sekolah",
+    "Sekolah", "per siswa", NEW, "Penuh", "Ya", None, "Proposal master sekolah (Canva)",
+    SCHOOL_BASE + [L("Rekap dan rekomendasi sekolah 6 jam / 50 siswa", 0.12, "jam", "PSI_DOC")])
+add("TJ-ASM-17", TJ, A1, "Paket Tes Sekolah Lengkap", "Paket Standar + konseling hasil 30 menit untuk orang tua",
+    "Sekolah", "per siswa", NEW, "Penuh", "Ya", None, "Proposal master sekolah (Canva)",
+    SCHOOL_BASE + [L("Rekap dan rekomendasi sekolah 6 jam / 50 siswa", 0.12, "jam", "PSI_DOC"),
+                   L("Konseling hasil ke orang tua 30 menit", 0.5, "jam", "PSI_F2F"), L("Administrasi sesi", 1, "sesi", "ADM_SESI")])
+add("TJ-ASM-18", TJ, A1, "Asesmen Perkembangan Anak (kelompok)", "Asesmen bersama orang tua, 1 asesor psikolog per 3 anak, 90 menit, 5-12 anak per sesi",
+    "Sekolah, PAUD, komunitas keluarga", "per anak", NEW, "Penuh", "Ya", None, "Proposal TJxDH (Canva, Sep 2026): Rp250rb per anak",
+    [L("Asesor psikolog 1,5 jam / 3 anak", 0.5, "jam", "PSI_F2F"), L("PIC psikolog pembuka 1,5 jam / 12 anak", 0.125, "jam", "PSI_F2F"),
+     L("Laporan dan rekomendasi", 0.5, "jam", "PSI_DOC"), L("Administrasi", 1, "anak", "ADM_SESI")])
+add("TJ-ASM-19", TJ, A1, "Snapshot Burnout untuk HR (L0)", "Tes mandiri online + laporan agregat otomatis untuk HR; pintu masuk, selalu diikuti proposal MHCU atau EAP",
+    "HR perusahaan", "per orang", NEW, "Pintu masuk", "Tidak", None, "Keputusan 20 Nov 2026: pintu masuk gratis bila biaya hampir nol",
+    [L("Laporan AI", 1, "laporan", "AI_LAPORAN", internal="Ya"), L("Server dan storage", 1, "orang", "TEST_SERVER", internal="Ya")])
+
+# Line 2. Konseling dan pendampingan
+add("TJ-EAP-06", TJ, A2, "EAP Korporat (retainer, 300 pegawai)",
+    "Pool 10 sesi konseling per bulan, MHCU 2x setahun untuk semua pegawai, laporan agregat, 1 webinar per kuartal; harga per bulan untuk 300 pegawai",
+    "HR bank, BUMN, perusahaan besar", "per bulan", NEW, "Penuh", "Ya", None, "Keputusan 20 Nov 2026; rencana 2027 Rp15 jt/bulan",
+    [L("Sesi konseling (pool)", 10, "sesi", "PSI_EAP", note="Asumsi model 2027: 10 sesi/bulan"),
+     L("Administrasi dan platform", 10, "sesi", "ADM_SESI"), L("Alat ukur MHCU, 300 x 2 / 12", 50, "orang", "MHCU_TOOL"),
+     L("Laporan agregat 2x setahun", 2 / 12, "laporan", "AGG_REPORT"), L("Webinar per kuartal: pembicara Tier 2", 1 / 3, "kegiatan", "SPK_T2"),
+     L("Webinar per kuartal: host/moderator", 1 / 3, "kegiatan", None, 500000, note="Bagian dari WEB_PROD"),
+     L("Webinar per kuartal: materi dan poster", 1 / 3, "sesi", "MATERI"), L("Account management", 4, "jam", "ADM_JAM"),
+     L("Kontrak dibagi 12 bulan", 1 / 12, "SPK", "KONTRAK")])
+add("TJ-KON-01", TJ, A2, "Sesi Konseling B2B 30 menit", "Konseling online 30 menit di luar kuota paket",
+    "Klien B2B", "per sesi", NEW, "Penuh", "Ya", None, "Proposal TFI (Canva, Agu 2026)",
+    [L("Fee psikolog 30 menit", 0.5, "sesi", "PSI_EAP"), L("Administrasi dan platform", 1, "sesi", "ADM_SESI")])
+add("TJ-KON-02", TJ, A2, "Paket 10 Sesi (60 menit) + MHCU", "10 sesi konseling online 60 menit, 10 MHCU, 10 laporan individual; 6 bulan",
+    "Komunitas, sekolah, kantor kecil", "per paket", NEW, "Penuh", "Ya", None, "Proposal TFI Welcoming Rp5,05 jt (preseden)",
+    [L("Fee psikolog", 10, "sesi", "PSI_EAP"), L("Administrasi dan platform", 10, "sesi", "ADM_SESI"),
+     L("Alat ukur MHCU", 10, "orang", "MHCU_TOOL"), L("Laporan individual", 2.5, "jam", "PSI_DOC"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-KON-03", TJ, A2, "Paket 10 Sesi (30 menit) + MHCU", "10 sesi konseling online 30 menit, 10 MHCU, 10 laporan individual; 6 bulan",
+    "Komunitas, sekolah, kantor kecil", "per paket", NEW, "Penuh", "Ya", None, "Proposal TFI Welcoming Rp3,3 jt (preseden)",
+    [L("Fee psikolog 30 menit", 5, "sesi", "PSI_EAP"), L("Administrasi dan platform", 10, "sesi", "ADM_SESI"),
+     L("Alat ukur MHCU", 10, "orang", "MHCU_TOOL"), L("Laporan individual", 2.5, "jam", "PSI_DOC"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-KON-04", TJ, A2, "Paket 20 Sesi + MHCU Pre/Post (18 bulan)", "Maks. 20 sesi online 60 menit, 2 putaran MHCU untuk 29 orang (58 laporan); 18 bulan",
+    "Program komunitas dan yayasan", "per kontrak", NEW, "Penuh", "Ya", None, "Proposal TFI TWB Full Impact Rp19,5 jt",
+    [L("Fee psikolog", 20, "sesi", "PSI_EAP"), L("Administrasi dan platform", 20, "sesi", "ADM_SESI"),
+     L("Alat ukur MHCU", 58, "orang", "MHCU_TOOL"), L("Laporan individual", 14.5, "jam", "PSI_DOC"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-KON-05", TJ, A2, "Konseling Kelompok 90 menit", "Sesi kelompok 5-8 orang dengan 1 psikolog",
+    "Komunitas, sekolah, perusahaan", "per sesi", NEW, "Penuh", "Ya", None, "Proposal TFI (Canva, Agu 2026)",
+    [L("Psikolog tatap muka", 1.5, "jam", "PSI_F2F"), L("Catatan sesi", 0.5, "jam", "PSI_DOC"), L("Administrasi dan platform", 1, "sesi", "ADM_SESI")])
+add("TJ-KON-06", TJ, A2, "In-house Psychologist (1 hari)", "Psikolog di lokasi: konseling, office hours, rujukan HR; 6 jam layanan",
+    "Perusahaan, sekolah", "per hari", NEW, "Penuh", "Ya", None, "Proposal korporat dan sekolah (Canva)",
+    [L("Psikolog tatap muka", 6, "jam", "PSI_F2F"), L("Catatan dan rujukan", 2, "jam", "PSI_DOC"), L("Transport", 1, "orang-hari", "TRANSPORT")])
+add("TJ-KON-07", TJ, A2, "In-house Psychologist (setengah hari)", "Psikolog di lokasi 3 jam layanan; untuk sekolah",
+    "Sekolah", "per setengah hari", NEW, "Penuh", "Ya", None, "Proposal sekolah (Canva)",
+    [L("Psikolog tatap muka", 3, "jam", "PSI_F2F"), L("Catatan", 1, "jam", "PSI_DOC"), L("Transport", 1, "orang-hari", "TRANSPORT")])
+
+# Line 3. Pembelajaran dan psikoedukasi
+for code, seg, price in (("TJ-PLT-08", "BUMN", 45000000), ("TJ-PLT-09", "Swasta", 55000000)):
+    add(code, TJ, A3, f"Program Bank Essential {seg}", "Hari pelatihan saja, tanpa asesmen dan laporan dampak", f"Bank {seg}",
+        "per hari", "Aktif", "Penuh", "Ya", price, "Rate_Card model 2027 v15 (paket Essential)",
+        [L("Pelaksanaan 1 hari", 1, "hari", "TRN_BANK")])
+for t in (1, 2, 3, 4):
+    add(f"TJ-SPK-0{t}", TJ, A3, f"Pembicara / Webinar Tier {t}, 2 jam",
+        "Kegiatan 2 jam (webinar, seminar, kuliah umum) oleh psikolog; materi disiapkan TJ; platform milik klien",
+        "Semua klien", "per kegiatan", NEW, "Penuh", "Ya", None, "Ratecard pembicara (Canva Okt 2026)",
+        [L(f"Fee psikolog pembicara Tier {t}", 1, "kegiatan", f"SPK_T{t}"), L("Kontrak", 1, "SPK", "KONTRAK")])
+for t in (1, 2, 3, 4):
+    add(f"TJ-SPK-1{t}", TJ, A3, f"Tambahan durasi pembicara Tier {t}", "Per jam di atas 2 jam",
+        "Semua klien", "per jam", NEW, "Penuh", "Ya", None, "Ratecard pembicara (Canva Okt 2026): 50% tarif per kegiatan",
+        [L(f"Fee psikolog Tier {t} per jam", 0.5, "kegiatan", f"SPK_T{t}")])
+add("TJ-SPK-20", TJ, A3, "Produksi Webinar oleh TJ (tambahan)", "Platform kapasitas 500 orang, desain poster dan e-sertifikat, host/moderator",
+    "Semua klien", "per webinar", NEW, "Penuh", "Ya", None, "Costing BI Sibolga v4",
+    [L("Produksi webinar", 1, "webinar", "WEB_PROD")])
+add("TJ-WS-01", TJ, A3, "Workshop Korporat 2 jam (Healthy Working Environment)", "Workshop tatap muka Tier 2, 30 peserta, co-fasilitator, worksheet",
+    "HR perusahaan", "per sesi", NEW, "Penuh", "Ya", None, "Proposal korporat (Canva)",
+    [L("Fee pembicara Tier 2", 1, "kegiatan", "SPK_T2"), L("Co-fasilitator", 1, "acara", "COFAS"),
+     L("Transport 2 orang", 2, "orang-hari", "TRANSPORT"), L("Worksheet", 30, "peserta", "WORKSHEET"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-WS-02", TJ, A3, "Art-Based Wellbeing 2 jam", "Sesi seni terpandu Tier 2 (kompetensi art therapy), 30 peserta, kit seni",
+    "HR perusahaan, komunitas", "per sesi", NEW, "Penuh", "Ya", None, "Proposal korporat (Canva)",
+    [L("Fee pembicara Tier 2", 1, "kegiatan", "SPK_T2"), L("Co-fasilitator", 1, "acara", "COFAS"),
+     L("Transport 2 orang", 2, "orang-hari", "TRANSPORT"), L("Kit seni", 30, "peserta", "EVENT_KIT"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-WS-03", TJ, A3, "Team-Building 4 jam", "Aktivitas experiential Tier 2, 30 peserta, 2 co-fasilitator, kit permainan",
+    "HR perusahaan", "per sesi", NEW, "Penuh", "Ya", None, "Proposal korporat (Canva)",
+    [L("Fee pembicara Tier 2 (2 jam)", 1, "kegiatan", "SPK_T2"), L("Tambahan 2 jam Tier 2", 1, "kegiatan", "SPK_T2"),
+     L("Co-fasilitator", 2, "acara", "COFAS"), L("Transport 3 orang", 3, "orang-hari", "TRANSPORT"),
+     L("Kit permainan", 30, "peserta", "EVENT_KIT"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-WS-04", TJ, A3, "Workshop Sekolah dan Kampus 2 jam",
+    "Career Readiness 101, Gadget Addiction, Sexual Education, UpStander, atau Parenting Class (Standar); Tier 1, 40 peserta",
+    "Sekolah, kampus", "per sesi", NEW, "Penuh", "Ya", None, "Proposal sekolah dan kampus (Canva)",
+    [L("Fee pembicara Tier 1", 1, "kegiatan", "SPK_T1"), L("Co-fasilitator", 1, "acara", "COFAS"),
+     L("Transport 2 orang", 2, "orang-hari", "TRANSPORT"), L("Worksheet", 40, "peserta", "WORKSHEET"), L("Kontrak", 1, "SPK", "KONTRAK")])
+add("TJ-WS-05", TJ, A3, "Tambahan Psikolog Kedua (versi Lengkap)", "Misalnya Sexual Education Lengkap: 1 psikolog perempuan + 1 laki-laki",
+    "Sekolah, kampus", "per sesi", NEW, "Penuh", "Ya", None, "Proposal sekolah (Canva)",
+    [L("Fee pembicara Tier 1", 1, "kegiatan", "SPK_T1")])
+
+# Line 4. Pengalaman dan komunitas
+TK = 20
+add("TJ-EXP-01", TJ, A4, "Teman Kecil Paket Komplit", "3 aktivitas 2,5 jam untuk anak + orang tua, 1 psikolog utama, 2 co-fasilitator, kit rumah dan Lentera Tumbuh; basis 20 pasangan",
+    "Perusahaan (family day), sekolah", "per pasangan", NEW, "Penuh", "Ya", None, "Proposal JLL (Canva, Nov 2026): Rp500-550rb",
+    [L("Psikolog utama 2,5 jam / 20", 2.5 / TK, "jam", "PSI_F2F"), L("Co-fasilitator x2 / 20", 2 / TK, "acara", "COFAS"),
+     L("Koordinator / 20", 1 / TK, "acara", "COFAS"), L("Dokumentasi / 20", 1 / TK, "acara", "DOKUM"),
+     L("Transport 4 orang / 20", 4 / TK, "orang-hari", "TRANSPORT"), L("Dokumen refleksi 2 jam / 20", 2 / TK, "jam", "PSI_DOC"),
+     L("Kit rumah + Lentera Tumbuh", 2, "kit", "EVENT_KIT"), L("Kontrak / 20", 1 / TK, "SPK", "KONTRAK")])
+add("TJ-EXP-02", TJ, A4, "Teman Kecil Art Therapy Only", "1 aktivitas 90-100 menit, kit rumah dibawa pulang; basis 20 pasangan",
+    "Perusahaan (family day), sekolah", "per pasangan", NEW, "Penuh", "Ya", None, "Proposal JLL (Canva, Nov 2026): Rp400-450rb",
+    [L("Psikolog utama 1,75 jam / 20", 1.75 / TK, "jam", "PSI_F2F"), L("Co-fasilitator x2 / 20", 2 / TK, "acara", "COFAS"),
+     L("Koordinator / 20", 1 / TK, "acara", "COFAS"), L("Transport 4 orang / 20", 4 / TK, "orang-hari", "TRANSPORT"),
+     L("Dokumen refleksi 2 jam / 20", 2 / TK, "jam", "PSI_DOC"), L("Kit rumah", 1, "kit", "EVENT_KIT"), L("Kontrak / 20", 1 / TK, "SPK", "KONTRAK")])
+add("TJ-EXP-03", TJ, A4, "Jasa Event untuk Mitra (12 peserta)", "TJ menjalankan event milik mitra: psikolog, fasilitasi, kit, MC dan registrasi, dokumentasi",
+    "Kreator, penulis, komunitas", "per event", NEW, "Penuh", "Tidak", None, "RAB Lyfe at 30s Paket 3 (Rp2,5 jt untuk <=12 peserta)",
+    [L("Psikolog event", 1, "event", "EVENT_PSI"), L("Dokumentasi", 1, "acara", "DOKUM"), L("Activity kit", 12, "peserta", "EVENT_KIT"),
+     L("MC / admin dan registrasi", 1, "acara", "COFAS")])
+
+# Line 5. Konsultasi organisasi
+add("TJ-KNS-01", TJ, A5, "Hari Konsultan (HR Advisory / evaluasi program)", "4 jam tatap muka + 4 jam analisis dan penulisan oleh psikolog senior",
+    "Direksi, HC, unit program", "per hari", NEW, "Penuh", "Ya", None, "Pola RAB BSN",
+    [L("Psikolog senior tatap muka", 4, "jam", "PSI_F2F"), L("Analisis dan penulisan", 4, "jam", "PSI_DOC"), L("Transport", 1, "orang-hari", "TRANSPORT")])
+add("TJ-KNS-02", TJ, A5, "FGD 2 jam (online)", "Fasilitator psikolog + notulen, olah transkrip dan ringkasan",
+    "Regulator, perusahaan", "per FGD", NEW, "Penuh", "Ya", None, "Proposal BI DPU (Canva, Nov 2026)",
+    [L("Fasilitator psikolog", 2, "jam", "PSI_F2F"), L("Notulen / co-fasilitator", 1, "acara", "COFAS"), L("Olah transkrip dan ringkasan", 3, "jam", "PSI_DOC")])
+
+# Line, role and segment for every product: (line, role, Pendidikan?, Korporat?, Regulator?, regulator price frozen?)
+LINE_OF_OLD = {"A. Pelatihan": A3, "B. EAP": A2, "C. Asesmen": A1, "E. B2C Konseling": A2, "F. B2C Tes": A1,
+               "G. Coreitera Software": A6, "H. Coreitera Asesmen": A6}
+LINE_OF_CODE = {"TJ-EDU-01": A5, "TJ-EDU-04": A4, "TJ-EDU-05": A4}
+SEGS = {  # code: (role, edu, korp, reg, frozen)
+    "TJ-PLT-01": ("Inti", 0, 0, 1, 1), "TJ-PLT-02": ("Inti", 0, 0, 1, 1), "TJ-PLT-03": ("Inti", 0, 1, 0, 0),
+    "TJ-PLT-04": ("Inti", 0, 1, 0, 0), "TJ-PLT-05": ("Retensi", 0, 1, 0, 0), "TJ-PLT-06": ("Retensi", 0, 1, 0, 0),
+    "TJ-PLT-07": ("Inti", 0, 1, 1, 1), "TJ-PLT-08": ("Inti", 0, 1, 0, 0), "TJ-PLT-09": ("Inti", 0, 1, 0, 0),
+    "TJ-EAP-01": ("Retensi", 1, 1, 1, 1), "TJ-EAP-02": ("Retensi", 1, 1, 1, 1), "TJ-EAP-03": ("Retensi", 1, 1, 1, 1),
+    "TJ-EAP-04": ("Retensi", 1, 1, 1, 1), "TJ-EAP-05": ("Inti", 1, 1, 1, 1), "TJ-EAP-06": ("Retensi", 0, 1, 1, 0),
+    "TJ-ASM-01": ("Inti", 0, 1, 1, 1), "TJ-ASM-02": ("Inti", 0, 1, 1, 0), "TJ-ASM-03": ("Inti", 0, 1, 1, 0),
+    "TJ-ASM-04": ("Inti", 0, 1, 1, 0), "TJ-ASM-05": ("Inti", 0, 1, 1, 0), "TJ-ASM-06": ("Inti", 0, 1, 1, 0),
+    "TJ-ASM-07": ("Inti", 0, 1, 1, 0), "TJ-ASM-08": ("Inti", 1, 1, 1, 0), "TJ-ASM-09": ("Inti", 1, 1, 1, 0),
+    "TJ-ASM-10": ("Retensi", 1, 1, 1, 1), "TJ-ASM-11": ("Inti", 1, 1, 1, 0), "TJ-ASM-12": ("Inti", 1, 0, 0, 0),
+    "TJ-ASM-13": ("Inti", 0, 1, 1, 0), "TJ-ASM-14": ("Inti", 0, 1, 1, 0), "TJ-ASM-15": ("Inti", 1, 0, 0, 0),
+    "TJ-ASM-16": ("Inti", 1, 0, 0, 0), "TJ-ASM-17": ("Inti", 1, 0, 0, 0), "TJ-ASM-18": ("Inti", 1, 0, 0, 0),
+    "TJ-ASM-19": ("Pintu masuk", 0, 0, 0, 0),
+    "TJ-KON-01": ("Inti", 1, 1, 1, 0), "TJ-KON-02": ("Inti", 1, 1, 0, 0), "TJ-KON-03": ("Inti", 1, 1, 0, 0),
+    "TJ-KON-04": ("Retensi", 1, 1, 0, 0), "TJ-KON-05": ("Inti", 1, 1, 0, 0), "TJ-KON-06": ("Retensi", 1, 1, 0, 0),
+    "TJ-KON-07": ("Retensi", 1, 0, 0, 0),
+    "TJ-SPK-20": ("Inti", 1, 1, 1, 0), "TJ-WS-01": ("Inti", 0, 1, 1, 0), "TJ-WS-02": ("Inti", 1, 1, 1, 0),
+    "TJ-WS-03": ("Inti", 0, 1, 1, 0), "TJ-WS-04": ("Inti", 1, 0, 0, 0), "TJ-WS-05": ("Inti", 1, 0, 0, 0),
+    "TJ-EXP-01": ("Inti", 1, 1, 0, 0), "TJ-EXP-02": ("Inti", 1, 1, 0, 0), "TJ-EXP-03": ("Inti", 1, 0, 0, 0),
+    "TJ-EDU-01": ("Inti", 1, 1, 1, 1), "TJ-EDU-04": ("Inti", 0, 1, 1, 0), "TJ-EDU-05": ("Inti", 0, 0, 0, 0),
+    "TJ-KNS-01": ("Inti", 1, 1, 1, 0), "TJ-KNS-02": ("Inti", 1, 1, 1, 0),
+    "CI-THT-01": ("Inti", 0, 0, 0, 0), "CI-THT-02": ("Inti", 0, 0, 0, 0), "CI-THT-03": ("Retensi", 0, 0, 0, 0),
+    "CI-THT-04": ("Inti", 0, 0, 0, 0), "CI-SYN-01": ("Inti", 0, 0, 0, 0), "CI-SYN-02": ("Inti", 0, 0, 0, 0),
+    "CI-ASM-01": ("Pintu masuk", 0, 0, 0, 0), "CI-ASM-02": ("Pintu masuk", 0, 0, 0, 0),
+}
+for t in (1, 2, 3, 4):
+    SEGS[f"TJ-SPK-0{t}"] = ("Inti", 1, 1, 1, 0)
+    SEGS[f"TJ-SPK-1{t}"] = ("Inti", 1, 1, 1, 0)
+LANGGANAN = {"CI-THT-01", "CI-THT-02", "CI-THT-03", "CI-SYN-01", "CI-SYN-02"}
+P2 = []
+for p in P:
+    p = list(p)
+    code = p[0]
+    p[2] = LINE_OF_CODE.get(code, LINE_OF_OLD.get(p[2], p[2]))
+    if code in LANGGANAN:
+        p[8] = "Langganan"
+    if code.startswith("TJ-B2C") or code.startswith("TJ-TES"):
+        role = ("Inti", 0, 0, 0, 0)
+    else:
+        role = SEGS[code]
+    P2.append(tuple(p) + (role,))
+LINE_ORDER = [f[0] for f in families]
+P = sorted(P2, key=lambda x: LINE_ORDER.index(x[2]))
+
+# ---------------------------------------------------------------------------------------------
 # 5. Rincian_Biaya
 # ---------------------------------------------------------------------------------------------
 wr = wb.create_sheet("Rincian_Biaya")
@@ -500,7 +724,7 @@ for p in P:
         put(wr, f"D{r}", unit)
         put(wr, f"E{r}", key)
         if direct == "PRICE":
-            put(wr, f"F{r}", f"=Katalog!$K${code_row[code]}", GREEN, RP)
+            put(wr, f"F{r}", f"=Katalog!$P${code_row[code]}", GREEN, RP)
         elif key is None:
             put(wr, f"F{r}", direct, BLUE, RP)
         put(wr, f"G{r}", f'=IF(E{r}="",F{r},INDEX(RATE_VAL,MATCH(E{r},RATE_KEY,0)))', BLACK, RP)
@@ -519,157 +743,194 @@ dv.add(f"I5:I{BOM_END}")
 # 6. Katalog
 # ---------------------------------------------------------------------------------------------
 wk = wb.create_sheet("Katalog", 1)
-put(wk, "A1", "Katalog produk dan harga: Teman Journey + Coreitera", TITLE)
-put(wk, "A2", "Harga daftar baru = harga yang dipakai sales. Harga saat ini tetap tampil sebagai pembanding. "
-              "Rupiah, belum termasuk PPN. Kolom biru boleh diubah; kolom lain rumus.")
-put(wk, "A3", "Cek aturan: Lolos = margin bersih memenuhi batas keluarga di sheet Input. 'Harga tetap' (EAP) hanya dicek marginnya. Info = produk 'Pasar' atau 'Harga pokok'.")
-cols = ["Kode", "Unit bisnis", "Keluarga", "Produk", "Isi / cakupan", "Pembeli utama", "Satuan", "Status produk",
-        "Aturan harga", "Potong PPh 23?", "Harga saat ini (Rp)", "Biaya total (Rp)", "Biaya luar grup (Rp)",
-        "Kelipatan min (opsional)", "Margin bersih min", "Harga min: kelipatan (Rp)", "Harga min: margin (Rp)", "Harga minimum aturan (Rp)",
-        "Pembulatan (Rp)", "HARGA DAFTAR BARU (Rp)", "Perubahan vs saat ini", "Laba bersih per satuan (Rp)",
-        "Margin bersih", "Kelipatan atas biaya luar", "Cek aturan", "Sumber", "Harga ditetapkan (Rp, opsional)"]
-widths = [20, 14, 22, 40, 50, 30, 18, 16, 12, 10, 16, 15, 15, 9, 9, 15, 15, 15, 11, 17, 11, 15, 10, 10, 11, 42, 16]
-OVERRIDE = {"TJ-ASM-08": 500000, "TJ-ASM-09": 750000}
+put(wk, "A1", "Katalog produk dan harga per segmen: Teman Journey + Coreitera", TITLE)
+put(wk, "A2", "Satu biaya dasar per produk; harga per segmen dari target margin di Input. Rupiah, belum termasuk PPN. "
+              "Kolom biru boleh diubah; kolom lain rumus. Harga kosong = produk tidak dijual ke segmen itu.")
+put(wk, "A3", "Cek: 'Lolos' = semua harga segmen minimal 30% margin bersih. 'Regulator (beku) di bawah 30%' = harga lama regulator "
+              "dipertahankan; perlu persetujuan Direktur. 'Info' = aturan Pasar, Langganan, Harga pokok, atau Pintu masuk.")
+cols = ["Kode", "Unit bisnis", "Lini", "Produk", "Isi / cakupan", "Pembeli utama", "Satuan", "Status",
+        "Peran", "Aturan harga", "Potong PPh 23?", "Pendidikan?", "Korporat?", "Regulator?", "Regulator dibekukan?",
+        "Harga saat ini (Rp)", "Biaya dasar (Rp)", "Margin bersih harga saat ini",
+        "HARGA DASAR / LANTAI 30% (Rp)", "HARGA PENDIDIKAN (Rp)", "Margin Pendidikan",
+        "HARGA KORPORAT (Rp)", "Margin Korporat", "HARGA REGULATOR (Rp)", "Margin Regulator",
+        "Harga regulator ditetapkan (Rp, opsional)", "Cek aturan", "Sumber", "Harga daftar utama (Rp)",
+        "Bantu: harga 30% sebelum bulat", "Bantu: harga 50% sebelum bulat", "Bantu: harga target regulator sebelum bulat"]
+widths = [13, 13, 22, 36, 46, 26, 14, 14, 11, 11, 9, 9, 9, 9, 10, 14, 14, 10, 15, 15, 10, 15, 10, 15, 10, 14, 16, 36, 15, 13, 13, 13]
 header(wk, 5, cols, widths)
-wk.row_dimensions[5].height = 45
+wk.row_dimensions[5].height = 58
 B = "Rincian_Biaya!$A$5:$A$%d" % BOM_END
 H = "Rincian_Biaya!$H$5:$H$%d" % BOM_END
 I_ = "Rincian_Biaya!$I$5:$I$%d" % BOM_END
+
+
+def rnd(x):
+    step = f"IF({x}<100000,STEP0,IF({x}<1000000,STEP1,IF({x}<10000000,STEP2,STEP3)))"
+    return f"ROUNDUP({x}/{step},0)*{step}"
+
+
+PRICE_FILL = PatternFill("solid", fgColor="E2EFDA")
 for i, p in enumerate(P):
     rr = KAT_FIRST + i
-    code, unit, fam, prod, scope, buyer, uom, status, rule, pph, cur, src, _ = p
+    code, unit, fam, prod, scope, buyer, uom, status, rule, pph, cur, src, _, seg = p
+    role, edu, korp, reg, frozen = seg
     for col, v in zip("ABCDEFGH", (code, unit, fam, prod, scope, buyer, uom, status)):
         put(wk, f"{col}{rr}", v, BOLD if col == "A" else BLACK, align=WRAP if col in "DEF" else None)
-    put(wk, f"I{rr}", rule, BLUE)
-    put(wk, f"J{rr}", pph, BLUE)
-    put(wk, f"K{rr}", cur, BLUE, RP)
-    tp = f'IF(J{rr}="Ya",TARIF_PPH23,0)'
-    put(wk, f"L{rr}", f"=SUMIFS({H},{B},A{rr})", GREEN, RP)
-    put(wk, f"M{rr}", f'=SUMIFS({H},{B},A{rr},{I_},"Tidak")', GREEN, RP)
-    put(wk, f"N{rr}", f"=INDEX(FAM_MULT,MATCH(C{rr},FAM,0))", GREEN, MULT)
-    put(wk, f"O{rr}", f"=INDEX(FAM_MARG,MATCH(C{rr},FAM,0))", GREEN, PCT)
-    put(wk, f"P{rr}", f'=IF(OR(I{rr}="Penuh",I{rr}="Harga tetap"),M{rr}*N{rr},"")', BLACK, RP)
-    put(wk, f"Q{rr}", f'=IF(OR(I{rr}="Penuh",I{rr}="Harga tetap"),L{rr}*(1-KOMISI)/((1-{tp})*(1-KOMISI)-O{rr}),"")', BLACK, RP)
-    put(wk, f"R{rr}", f'=IF(I{rr}="Penuh",MAX(P{rr},Q{rr}),IF(I{rr}="Harga tetap",Q{rr},IF(I{rr}="Harga pokok",L{rr}/(1-{tp}),"")))', BLACK, RP)
-    put(wk, f"S{rr}", f'=IF(R{rr}="","",IF(R{rr}<100000,STEP0,IF(R{rr}<1000000,STEP1,IF(R{rr}<10000000,STEP2,STEP3))))', BLACK, RP)
-    put(wk, f"AA{rr}", OVERRIDE.get(code), BLUE, RP)
-    put(wk, f"T{rr}", f'=IF(AA{rr}>0,AA{rr},IF(I{rr}="Penuh",MAX(K{rr},ROUNDUP(R{rr}/S{rr},0)*S{rr}),'
-                      f'IF(I{rr}="Harga pokok",IF(K{rr}>0,K{rr},ROUNDUP(R{rr}/S{rr},0)*S{rr}),K{rr})))',
-        Font(name=F, bold=True), RP, fill=PatternFill("solid", fgColor="E2EFDA"))
-    put(wk, f"U{rr}", f'=IF(K{rr}>0,T{rr}/K{rr}-1,"Baru")', BLACK, PCT)
-    gp = f"(T{rr}*(1-{tp})-L{rr})"
-    put(wk, f"V{rr}", f'={gp}-IF(OR(I{rr}="Penuh",I{rr}="Harga tetap"),MAX(0,{gp}*KOMISI),0)', BLACK, RP)
-    put(wk, f"W{rr}", f'=IF(T{rr}>0,V{rr}/T{rr},"")', BLACK, PCT)
-    put(wk, f"X{rr}", f'=IF(M{rr}>0,T{rr}/M{rr},"")', BLACK, MULT)
-    put(wk, f"Y{rr}", f'=IF(I{rr}="Harga tetap",IF(W{rr}>=O{rr}-0.0001,"Lolos (margin)","Di bawah margin"),IF(I{rr}<>"Penuh","Info",IF(AND(X{rr}>=N{rr}-0.001,W{rr}>=O{rr}-0.0001),"Lolos","Tidak lolos")))')
-    put(wk, f"Z{rr}", src, align=WRAP)
+    put(wk, f"I{rr}", role, BLUE)
+    put(wk, f"J{rr}", rule, BLUE)
+    put(wk, f"K{rr}", pph, BLUE)
+    for col, flag in zip("LMNO", (edu, korp, reg, frozen)):
+        put(wk, f"{col}{rr}", "Ya" if flag else "Tidak", BLUE)
+    put(wk, f"P{rr}", cur, BLUE, RP)
+    put(wk, f"Q{rr}", f"=SUMIFS({H},{B},A{rr})", GREEN, RP)
+    tp = f'IF(K{rr}="Ya",TARIF_PPH23,0)'
+    kom = f'IF(OR(J{rr}="Penuh",J{rr}="Langganan"),KOMISI,0)'
+
+    def net_margin(pc):
+        gp = f"({pc}*(1-{tp})-Q{rr})"
+        return f'=IF(AND(ISNUMBER({pc}),IF(ISNUMBER({pc}),{pc},0)>0),({gp}-MAX(0,{gp}*{kom}))/{pc},"")'
+
+    def raw(m):
+        return f"=IF(Q{rr}>0,Q{rr}*(1-KOMISI)/((1-{tp})*(1-KOMISI)-{m}),0)"
+
+    put(wk, f"AD{rr}", raw("SEG_EDU"), BLACK, RP)
+    put(wk, f"AE{rr}", raw("SEG_KORP"), BLACK, RP)
+    put(wk, f"AF{rr}", raw("SEG_REG"), BLACK, RP)
+    put(wk, f"R{rr}", net_margin(f"P{rr}"), BLACK, PCT)
+    put(wk, f"S{rr}", f'=IF(J{rr}="Pintu masuk",0,IF(J{rr}="Pasar",P{rr},IF(J{rr}="Harga pokok",IF(IF(ISNUMBER(P{rr}),P{rr},0)>0,P{rr},'
+                      f'{rnd(f"(Q{rr}/(1-{tp}))")}),IF(J{rr}="Langganan",MAX(IF(ISNUMBER(P{rr}),P{rr},0),{rnd(f"AD{rr}")}),{rnd(f"AD{rr}")}))))',
+        Font(name=F, bold=True), RP)
+    put(wk, f"T{rr}", f'=IF(AND(J{rr}="Penuh",L{rr}="Ya"),S{rr},"")', Font(name=F, bold=True), RP, fill=PRICE_FILL)
+    put(wk, f"U{rr}", net_margin(f"T{rr}"), BLACK, PCT)
+    put(wk, f"V{rr}", f'=IF(AND(J{rr}="Penuh",M{rr}="Ya"),MAX(IF(ISNUMBER(P{rr}),P{rr},0),{rnd(f"AE{rr}")}),"")', Font(name=F, bold=True), RP, fill=PRICE_FILL)
+    put(wk, f"W{rr}", net_margin(f"V{rr}"), BLACK, PCT)
+    put(wk, f"X{rr}", f'=IF(AND(J{rr}="Penuh",N{rr}="Ya"),IF(IF(ISNUMBER(Z{rr}),Z{rr},0)>0,Z{rr},IF(AND(O{rr}="Ya",IF(ISNUMBER(P{rr}),P{rr},0)>0),P{rr},'
+                      f'MAX(IF(ISNUMBER(P{rr}),P{rr},0),{rnd(f"AF{rr}")}))),"")', Font(name=F, bold=True), RP, fill=PRICE_FILL)
+    put(wk, f"Y{rr}", net_margin(f"X{rr}"), BLACK, PCT)
+    put(wk, f"Z{rr}", None, BLUE, RP)
+    put(wk, f"AA{rr}", f'=IF(J{rr}<>"Penuh","Info",IF(AND(ISNUMBER(Y{rr}),IF(ISNUMBER(Y{rr}),Y{rr},0)<0.2999),"Regulator (beku) di bawah 30%",'
+                       f'IF(MIN(IF(ISNUMBER(U{rr}),U{rr},1),IF(ISNUMBER(W{rr}),W{rr},1))<0.2999,"Di bawah 30%","Lolos")))')
+    put(wk, f"AB{rr}", src, align=WRAP)
+    put(wk, f"AC{rr}", f'=IF(ISNUMBER(V{rr}),V{rr},IF(ISNUMBER(T{rr}),T{rr},IF(ISNUMBER(X{rr}),X{rr},S{rr})))', BOLD, RP)
 KAT_LAST = KAT_FIRST + len(P) - 1
 wk.freeze_panes = "E6"
-wk.auto_filter.ref = f"A5:AA{KAT_LAST}"
+wk.auto_filter.ref = f"A5:AF{KAT_LAST}"
+for col in ("AD", "AE", "AF"):
+    wk.column_dimensions[col].hidden = True
 green = PatternFill("solid", fgColor="C6EFCE")
 red = PatternFill("solid", fgColor="FFC7CE")
-wk.conditional_formatting.add(f"Y{KAT_FIRST}:Y{KAT_LAST}", CellIsRule(operator="equal", formula=['"Lolos"'], fill=green))
-wk.conditional_formatting.add(f"Y{KAT_FIRST}:Y{KAT_LAST}", CellIsRule(operator="equal", formula=['"Tidak lolos"'], fill=red))
-wk.conditional_formatting.add(f"Y{KAT_FIRST}:Y{KAT_LAST}", CellIsRule(operator="equal", formula=['"Lolos (margin)"'], fill=green))
-wk.conditional_formatting.add(f"Y{KAT_FIRST}:Y{KAT_LAST}", CellIsRule(operator="equal", formula=['"Di bawah margin"'], fill=red))
-wk.conditional_formatting.add(f"U{KAT_FIRST}:U{KAT_LAST}", FormulaRule(formula=[f'AND(ISNUMBER(U{KAT_FIRST}),U{KAT_FIRST}>0)'],
-                                                                      fill=PatternFill("solid", fgColor="FCE4D6")))
-for f1, opts in (("I", '"Penuh,Harga tetap,Pasar,Harga pokok"'), ("J", '"Ya,Tidak"')):
+wk.conditional_formatting.add(f"AA{KAT_FIRST}:AA{KAT_LAST}", CellIsRule(operator="equal", formula=['"Lolos"'], fill=green))
+wk.conditional_formatting.add(f"AA{KAT_FIRST}:AA{KAT_LAST}", FormulaRule(formula=[f'ISNUMBER(SEARCH("30%",AA{KAT_FIRST}))'], fill=red))
+wk.conditional_formatting.add(f"AA{KAT_FIRST}:AA{KAT_LAST}", CellIsRule(operator="notEqual", formula=['"Lolos"'],
+                                                                         fill=PatternFill("solid", fgColor="FFF2CC")))
+for f1, opts, cols_ in (("I", '"Pintu masuk,Inti,Retensi"', "I"), ("J", '"Penuh,Langganan,Pasar,Harga pokok,Pintu masuk"', "J"),
+                        ("K", '"Ya,Tidak"', "K"), ("L", '"Ya,Tidak"', "L"), ("M", '"Ya,Tidak"', "M"), ("N", '"Ya,Tidak"', "N"),
+                        ("O", '"Ya,Tidak"', "O")):
     d = DataValidation(type="list", formula1=opts)
     wk.add_data_validation(d)
     d.add(f"{f1}{KAT_FIRST}:{f1}{KAT_LAST}")
-name("KAT_CODE", f"Katalog!$A${KAT_FIRST}:$A${KAT_LAST}")
-name("KAT_PROD", f"Katalog!$D${KAT_FIRST}:$D${KAT_LAST}")
-name("KAT_UOM", f"Katalog!$G${KAT_FIRST}:$G${KAT_LAST}")
-name("KAT_RULE", f"Katalog!$I${KAT_FIRST}:$I${KAT_LAST}")
-name("KAT_PPH", f"Katalog!$J${KAT_FIRST}:$J${KAT_LAST}")
-name("KAT_COST", f"Katalog!$L${KAT_FIRST}:$L${KAT_LAST}")
-name("KAT_EXT", f"Katalog!$M${KAT_FIRST}:$M${KAT_LAST}")
-name("KAT_PRICE", f"Katalog!$T${KAT_FIRST}:$T${KAT_LAST}")
-name("KAT_FAM", f"Katalog!$C${KAT_FIRST}:$C${KAT_LAST}")
-name("KAT_CUR", f"Katalog!$K${KAT_FIRST}:$K${KAT_LAST}")
-name("KAT_CHG", f"Katalog!$U${KAT_FIRST}:$U${KAT_LAST}")
-name("KAT_CHECK", f"Katalog!$Y${KAT_FIRST}:$Y${KAT_LAST}")
-name("KAT_MARGIN", f"Katalog!$W${KAT_FIRST}:$W${KAT_LAST}")
+for nm, col in (("KAT_CODE", "A"), ("KAT_FAM", "C"), ("KAT_PROD", "D"), ("KAT_UOM", "G"), ("KAT_ROLE", "I"), ("KAT_RULE", "J"),
+                ("KAT_PPH", "K"), ("KAT_CUR", "P"), ("KAT_COST", "Q"), ("KAT_BASE", "S"), ("KAT_EDU", "T"), ("KAT_MEDU", "U"),
+                ("KAT_KORP", "V"), ("KAT_MKORP", "W"), ("KAT_REG", "X"), ("KAT_MREG", "Y"), ("KAT_CHECK", "AA"), ("KAT_PRICE", "AC")):
+    name(nm, f"Katalog!${col}${KAT_FIRST}:${col}${KAT_LAST}")
 
 # ---------------------------------------------------------------------------------------------
 # 7. Ringkasan
 # ---------------------------------------------------------------------------------------------
 ws = wb.create_sheet("Ringkasan", 1)
-put(ws, "A1", "Ringkasan: produk, aturan, dan dampak harga baru", TITLE)
-put(ws, "A2", "Semua angka rumus dari Katalog. Ubah batas margin per keluarga di Input untuk melihat dampaknya.")
-header(ws, 4, ["Keluarga", "Jumlah produk", "Produk dengan aturan (Penuh / Harga tetap)", "Lolos dengan harga saat ini", "Naik harga", "Produk baru (belum ada harga)",
-               "Kenaikan rata-rata (yang naik)", "Margin bersih rata-rata, harga baru", "Kelipatan min (opsional)", "Margin min", "Di bawah margin (harga tetap)"],
-       [32, 12, 14, 14, 12, 14, 14, 16, 11, 11, 14])
-for i, (fam, _) in enumerate(families):
+put(ws, "A1", "Ringkasan: produk per lini dan margin per segmen", TITLE)
+put(ws, "A2", "Semua angka rumus dari Katalog. Ubah target margin per segmen di Input untuk melihat dampaknya.")
+header(ws, 4, ["Lini", "Jumlah produk", "Produk baru (20 Nov 2026)", "Pintu masuk", "Inti", "Retensi",
+               "Dijual ke Pendidikan", "Dijual ke Korporat", "Dijual ke Regulator",
+               "Margin rata-rata Pendidikan", "Margin rata-rata Korporat", "Perlu persetujuan (di bawah 30%)"],
+       [34, 11, 13, 11, 9, 9, 12, 12, 12, 13, 13, 15])
+for i, (fam, _, _) in enumerate(families):
     rr = 5 + i
     put(ws, f"A{rr}", fam, BOLD)
     put(ws, f"B{rr}", f"=COUNTIFS(KAT_FAM,A{rr})", GREEN)
-    put(ws, f"C{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_RULE,"Penuh")+COUNTIFS(KAT_FAM,A{rr},KAT_RULE,"Harga tetap")', GREEN)
-    put(ws, f"D{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_CHECK,"Lolos*",KAT_CHG,"<=0.0001")', GREEN)
-    put(ws, f"E{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_CHG,">0.0001")', GREEN)
-    put(ws, f"F{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_CHG,"Baru")', GREEN)
-    put(ws, f"G{rr}", f'=IF(E{rr}=0,0,SUMIFS(KAT_CHG,KAT_FAM,A{rr},KAT_CHG,">0.0001")/E{rr})', GREEN, PCT)
-    put(ws, f"H{rr}", f"=IFERROR(AVERAGEIFS(KAT_MARGIN,KAT_FAM,A{rr}),0)", GREEN, PCT)
-    put(ws, f"I{rr}", f"=INDEX(FAM_MULT,MATCH(A{rr},FAM,0))", GREEN, MULT)
-    put(ws, f"J{rr}", f"=INDEX(FAM_MARG,MATCH(A{rr},FAM,0))", GREEN, PCT)
-    put(ws, f"K{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_CHECK,"Di bawah margin")', GREEN)
+    put(ws, f"C{rr}", f'=COUNTIFS(KAT_FAM,A{rr},Katalog!$H${KAT_FIRST}:$H${KAT_LAST},"{NEW}")', GREEN)
+    for col, rl in zip("DEF", ("Pintu masuk", "Inti", "Retensi")):
+        put(ws, f"{col}{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_ROLE,"{rl}")', GREEN)
+    for col, rng in zip("GHI", ("KAT_EDU", "KAT_KORP", "KAT_REG")):
+        put(ws, f"{col}{rr}", f'=COUNTIFS(KAT_FAM,A{rr},{rng},">0")', GREEN)
+    put(ws, f"J{rr}", f"=IFERROR(AVERAGEIFS(KAT_MEDU,KAT_FAM,A{rr}),0)", GREEN, PCT)
+    put(ws, f"K{rr}", f"=IFERROR(AVERAGEIFS(KAT_MKORP,KAT_FAM,A{rr}),0)", GREEN, PCT)
+    put(ws, f"L{rr}", f'=COUNTIFS(KAT_FAM,A{rr},KAT_CHECK,"*30%*")', GREEN)
 tot = 5 + len(families)
 put(ws, f"A{tot}", "Total", BOLD)
-for col in "BCDEFK":
+for col in "BCDEFGHIL":
     put(ws, f"{col}{tot}", f"=SUM({col}5:{col}{tot-1})", BOLD)
-put(ws, f"A{tot+2}", "Cara baca: 'Naik harga' = produk yang harga saat ininya di bawah aturan dan dinaikkan di Katalog. "
-                     "Jika kenaikan terlalu besar untuk pasar, ubah produk itu ke aturan 'Harga tetap' di Katalog "
-                     "(harga hari ini dipertahankan, margin tetap dicek).", align=WRAP)
-ws.merge_cells(f"A{tot+2}:J{tot+2}")
-ws.row_dimensions[tot + 2].height = 45
+put(ws, f"A{tot+2}", "Target margin: Pendidikan", BOLD)
+put(ws, f"C{tot+2}", "=SEG_EDU", GREEN, PCT)
+put(ws, f"A{tot+3}", "Target margin: Korporat dan pemerintah", BOLD)
+put(ws, f"C{tot+3}", "=SEG_KORP", GREEN, PCT)
+put(ws, f"A{tot+4}", "Target margin: Regulator", BOLD)
+put(ws, f"C{tot+4}", "=SEG_REG", GREEN, PCT)
+put(ws, f"A{tot+6}", "Cara baca: margin rata-rata Korporat bisa di atas 50% karena harga saat ini yang lebih tinggi tidak diturunkan "
+                     "(misalnya program bank, profiling, pemetaan). 'Perlu persetujuan' = harga regulator yang dibekukan di bawah 30%.",
+    align=WRAP)
+ws.merge_cells(f"A{tot+6}:L{tot+6}")
+ws.row_dimensions[tot + 6].height = 40
 
 # ---------------------------------------------------------------------------------------------
 # 8. Simulasi_Penawaran
 # ---------------------------------------------------------------------------------------------
 wq = wb.create_sheet("Simulasi_Penawaran")
 put(wq, "A1", "Simulasi penawaran", TITLE)
-put(wq, "A2", "Pilih kode produk (daftar dari Katalog), isi jumlah dan diskon (biru). Contoh di baris pertama: 1 paket EAP Jeda.")
+put(wq, "A2", "Pilih kode produk dan segmen (daftar), isi jumlah dan diskon (biru). Harga mengikuti segmen. "
+              "Contoh: 30 MHCU Flash + 1 workshop korporat untuk perusahaan.")
 put(wq, "A3", "Klien:", BOLD)
 put(wq, "B3", "(isi nama klien)", BLUE)
-header(wq, 5, ["No", "Kode produk", "Produk", "Satuan", "Jumlah", "Harga daftar (Rp)", "Diskon", "Harga setelah diskon (Rp)",
-               "Total harga (Rp)", "Total biaya (Rp)", "Biaya luar grup (Rp)", "Potong PPh 23?", "Aturan",
-               "Harga minimum kelipatan, opsional (Rp)"],
-       [5, 20, 44, 18, 9, 16, 9, 17, 17, 16, 16, 10, 11, 18])
+put(wq, "D3", "Bagi hasil sekolah / mitra (% harga, maks. 10%):", BOLD)
+put(wq, "H3", 0, BLUE, PCT)
+header(wq, 5, ["No", "Kode produk", "Produk", "Satuan", "Segmen", "Jumlah", "Harga daftar segmen (Rp)", "Diskon",
+               "Harga setelah diskon (Rp)", "Total harga (Rp)", "Total biaya (Rp)", "Potong PPh 23?", "Aturan",
+               "Target margin segmen", "Catatan"],
+       [5, 13, 40, 16, 13, 9, 16, 9, 16, 16, 16, 10, 11, 11, 30])
 Q1, QN = 6, 20
 dvq = DataValidation(type="list", formula1=f"=Katalog!$A${KAT_FIRST}:$A${KAT_LAST}", allow_blank=True)
 wq.add_data_validation(dvq)
 dvq.add(f"B{Q1}:B{QN}")
+dvs = DataValidation(type="list", formula1='"Pendidikan,Korporat,Regulator,Umum"', allow_blank=True)
+wq.add_data_validation(dvs)
+dvs.add(f"E{Q1}:E{QN}")
+example = {Q1: ("TJ-ASM-08", "Korporat", 30, 0), Q1 + 1: ("TJ-WS-01", "Korporat", 1, 0.05)}
 for rr in range(Q1, QN + 1):
+    ex = example.get(rr, (None, None, None, None))
     put(wq, f"A{rr}", rr - Q1 + 1)
-    put(wq, f"B{rr}", "TJ-EAP-01" if rr == Q1 else None, BLUE)
-    put(wq, f"E{rr}", 1 if rr == Q1 else None, BLUE, "#,##0")
-    put(wq, f"G{rr}", 0 if rr == Q1 else None, BLUE, PCT)
-    look = lambda rng: f'=IF($B{rr}="","",INDEX({rng},MATCH($B{rr},KAT_CODE,0)))'
-    put(wq, f"C{rr}", look("KAT_PROD"), GREEN)
-    put(wq, f"D{rr}", look("KAT_UOM"), GREEN)
-    put(wq, f"F{rr}", look("KAT_PRICE"), GREEN, RP)
-    put(wq, f"H{rr}", f'=IF($B{rr}="",0,F{rr}*(1-G{rr}))', BLACK, RP)
-    put(wq, f"I{rr}", f'=IF($B{rr}="",0,H{rr}*E{rr})', BLACK, RP)
-    put(wq, f"J{rr}", f'=IF($B{rr}="",0,INDEX(KAT_COST,MATCH($B{rr},KAT_CODE,0))*E{rr})', GREEN, RP)
-    put(wq, f"K{rr}", f'=IF($B{rr}="",0,INDEX(KAT_EXT,MATCH($B{rr},KAT_CODE,0))*E{rr})', GREEN, RP)
-    put(wq, f"L{rr}", look("KAT_PPH"), GREEN)
-    put(wq, f"M{rr}", look("KAT_RULE"), GREEN)
-    put(wq, f"N{rr}", f'=IF(OR($B{rr}="",M{rr}<>"Penuh"),0,K{rr}*INDEX(FAM_MULT,MATCH(INDEX(KAT_FAM,MATCH($B{rr},KAT_CODE,0)),FAM,0)))', BLACK, RP)
+    put(wq, f"B{rr}", ex[0], BLUE)
+    put(wq, f"E{rr}", ex[1], BLUE)
+    put(wq, f"F{rr}", ex[2], BLUE, "#,##0")
+    put(wq, f"H{rr}", ex[3], BLUE, PCT)
+    look = lambda rng: f'INDEX({rng},MATCH($B{rr},KAT_CODE,0))'
+    put(wq, f"C{rr}", f'=IF($B{rr}="","",{look("KAT_PROD")})', GREEN)
+    put(wq, f"D{rr}", f'=IF($B{rr}="","",{look("KAT_UOM")})', GREEN)
+    put(wq, f"G{rr}", f'=IF($B{rr}="","",IF($E{rr}="Pendidikan",{look("KAT_EDU")},IF($E{rr}="Korporat",{look("KAT_KORP")},'
+                      f'IF($E{rr}="Regulator",{look("KAT_REG")},{look("KAT_BASE")}))))', GREEN, RP)
+    put(wq, f"I{rr}", f'=IF(ISNUMBER(G{rr}),G{rr}*(1-H{rr}),0)', BLACK, RP)
+    put(wq, f"J{rr}", f'=IF($B{rr}="",0,I{rr}*F{rr})', BLACK, RP)
+    put(wq, f"K{rr}", f'=IF($B{rr}="",0,{look("KAT_COST")}*F{rr})', GREEN, RP)
+    put(wq, f"L{rr}", f'=IF($B{rr}="","",{look("KAT_PPH")})', GREEN)
+    put(wq, f"M{rr}", f'=IF($B{rr}="","",{look("KAT_RULE")})', GREEN)
+    put(wq, f"N{rr}", f'=IF($B{rr}="",0,IF($E{rr}="Pendidikan",SEG_EDU,IF($E{rr}="Korporat",SEG_KORP,IF($E{rr}="Regulator",SEG_REG,0))))', BLACK, PCT)
+    put(wq, f"O{rr}", f'=IF($B{rr}="","",IF(ISNUMBER(G{rr}),"","Tidak dijual ke segmen ini: pilih segmen lain"))', BLACK)
 s = QN + 2
 summary = [
-    ("Total harga ke klien (belum PPN)", f"=SUM(I{Q1}:I{QN})", RP),
-    ("PPh 23 dipotong klien", f'=SUMPRODUCT((L{Q1}:L{QN}="Ya")*I{Q1}:I{QN})*TARIF_PPH23', RP),
-    ("Total biaya", f"=SUM(J{Q1}:J{QN})", RP),
-    ("Laba kotor", f"=C{s}-C{s+1}-C{s+2}", RP),
-    ("Komisi (dari laba kotor, produk 'Penuh')", f'=MAX(0,SUMPRODUCT(((M{Q1}:M{QN}="Penuh")+(M{Q1}:M{QN}="Harga tetap"))*(I{Q1}:I{QN}*(1-TARIF_PPH23*(L{Q1}:L{QN}="Ya"))-J{Q1}:J{QN})))*KOMISI', RP),
-    ("Laba bersih", f"=C{s+3}-C{s+4}", RP),
-    ("Margin bersih", f"=IF(C{s}>0,C{s+5}/C{s},0)", PCT),
-    ("Kelipatan atas biaya luar grup", f"=IF(SUM(K{Q1}:K{QN})>0,C{s}/SUM(K{Q1}:K{QN}),0)", MULT),
-    ("Diskon terbesar", f"=MAX(G{Q1}:G{QN})", PCT),
-    ("Lolos aturan margin bersih (minimal 30%)?", f'=IF(C{s+6}>=0.3,"Ya","Tidak: naikkan harga atau kurangi diskon")', None),
-    ("Lolos batas kelipatan (opsional, 0 = tidak dipakai)?", f'=IF(C{s}>=SUM(N{Q1}:N{QN})-1,"Ya","Tidak: perlu persetujuan Direktur")', None),
-    ("Persetujuan yang dibutuhkan", f'=IF(OR(C{s+9}<>"Ya",C{s+10}<>"Ya",C{s+8}>0.2),"Direktur",IF(C{s+8}>0.1,"Founder / CEO",IF(C{s+8}>0,"Lead sales","Tidak perlu")))', None),
+    ("Total harga ke klien (belum PPN)", f"=SUM(J{Q1}:J{QN})", RP),
+    ("PPh 23 dipotong klien", f'=SUMPRODUCT((L{Q1}:L{QN}="Ya")*J{Q1}:J{QN})*TARIF_PPH23', RP),
+    ("Total biaya", f"=SUM(K{Q1}:K{QN})", RP),
+    ("Bagi hasil sekolah / mitra", f"=C{s}*H3", RP),
+    ("Laba kotor", f"=C{s}-C{s+1}-C{s+2}-C{s+3}", RP),
+    ("Komisi sales (10% dari laba kotor)", f"=MAX(0,C{s+4})*KOMISI", RP),
+    ("Laba bersih", f"=C{s+4}-C{s+5}", RP),
+    ("Margin bersih", f"=IF(C{s}>0,C{s+6}/C{s},0)", PCT),
+    ("Target margin (rata-rata tertimbang segmen)", f"=IF(C{s}>0,SUMPRODUCT(J{Q1}:J{QN},N{Q1}:N{QN})/C{s},0)", PCT),
+    ("Diskon terbesar", f"=MAX(H{Q1}:H{QN})", PCT),
+    ("Status", f'=IF(C{s+7}>=C{s+8}-0.0001,"Hijau: sesuai target",IF(C{s+7}>=0.3,"Kuning: di bawah target, perlu persetujuan",'
+               f'"Merah: di bawah 30%, tidak boleh tanpa Direktur"))', None),
+    ("Kontrak pendidikan minimal Rp10 jt?", f'=IF(COUNTIF(E{Q1}:E{QN},"Pendidikan")=0,"Tidak berlaku",IF(C{s}>=10000000,"Ya",'
+                                            f'"Tidak: tambah item ke paket"))', None),
+    ("Persetujuan yang dibutuhkan", f'=IF(OR(C{s+7}<0.3,C{s+9}>0.2,H3>0.1),"Direktur",IF(OR(C{s+7}<C{s+8}-0.0001,C{s+9}>0.1),'
+                                    f'"Founder / CEO",IF(C{s+9}>0,"Lead sales","Tidak perlu")))', None),
 ]
 for i, (lab, f, fmt) in enumerate(summary):
     put(wq, f"B{s+i}", lab, BOLD)
@@ -686,19 +947,34 @@ wa.column_dimensions["C"].width = 100
 put(wa, "A1", "Aturan penjualan untuk tim sales dan mitra", TITLE)
 header(wa, 3, ["No", "Aturan", "Isi"])
 rules = [
-    ("Harga daftar", "Buka setiap penawaran dengan Harga Daftar Baru di Katalog. Tidak pernah di bawahnya tanpa persetujuan."),
-    ("Satuan harga", "Pelatihan per kelompok per hari; asesmen per peserta; EAP per paket atau per kuartal; software per biro atau per kursi per bulan. Tidak pernah satu angka borongan tanpa rincian."),
+    ("Harga per segmen", "Pakai harga segmen di Katalog: Pendidikan dan komunitas (target 30%), Korporat dan pemerintah (target 50%), "
+                         "Regulator (menuju 50%, minimal 30%). Harga kosong = produk tidak dijual ke segmen itu."),
+    ("Satu metode, harga berbeda", "Instrumen, standar laporan, dan review psikolog sama untuk semua segmen. Yang berbeda hanya durasi, "
+                                   "senioritas psikolog, dan harga. Jangan menjual 'versi murah'."),
+    ("Pintu masuk", "Gratis atau di bawah pasar hanya untuk produk yang biaya antarnya hampir nol (tes mandiri, snapshot burnout, "
+                    "webinar rekaman, konten). Selalu diikuti proposal produk inti. Subsidi maks. Rp6 jt per perusahaan, dicatat sebagai "
+                    "biaya penjualan. Konversi dilacak; dihentikan bila di bawah 5% dalam 6 bulan. Tidak gratis untuk regulator dan bank: "
+                    "untuk mereka, pintu masuknya pilot berbayar."),
+    ("Produk inti tidak pernah gratis", "Semua yang memakai waktu psikolog per orang (MHCU L1-L4, workshop, sesi, asesmen) dijual minimal di harga segmen."),
+    ("Pendidikan: minimal kontrak", "Kontrak segmen Pendidikan minimal Rp10 jt. Item tunggal hanya sebagai tambahan di dalam paket."),
+    ("Bagi hasil sekolah / mitra", "Maksimal 10% dari harga, dicatat sebagai biaya di Simulasi_Penawaran. Di atas 10%: Direktur."),
+    ("Regulator", "Jual sebagai program dan paket, bukan honor per jam. Acuan pagu SBM (honor narasumber sekitar Rp1,7 jt per jam). "
+                  "Jangan menaikkan harga item yang sudah pernah dibeli; tambahkan item baru."),
+    ("Satuan harga", "Pelatihan per kelompok per hari; asesmen per peserta; EAP per paket, per kuartal, atau per bulan; pembicara per 2 jam "
+                     "+ per jam tambahan; software per biro atau per kursi per bulan. Tidak pernah satu angka borongan tanpa rincian."),
     ("Diskon pilot", "Paling besar 20%, sekali per klien, dicatat sebagai biaya penjualan, dan diikat ke kontrak lanjutan."),
-    ("Diskon volume", "5% untuk 5 kelompok atau lebih setahun, 10% untuk 10 kelompok atau lebih. Tidak pernah lebih dari 10%."),
-    ("Persetujuan diskon", "0%: tidak perlu. Sampai 10%: lead sales. Sampai 20%: founder / CEO. Di atas 20%, atau penawaran dengan margin bersih di bawah 30%: Direktur."),
-    ("Harga di atas daftar (mitra)", "Mitra boleh menawarkan hingga 20% di atas Harga Daftar tanpa persetujuan dan mendapat 30% dari selisihnya."),
+    ("Diskon volume", "5% untuk 5 kelompok atau lebih setahun, 10% untuk 10 kelompok atau lebih. Tidak ada diskon volume untuk MHCU."),
+    ("Persetujuan", "Margin di atas target segmen dan diskon 0%: tidak perlu. Diskon sampai 10%: lead sales. Margin di bawah target segmen "
+                    "atau diskon sampai 20%: founder / CEO. Margin di bawah 30%, diskon di atas 20%, atau bagi hasil di atas 10%: Direktur."),
+    ("Komisi sales", "10% dari laba kotor. Harga lebih tinggi = margin perusahaan lebih tinggi dan komisi sales lebih besar."),
+    ("Harga di atas daftar (mitra)", "Mitra boleh menawarkan hingga 20% di atas harga segmen tanpa persetujuan dan mendapat 30% dari selisihnya."),
     ("Komisi mitra non-EAP", "10% dari profit bersih event untuk deal ke-1 sampai ke-4, 12,5% mulai deal ke-5, 2,5% untuk perpanjangan. Margin bersih setelah komisi tidak boleh di bawah 15%."),
     ("Komisi mitra EAP", "Rp1,5 jt per kontrak EAP tahunan baru, Rp500rb per paket 3 bulan, Rp1 jt per perpanjangan 1 tahun."),
     ("Perjalanan dan venue", "Di luar Jakarta: ditagihkan ke klien sebesar biaya aktual, atau biaya + 10% jika TJ yang mengatur."),
-    ("Pembayaran", "EAP 3 bulan: DP 50% saat SPK, pelunasan setelah laporan akhir (atau opsi bulanan, total +20%). Kontrak bank di atas Rp100 jt: DP 30%. Regulator: mengikuti ketentuan mereka."),
+    ("Pembayaran", "Pendidikan dan komunitas: deposit penuh di muka sebelum pelaksanaan. EAP 3 bulan: DP 50% saat SPK, pelunasan setelah laporan akhir "
+                   "(atau bayar bulanan, total +20%). Kontrak bank dan korporat di atas Rp100 jt: DP 30%. Regulator: mengikuti ketentuan mereka."),
     ("Pajak", "Teman Journey dan Coreitera Non-PKP: jangan pernah menulis 'termasuk PPN'. PPh 23 dipotong klien B2B."),
-    ("Regulator", "Jangan menaikkan harga item lama. Tambahkan item baru (asesmen, lisensi, pendampingan) yang mendapat pagu baru."),
-    ("Posisi harga", "Elite boutique: selalu jelas di bawah trainer besar, tidak pernah yang termurah. Bersaing dengan layanan lebih lengkap dan hasil terukur."),
+    ("Posisi harga", "Butik premium: tidak ikut perang harga untuk produk inti. Bersaing di interpretasi, laporan, dan program."),
     ("Coreitera ke biro", "Coreitera menjual lewat biro, tidak pernah menjual tes langsung ke korporat. Mesin tes dijual sekitar biaya; keuntungan dari interpretasi dan langganan."),
     ("Kerahasiaan", "Manajemen klien hanya menerima data agregat anonim. Hasil individual hanya untuk pegawai yang bersangkutan."),
 ]
@@ -708,7 +984,7 @@ for i, (a, b) in enumerate(rules):
     put(wa, f"B{rr}", a, BOLD, align=WRAP)
     put(wa, f"C{rr}", b, align=WRAP)
     wa.row_dimensions[rr].height = 32
-put(wa, f"B{6 + len(rules)}", "Sumber: Rate_Card model v15, Perjanjian Kemitraan (Pasal 4-8, Lampiran C), Model Biaya BI Sibolga, Proposal Synthesia v0.2, keputusan 19 Nov 2026.", align=WRAP)
+put(wa, f"B{6 + len(rules)}", "Sumber: Rate_Card model v15, Perjanjian Kemitraan (Pasal 4-8, Lampiran C), Model Biaya BI Sibolga, Proposal Synthesia v0.2, keputusan 19 dan 20 Nov 2026 (05_Struktur_Produk_dan_Segmen.md).", align=WRAP)
 
 # ---------------------------------------------------------------------------------------------
 # 10. Sumber_Konflik
@@ -733,6 +1009,19 @@ conf = [
     ("Pemetaan 3A-3C di bawah 3x (sekitar 2,5x)", "RAB BSN", "Tidak masalah lagi: aturan 3x tidak dipakai, margin bersih 62-71%."),
     ("Komisi 10% dari laba kotor di RAB vs komisi mitra di Kemitraan", "Semua RAB vs Kemitraan",
      "Katalog memakai 10% laba kotor (konservatif). Komisi mitra mengikuti Aturan_Penjualan."),
+    ("MHCU Telering: Flash Rp242rb, Deep Rp380rb (diskon volume 5% / 7,5%), di bawah biaya", "Proposal Telering (Canva, Okt 2026)",
+     "Dihormati untuk Telering saja (preseden). Ke depan, komunitas seperti Telering memakai MHCU Ringkas 15 menit (TJ-ASM-12). Tidak ada diskon volume MHCU."),
+    ("MHCU DASS-21 tanpa konseling Rp250rb (Mr DIY)", "Proposal Mr DIY (Canva, Nov 2026)", "Menjadi produk TJ-ASM-11 (MHCU Skrining) dengan harga per segmen."),
+    ("Paket TFI: Welcoming Rp5,05 jt / Rp3,3 jt, add-on 5 sesi Rp1,35 jt (rugi)", "Proposal Teacher Wellbeing TFI (Canva, Agu 2026)",
+     "Harga lama. Struktur baru (paket 10 dan 20 sesi) dihitung ulang: TJ-KON-02 sampai 04. Add-on sesi memakai harga sesi B2B."),
+    ("Dua ratecard pembicara: internal Rp2,8/4,5/6/8 jt; kampus Rp3/4,5/7/8 jt dengan tambahan per 2 jam (rugi)", "Canva: ratecard internal dan proposal Teman Kampus",
+     "Fee psikolog dari ratecard internal masuk Tarif_Biaya (SPK_T1-T4). Harga per segmen dari rumus; tambahan durasi dihitung per jam."),
+    ("Psikolog event komunitas Rp150rb vs Rp500rb", "RAB Lyfe at 30s (dua versi)", "Rp500rb (disetujui 20 Nov 2026)."),
+    ("EAP bank di rencana 2027 Rp15 jt/bulan vs paket kecil Rp4-10,5 jt/bulan", "Model 2027 v15 vs paket Jeda/Tumbuh/Seperjalanan",
+     "EAP korporat menjadi produk sendiri (TJ-EAP-06), Rp13,5 jt per bulan untuk 300 pegawai pada target 50%."),
+    ("Asesmen anak Deen Haus Rp250rb per anak, di bawah biaya bila asesor psikolog", "Proposal TJxDH (Canva, Sep 2026)",
+     "Produk TJ-ASM-18 dengan harga Pendidikan dari rumus. Rp250rb hanya mungkin dengan asisten terlatih (bukan psikolog)."),
+    ("Paket EAP dulu 'Harga tetap'", "Keputusan 19 Nov 2026", "Keputusan 20 Nov 2026: harga per segmen. Harga lama tetap untuk regulator (BI KPw Sibolga) lewat aturan dibekukan."),
 ]
 for i, (a, b, c) in enumerate(conf):
     rr = 4 + i

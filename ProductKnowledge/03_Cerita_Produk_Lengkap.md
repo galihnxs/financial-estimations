@@ -1,6 +1,6 @@
 # Cerita Lengkap Produk Teman Journey dan Coreitera
 
-*Untuk tim sales dan mitra. Ditulis 19 November 2026. Harga dan angka diambil dari `Master_Produk_dan_Harga.xlsx`; kalau ada yang berbeda, spreadsheet itu yang benar.*
+*Untuk tim sales dan mitra. Ditulis 19 November 2026, diperbarui 20 November 2026 (struktur 6 lini dan harga per segmen). Harga dan angka diambil dari `Master_Produk_dan_Harga.xlsx`; kalau ada yang berbeda, spreadsheet itu yang benar.*
 
 ---
 
@@ -56,7 +56,7 @@ Hampir semua penjualan kita jatuh ke enam jenis pembeli. Masing-masing punya mas
 
 **Cara mereka membeli.** Lewat vendor terdaftar dan sering lewat tender. Bank BUMN lebih sensitif harga dibanding bank swasta. Pembayaran bank lebih lambat dari regulator, sering 30 sampai 60 hari, jadi untuk kontrak di atas Rp100 juta kita minta DP 30%.
 
-**Pintu masuknya.** Program Bank Signature per kelompok per hari (BUMN Rp51 juta, swasta Rp61 juta), lalu naik ke Elite yang menambahkan lisensi pelatih internal dan pendampingan 3 bulan. Setelah programnya jalan, tawarkan EAP untuk pegawainya.
+**Pintu masuknya.** Program Bank Signature per kelompok per hari (BUMN Rp51 juta, swasta Rp61 juta), lalu naik ke Elite yang menambahkan lisensi pelatih internal dan pendampingan 3 bulan. Kalau anggaran terbatas, ada Essential (hari pelatihan saja, Rp45 juta BUMN, Rp55 juta swasta), tetapi tanpa tes sebelum-sesudah; selalu dorong ke Signature. Setelah programnya jalan, tawarkan EAP Korporat untuk pegawainya.
 
 ### 3. HR instansi dan perusahaan
 
@@ -64,7 +64,7 @@ Hampir semua penjualan kita jatuh ke enam jenis pembeli. Masing-masing punya mas
 
 **Cara mereka membeli.** Biasanya kontrak kecil per kuartal lewat SPK, dengan keputusan di tangan kepala unit atau HR. Mereka butuh sesuatu yang mudah dijelaskan ke atasan dan tidak membuka data pribadi pegawai.
 
-**Pintu masuknya.** EAP Jeda (Rp12 juta untuk 3 bulan) sebagai percobaan, lalu kontrak tahunan Jeda Tahunan atau paket yang lebih besar seperti Tumbuh dan Seperjalanan.
+**Pintu masuknya.** Snapshot burnout gratis untuk HR (tes mandiri, laporan agregat otomatis). Produk pertama yang dibayar biasanya MHCU Skrining atau Flash, atau paket EAP kecil seperti Jeda. Untuk perusahaan besar, tujuannya EAP Korporat (Rp13,5 juta per bulan untuk 300 pegawai).
 
 ### 4. HC dan direksi yang mengambil keputusan tentang orang
 
@@ -72,13 +72,13 @@ Hampir semua penjualan kita jatuh ke enam jenis pembeli. Masing-masing punya mas
 
 **Cara mereka membeli.** Per proyek, biasanya dengan tenggat yang ketat. Mereka membandingkan kita dengan platform tes online (murah, tapi hanya skor) dan dengan konsultan besar seperti SHL (lengkap, tapi mahal dan lambat).
 
-**Pintu masuknya.** Untuk seleksi pejabat: asesmen Fit and Proper (Rp15 juta untuk 6 kandidat). Untuk pemetaan massal: Profiling Paket 1 atau 2 (Rp50 sampai Rp70 juta untuk 2.000 karyawan), lalu naik ke pemetaan talenta 3A sampai 3C kalau mereka butuh analisis per unit dan per jabatan.
+**Pintu masuknya.** Untuk seleksi pejabat: asesmen Fit and Proper (harga korporat Rp21 juta untuk 6 kandidat; BI tetap Rp15 juta), asesmen manajerial (Rp2 juta per peserta), atau asesmen eksekutif untuk direksi (Rp7,6 juta per peserta). Untuk pemetaan massal: Profiling Paket 1 atau 2 (Rp50 sampai Rp70 juta untuk 2.000 karyawan), lalu naik ke pemetaan talenta 3A sampai 3C kalau mereka butuh analisis per unit dan per jabatan.
 
 ### 5. Komunitas, kampus, dan panitia kegiatan
 
 **Masalahnya.** Komunitas seperti Telering (mentoring calon penerima beasiswa LPDP) atau panitia lomba seperti JAMPURNAS butuh dukungan psikologi yang serius, tetapi anggarannya kecil dan waktunya pendek.
 
-**Pintu masuknya.** MHCU Flash atau Deep per peserta, webinar psikoedukasi, juri ahli, atau event komunitas bertiket. Produk-produk ini jarang besar nilainya, tetapi bagus untuk nama baik dan sering membuka pintu ke klien yang lebih besar.
+**Pintu masuknya.** MHCU Ringkas atau Flash dengan harga pendidikan, paket tes sekolah, workshop sekolah dan kampus, Teman Kecil, juri ahli, atau event komunitas bertiket. Kontrak pendidikan minimal Rp10 juta, jadi jual sebagai paket. Produk-produk ini jarang besar nilainya, tetapi bagus untuk nama baik dan sering membuka pintu ke klien yang lebih besar.
 
 ### 6. Individu dan pasangan
 
@@ -123,7 +123,9 @@ Ada empat paket, dari kecil ke besar:
 
 Hal yang harus selalu dijaga dalam percakapan: **manajemen hanya menerima laporan agregat yang anonim.** Hasil individual hanya diberikan ke pegawai yang bersangkutan. Ini alasan utama pegawai mau memakai layanannya, dan juga alasan HR merasa aman membelinya.
 
-Satu catatan jujur untuk sales: secara per sesi, paket EAP tidak lebih murah dari membeli sesi satuan (Rp500 ribu per sesi). Nilai paket ada di kuota yang terjamin, psikoedukasi, laporan untuk manajemen, dan satu kontrak untuk satu kuartal. Jangan menjual paket sebagai "lebih hemat per sesi", karena klien yang teliti akan menghitungnya.
+Untuk bank, BUMN, dan perusahaan besar, kita punya **EAP Korporat**: retainer bulanan berdasarkan jumlah pegawai yang dicakup. Untuk 300 pegawai harganya Rp13,5 juta per bulan, berisi pool 10 sesi konseling per bulan, MHCU dua kali setahun untuk semua pegawai, laporan agregat, dan satu webinar per kuartal. Paket Jeda, Tumbuh, dan Seperjalanan tetap ada untuk kantor kecil, sekolah, dan komunitas.
+
+Satu catatan jujur untuk sales: secara per sesi, paket EAP tidak lebih murah dari membeli sesi satuan. Nilai paket ada di kuota yang terjamin, psikoedukasi, laporan untuk manajemen, dan satu kontrak untuk satu kuartal. Jangan menjual paket sebagai "lebih hemat per sesi", karena klien yang teliti akan menghitungnya.
 
 ### Asesmen
 
@@ -133,13 +135,13 @@ Asesmen kita terbagi tiga, sesuai keputusan yang mau diambil klien.
 
 **Profiling dan pemetaan talenta.** Untuk perusahaan yang ingin memahami ratusan sampai ribuan karyawannya sekaligus. Tesnya online lewat platform Coreitera, laporannya keluar otomatis, dan skor masuk ke dashboard HC. Kalau klien butuh lebih dari skor, psikolog kita membuat peta per unit (3A), talent box yang menggabungkan profil dengan data kinerja (3B), sampai analisis kecocokan per rumpun jabatan (3C). Ini yang kita tawarkan ke BSN.
 
-**Mental Health Check-Up (MHCU).** Lima instrumen klinis yang tervalidasi (DASS-21, CBI, BFI-10, SWLS, dan cerita pribadi peserta), direview psikolog, dengan laporan personal dan sesi konseling. Versi Flash memakai konseling 30 menit (Rp500 ribu), versi Deep 60 menit (Rp750 ribu).
+**Mental Health Check-Up (MHCU).** Lima instrumen klinis yang tervalidasi (DASS-21, CBI, BFI-10, SWLS, dan cerita pribadi peserta), direview psikolog, dengan laporan personal dan sesi konseling. MHCU dijual sebagai tangga: **Skrining** (review psikolog tanpa konseling), **Flash** (konseling 30 menit), dan **Deep** (konseling 60 menit). Untuk korporat harganya Rp175 ribu, Rp600 ribu, dan Rp1 juta per orang; untuk pendidikan Rp125 ribu, Rp400 ribu, dan Rp650 ribu. Komunitas dan kampus juga bisa memakai **MHCU Ringkas** dengan konseling 15 menit (Rp250 ribu). Di bawah tangga ini ada snapshot burnout gratis untuk HR: tes mandiri dengan laporan agregat otomatis, sebagai pintu masuk.
 
 Ketika klien membandingkan kita dengan aplikasi tes Rp15 ribu, jawabannya sederhana: **mereka menjual skor, kita menjual keputusan yang bisa dipertanggungjawabkan.** Skor tanpa interpretasi psikolog tidak bisa dipakai untuk memutuskan promosi atau rotasi. Kalau klien memang hanya butuh skor massal, kita juga punya: Profiling Paket 1 setara Rp25 ribu per karyawan.
 
 ### Psikoedukasi dan jasa ahli
 
-Webinar (Rp2,6 juta per sesi), seminar tatap muka (Rp4,9 juta), dan event psikoedukasi untuk umum (Rp24 juta). Topik yang sudah siap antara lain mengenali burnout sejak dini, komunikasi asertif di bawah tekanan kerja, tetap terhubung dengan keluarga saat jauh dari rumah, dan refleksi akhir tahun.
+Pembicara dan webinar memakai ratecard per tier psikolog, per kegiatan 2 jam: untuk korporat Rp3,9 juta (Tier 1) sampai Rp9,8 juta (Tier 4), untuk pendidikan Rp2,6 juta sampai Rp6,5 juta. Ada juga workshop tatap muka (Healthy Working Environment, Art-Based Wellbeing, Team-Building untuk perusahaan; Career Readiness, Gadget, Sexual Education, UpStander, dan Parenting Class untuk sekolah dan kampus) dan event psikoedukasi untuk umum (Rp24 juta). Topik yang sudah siap antara lain mengenali burnout sejak dini, komunikasi asertif di bawah tekanan kerja, tetap terhubung dengan keluarga saat jauh dari rumah, dan refleksi akhir tahun.
 
 Kita juga menyediakan juri ahli untuk kompetisi (Rp15 juta per acara), seperti yang kita lakukan untuk JAMPURNAS BI, dan event komunitas bertiket bersama mitra, seperti peluncuran buku Lyfe at 30s.
 
@@ -188,10 +190,13 @@ Regulator dan bank menyusun anggaran setahun sebelumnya. **Kalau kegiatan berjal
 
 ### Cara bicara soal harga
 
-- **Selalu buka dengan harga daftar.** Harga di katalog adalah titik awal, bukan titik tawar. Tidak boleh di bawahnya tanpa persetujuan.
+- **Harga mengikuti jenis klien.** Metodenya sama untuk semua klien; harganya berbeda. Korporat dan pemerintah memakai harga Korporat (target margin 50%), sekolah, kampus, dan komunitas memakai harga Pendidikan (30%), regulator memakai harga Regulator. Harga di katalog adalah titik awal, bukan titik tawar.
+- **Pintu masuk boleh gratis, produk inti tidak.** Snapshot burnout, tes mandiri, dan webinar rekaman boleh gratis karena biayanya hampir nol. Semua yang memakai waktu psikolog per orang (MHCU, workshop, sesi, asesmen) tidak pernah gratis.
+- **Pendidikan minimal Rp10 juta per kontrak.** Jual paket (misalnya tes + workshop + parenting class), bukan satu item lepas. Bagi hasil untuk sekolah paling besar 10%.
 - **Jual per satuan, jangan borongan.** Pelatihan per kelompok per hari, asesmen per peserta, EAP per paket atau per kuartal. Satuan yang jelas membuat klien bisa menambah tanpa negosiasi ulang.
 - **Diskon ada aturannya.** Diskon pilot paling besar 20%, hanya sekali per klien, dan harus diikat ke kontrak lanjutan. Diskon volume 5% untuk 5 kelompok atau lebih, 10% untuk 10 kelompok atau lebih. Sampai 10% cukup disetujui lead sales, sampai 20% oleh CEO, di atas itu oleh Direktur.
-- **Batas margin.** Setiap penawaran harus menyisakan margin bersih minimal 30% setelah pajak dan komisi. Simulasi penawaran di spreadsheet akan langsung memberi tahu apakah penawaran lolos. Jeda Tahunan dan sesi tambahan EAP saat ini di bawah batas itu, jadi selalu perlu persetujuan Direktur.
+- **Batas margin.** Simulasi penawaran memberi warna: hijau kalau margin sesuai target segmen, kuning kalau di bawah target (perlu persetujuan founder / CEO), merah kalau di bawah 30% (perlu Direktur). Harga lama BI untuk Jeda Tahunan dan sesi tambahan EAP di bawah 30%, jadi perpanjangannya selalu perlu persetujuan Direktur.
+- **Harga lebih tinggi menguntungkan semua.** Komisi sales 10% dari laba kotor, jadi setiap diskon yang tidak perlu mengurangi komisi sales sendiri.
 - **Perjalanan ditagih terpisah.** Untuk kegiatan di luar Jakarta, tiket, hotel, dan uang harian ditagih sebesar biaya aktual.
 - **Soal pajak.** Teman Journey dan Coreitera bukan PKP. Jangan pernah menulis "harga sudah termasuk PPN". PPh 23 akan dipotong oleh klien.
 
@@ -226,26 +231,34 @@ Satu peringatan: saat ini sebagian besar pendapatan kita datang dari Bank Indone
 
 ## Bagian 7. Usulan alur deck yang baru
 
-Deck katalog sekarang terlalu banyak tabel dan terlalu sedikit cerita. Usulan alur untuk versi berikutnya, satu pesan per slide:
+Deck katalog lama terlalu banyak tabel dan terlalu sedikit cerita. Alur baru mengikuti 6 lini produk dan perjalanan klien
+(pintu masuk, inti, retensi). Deck klien bersifat modular: setiap lini punya slide sendiri, sehingga sales bisa menyembunyikan
+yang tidak dibutuhkan klien. Satu pesan per slide:
 
 1. **Pembuka:** Kita tidak menjual daftar hadir, kita menjual bukti perubahan.
 2. **Masalah klien:** Tiga cerita singkat, yaitu pegawai cabang yang burnout, pejabat yang dipromosikan tanpa data, dan program edukasi yang tidak bisa dibuktikan dampaknya.
 3. **Siapa kita:** Teman Journey membawa psikolog, Coreitera membawa teknologi.
-4. **Perjalanan klien:** Mulai dari kantor pusat, menyebar ke cabang, dipertahankan lewat EAP. Satu gambar alur, bukan tabel.
-5. **Pelatihan:** Satu cerita BI CBP Rupiah, lalu tiga tingkatan program dalam satu slide kartu.
-6. **EAP:** Asesmen, konseling, intervensi; kapan pegawai butuh; empat paket.
-7. **Asesmen:** Tiga keputusan (seleksi, pemetaan, kesehatan mental), masing-masing dengan satu contoh klien.
-8. **Psikoedukasi dan layanan individu:** Satu slide masing-masing.
-9. **Coreitera:** Kenapa kita tidak ikut perang harga, lalu Theta.
-10. **Bukti:** Psikolog dan klien, dalam bentuk cerita singkat.
-11. **Cara bekerja sama:** Langkah dari pertemuan pertama sampai SPK, dan kapan harus mulai.
-12. **Lampiran:** Semua tabel harga dipindah ke sini, supaya badan deck berisi cerita.
+4. **Perjalanan klien:** Pintu masuk (snapshot gratis, webinar), lalu produk inti, lalu kontrak berulang. Satu gambar alur, bukan tabel.
+5. **Lini 1, Asesmen:** Tiga keputusan (seleksi, pemetaan, kesehatan mental) dan tangga MHCU Skrining, Flash, Deep.
+6. **Lini 2, Konseling dan pendampingan:** Kapan pegawai butuh; EAP Korporat untuk perusahaan besar, paket Jeda, Tumbuh, Seperjalanan untuk kantor kecil dan sekolah.
+7. **Lini 3, Pembelajaran:** Satu cerita BI CBP Rupiah, tangga program bank (Essential, Signature, Elite), workshop, dan pembicara.
+8. **Lini 4, Pengalaman dan komunitas:** Teman Kecil dan event komunitas.
+9. **Lini 5, Konsultasi organisasi:** HR Advisory dan evaluasi program.
+10. **Lini 6, Coreitera:** Kenapa kita tidak ikut perang harga di tes, lalu Theta.
+11. **Bukti:** Psikolog dan klien, dalam bentuk cerita singkat.
+12. **Investasi:** Harga segmen klien saja (bukan semua segmen), dalam bentuk kartu, bukan tabel.
+13. **Cara bekerja sama:** Langkah dari pertemuan pertama sampai SPK, dan kapan harus mulai.
+
+Deck internal (product knowledge) memakai lini yang sama, ditambah aturan harga per segmen, keberatan dan jawabannya,
+dan cara membaca file Excel.
 
 ---
 
 ## Hal yang masih terbuka
 
-- Harga Webinar (Rp2,6 juta), Seminar (Rp4,9 juta), dan fee laporan Synthesia (Rp12 ribu) adalah usulan dari aturan margin, belum pernah diuji ke klien.
+- Harga baru per segmen (20 Nov 2026), termasuk ratecard pembicara, workshop, EAP Korporat, dan paket tes sekolah, belum pernah diuji ke klien. Fee laporan Synthesia (Rp12 ribu) juga masih usulan.
+- EAP Korporat memakai asumsi 10 sesi per bulan per 300 pegawai. Perlu dicek dengan data pemakaian nyata.
+- Biaya alat tes IQ berlisensi, kit ASQ-3, dan harga nyata kit seni belum ada; sementara memakai tarif pengganti.
 - Biaya pelaksanaan pelatihan (Rp8 juta per hari regional, Rp25 juta per program kantor pusat) masih estimasi dan perlu dicek dengan angka asli.
 - Pembagian komisi mitra mengikuti Perjanjian Kemitraan, yang masih perlu dikonfirmasi Kia sebelum ditandatangani.
 - Penawaran BSN masih draf dan belum dikirim, jadi belum boleh diceritakan sebagai klien.
