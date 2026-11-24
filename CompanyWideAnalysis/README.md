@@ -49,6 +49,7 @@ shows model version numbers.
 | File | What it is |
 |---|---|
 | `TemanJourney_Model_2027_v15.xlsx` | **The current model.** Monthly sales, costs, profit and cash, with real timing, the pay plan, the growth plan and the roadmap. Open **Outlook** and **Roadmap** first. |
+| `TJ_Portfolio_Focus.xlsx` | **Portfolio evaluation (Nov 2026).** Which of the 24 product families earn their place with a part-time team. Inputs per product (price, cost, units, person-days per role), what was actually delivered in 2025-2026, and what we spent in 2026 to win clients (content, outreach, ads). Every number is labelled Actual, Plan, Proxy or Missing. Open **Read_Me**, then **Portfolio**. |
 | `TemanJourney_Model_2027_v14.xlsx` | The previous model (fair pay in one step). Kept for comparison. |
 | `TemanJourney_Model_2027_v13.xlsx` | The previous model. It assumes sales from October 2026. Kept unchanged for comparison. |
 | `TemanJourney_Growth_Recommendation.pptx` / `.pdf` | The growth plan deck: 43 slides (slide 16 summarises the partner program; appendix includes two slides on lowering the cost of winning clients and trainers, with a DuPont-style profit tree). Pyramid: summary first; each part (goal and problem, A. B2B, B. B2C, C. people, D. money, next steps, appendix) opens with a dark slide that asks the question it answers. |
@@ -113,6 +114,7 @@ $PY analysis/build_growth_deck.py      # 5. build the deck (reads model_runs.jso
 | `analysis/build_model.py` | Copies v13 and adds the timing switch, the growth plan, Pay_Plan, Outlook, Roadmap, the operations rows and new To_Fill rows. |
 | `analysis/excel_runner.py` | Opens a copy of v15 in Excel, sets each scenario (Inputs, Pay_Plan or Volume cells), recalculates and reads the monthly results and the operations load. To add a scenario, add a line to `CONFIGS`. |
 | `analysis/growth_scenarios.py` | The "normal full year" steps used in the deck (slides 5, 9 and appendix slide 20). It reads v13. |
+| `analysis/build_portfolio.py` | Builds `TJ_Portfolio_Focus.xlsx` from the product catalog, model v15, the CoreItera-Strategy marketing files and the budget and counseling recaps (aggregated; no client names). Recalculate in Excel after building. |
 | `analysis/build_growth_deck.py` | Builds the deck. All numbers come from the sources above; none are typed by hand. |
 
 **Deck checks.** After building the deck, run the text-fit and overlap checks from the DOS5024 project, then the pptx
