@@ -1,6 +1,6 @@
 """Re-titles the Teman Journey proposal cover for the BSN employee mapping offer.
 
-Usage: python make_cover.py <cover_source_cbp.png> <cover_bsn.png>
+Usage: python make_cover.py <cover_source_cbp.png> <cover_bsn.png> ["line 1|line 2|line 3"]
 Paints over the old date and title with the cover background, removes the old client logo
 from the gold "prepared for" band (refilled with the band's own gradient), and writes the
 client name as text. We have no BSN logo file, so no logo is drawn.
@@ -27,7 +27,7 @@ client_font = ImageFont.truetype("/System/Library/Fonts/Avenir Next.ttc", 46, in
 
 shadow = Image.new("RGBA", img.size, (0, 0, 0, 0))
 sd = ImageDraw.Draw(shadow)
-lines = ["PROPOSAL -", "Pemetaan Karyawan", "dengan Tes BFI dan DISC"]
+lines = sys.argv[3].split("|") if len(sys.argv) > 3 else ["PROPOSAL -", "Pemetaan Karyawan", "dengan Tes BFI dan DISC"]
 y0, step = 300, 92
 for i, line in enumerate(lines):
     sd.text((60, y0 + i * step + 5), line, font=title_font, fill=(0, 0, 0, 90))
